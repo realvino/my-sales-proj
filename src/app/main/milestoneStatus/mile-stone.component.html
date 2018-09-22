@@ -1,0 +1,120 @@
+<div [@routerTransition] id="pager">
+<div class="row margin-bottom-5"><br>
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>Milestone Status</span> <small>Details({{mileStoneStatusList.length}})</small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <!-- <button (click)="exportToExcel()" class="btn green-haze"><i class="fa fa-file-excel-o"></i> {{l("ExportToExcel")}}</button> -->
+            <button *ngIf="isGranted('Pages.Tenant.Master.MileStoneStatus.Create')" (click)="createMileStoneStat(0)" class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Create Milestone Status")}}</button>
+        </div>
+    </div>
+	 <div class="portlet light margin-bottom-0">
+	     <div class="portlet-body">
+		     <div class="form">
+                <form class="horizontal-form">
+                    <div class="form-body">
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-12">
+                                <div class="inputs inputs-full-width">
+                                    <div class="portlet-input">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filter" name="filter" autocomplete="off" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getMileStone()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+		    <div class="list-group">
+                <a *ngFor="let mileStone of mileStoneStatusList" href="javascript:;" class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                    {{mileStone.code}}
+                       <button *ngIf="isGranted('Pages.Tenant.Master.MileStoneStatus.Edit')" (click)="createMileStoneStat(mileStone)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person">
+                            <i class="icon-pencil"></i>
+                        </button>
+                         <button *ngIf="isGranted('Pages.Tenant.Master.MileStoneStatus.Delete')" (click)="deleteMileStone(mileStone)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person">
+                            <i class="icon-trash"></i>
+                         </button>
+                    </h4>
+                    <p class="list-group-item-text">
+                        {{mileStone.name}}
+                    </p>
+                </a>
+            </div>
+			<!-- <div class="primeng-datatable-container" 
+                 [busyIf]="primengDatatableHelper.isLoading">
+                <p-dataTable #dataTable
+                             (onLazyLoad)="getMileStone($event)"
+                             [value]="primengDatatableHelper.records"
+                             rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                             [paginator]="false"
+                             [lazy]="true"
+                             emptyMessage="{{l('NoData')}}"
+                             ScrollWidth="100%" 
+                             responsive="primengDatatableHelper.isResponsive"
+                             >
+                  
+                    <p-column field=""
+                              header="{{l('Actions')}}"
+                              [sortable]="false"
+                              [style]="{'width':'50px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            <div class="btn-group dropdown" normalizePosition>
+                                <button class="dropdown-toggle btn btn-xs btn-primary blue"
+                                        data-toggle="dropdown"
+										tooltip="{{l('Actions')}}"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                </button> 
+								 
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a (click)="createMileStoneStat(record)">{{l('Edit')}}</a>
+                                    </li>
+                                    <li>
+                                        <a (click)="deleteMileStone(record)">{{l('Delete')}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="code" header="{{l('Status Code')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.code}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="name" header="{{l('Status Name')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.name}}
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+                <div class="primeng-paging-container">
+                    <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                 #paginator
+                                 (onPageChange)="getMileStone($event)"
+                                 [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                 [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                    </p-paginator>
+                    <span class="total-records-count">
+                        {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                    </span>
+                </div>
+            </div> -->
+   </div>
+</div>
+</div>
+<createMileStoneStatus #createMileStoneStatus (modalSave)="getMileStone()"></createMileStoneStatus>

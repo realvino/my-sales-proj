@@ -1,0 +1,37 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form *ngIf="active" #createTargetForm="ngForm" novalidate (ngSubmit)="save()">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="close()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">
+                            <span *ngIf="!targetInput.id">{{l("Create Target")}}</span>
+                            <span *ngIf="targetInput.id">{{l("Edit Target")}}</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6"> 
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                    <label>{{l("Choose Month")}}  <required_field></required_field></label>
+                                    <my-monthpicker id="monthPickerval" name="monthpicker" value={{month}} (dateChange)="onDateChange($event)"></my-monthpicker>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="top: 24px;"> 
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                    <input class="form-control" type="number" name="monthtarget" [(ngModel)]="targetInput.value" [ngClass]="{'edited':targetInput.value}" required>
+                                    <label>{{l("Target")}}  <required_field></required_field></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                        <button type="submit" class="btn btn-primary blue" [disabled]="!createTargetForm.valid || !month" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

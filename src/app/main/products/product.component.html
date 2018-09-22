@@ -1,0 +1,173 @@
+<div [@routerTransition] id="pager">
+<tabset class="tab-container tabbable-line">
+    <tab heading="Products">
+    <div class="row margin-bottom-5">
+        <div class="col-xs-6">
+            <!-- <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>Product </span> <small>Details({{primengDatatableHelper.totalRecordsCount}})</small>
+                    </h1>
+                </div>
+            </div> -->
+        </div>
+        <div class="col-xs-6 text-right">
+            <button *ngIf="isGranted('Pages.Tenant.ProductFamily.Products.Create')" (click)="createSubGroup()" class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Create Product")}}</button>
+        </div>
+    </div>
+    <div class="portlet light margin-bottom-0">
+        <div class="portlet-body">
+            <div class="form">
+                <form class="horizontal-form">
+                    <div class="form-body">
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-12">
+                                <div class="inputs inputs-full-width">
+                                    <div class="portlet-input">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filterText" name="filterText" autocomplete="off" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getProduct()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--<div id="productSubGroupTable"></div>-->
+			<div class="primeng-datatable-container" 
+                 [busyIf]="primengDatatableHelper.isLoading">
+                <p-dataTable #dataTable
+                             (onLazyLoad)="getProduct($event)"
+                             [value]="primengDatatableHelper.records"
+                             rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                             [paginator]="false"
+                             [lazy]="true"
+                             emptyMessage="{{l('NoData')}}"
+                             ScrollWidth="100%" 
+                             responsive="primengDatatableHelper.isResponsive"
+                             >
+                  
+                    <p-column field=""
+                              header="{{l('Actions')}}"
+                              [sortable]="false"
+                              [style]="{'width':'50px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            <div class="btn-group dropdown" normalizePosition>
+                                <button class="dropdown-toggle btn btn-xs btn-primary blue"
+                                        data-toggle="dropdown"
+										tooltip="{{l('Actions')}}"
+                                        aria-haspopup="true"
+                                        aria-expanded="false">
+                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a *ngIf="isGranted('Pages.Tenant.ProductFamily.Products.Edit')" (click)="editProduct(record)">{{l('Edit')}}</a>
+                                    </li>
+                                    <li>
+                                        <a *ngIf="isGranted('Pages.Tenant.ProductFamily.Products.Delete')" (click)="deleteProduct(record)">{{l('Delete')}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-template>
+                    </p-column>
+					<p-column field="productName" header="{{l('Product Name')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.productName}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="productCode" header="{{l('Product Code')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.productCode}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="productSubGroupName" header="{{l('Product SubgroupName')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.productSubGroupName}}
+                        </ng-template>
+                    </p-column>
+					<p-column field="Discontinue" header="{{l('Discontinue')}}" [sortable]="false" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            <span>
+                                <div class="text-center">
+                                    <i *ngIf="record.discontinued" class="fa fa-check-circle-o fa-2x" style="color:green;"></i>
+                                    <i *ngIf="!record.discontinued" class="fa fa-ban fa-2x" style="color:red;"></i>
+                                </div>
+                            </span>
+                        </ng-template>
+                    </p-column>
+					
+                </p-dataTable>
+                <div class="primeng-paging-container">
+                    <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                 #paginator
+                                 (onPageChange)="getProduct($event)"
+								 [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                 [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                    </p-paginator>
+                  <span class="total-records-count">
+                        {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </tab>
+    <tab heading="Services">
+            <div class="row margin-bottom-5">
+                <div class="col-xs-6">
+                </div>
+                <div class="col-xs-6 text-right">
+                    <button *ngIf="isGranted('Pages.Tenant.ProductFamily.Services.Create')" class="btn btn-primary blue" (click)="createService()"><i class="fa fa-plus"></i>Create Service</button>
+                </div>
+            </div>
+            <div class="portlet light margin-bottom-0">
+                <div class="portlet-body">
+                    <div class="form">
+                        <form class="horizontal-form">
+                            <div class="form-body">
+                                <div class="row margin-bottom-10">
+                                    <div class="col-md-12">
+                                        <div class="inputs inputs-full-width">
+                                            <div class="portlet-input">
+                                                <div class="input-group">
+                                                    <input [(ngModel)]="filter" name="filter" (keyup.enter)="getService()"  autocomplete="off" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                                    <span class="input-group-btn">
+                                                   <button  (click)="getService()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="list-group">
+                        <a *ngFor="let service of serviceList" href="javascript:;" class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                {{service.serviceCode }}
+                                <button *ngIf="isGranted('Pages.Tenant.ProductFamily.Services.Edit')" (click)="editService(service)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person" style="float: right;">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                                <button *ngIf="isGranted('Pages.Tenant.ProductFamily.Services.Delete')" (click)="deleteService(service)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;" style="float: right; margin-right: 10px;">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </h4>
+                            <p class="list-group-item-text">
+                                {{service.serviceName}}
+                            </p>
+                        </a>
+                    </div>
+        
+                </div>
+            </div>
+    </tab>
+</tabset>
+    <createProductModal #createProductModal (modalSave)="getProduct()"></createProductModal>
+    <createServiceModal #createServiceModal (modalSave)="getService()"></createServiceModal>
+</div>

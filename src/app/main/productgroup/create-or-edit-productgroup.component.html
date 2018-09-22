@@ -1,0 +1,60 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form *ngIf="active" #createProductGroupForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span *ngIf="productGroup.id">{{l("Edit ProductGroup")}}: {{productGroup.productGroupName}}</span>
+                        <span *ngIf="!productGroup.id">{{l("Create Product Group")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal_processing" *ngIf="processed_image">
+                        Processing...
+                        <div class="loader">
+                        </div>
+                    </div>
+                   <div class="row">
+                       <div class="col-md-2" *ngIf="productGroup.id">
+                           <div class="col-md-12 imgCont">
+                                            <span >
+                                                <img width="135" height="100" *ngIf="productGroup.path" src="{{path+'/'+productGroup.path}}" class="img-product" />
+                                            </span>
+                           </div>
+                           <div class="col-md-6">
+                               <div class="form-group" style="margin-top: 15px;">
+                                   <input type="file" ng2FileSelect [uploader]="uploader" />
+                               </div>
+                           </div>
+                       </div>
+
+                       <div [ngClass]="productGroup.id ? 'col-md-10' : 'col-md-12'">
+                           <div class="col-md-2" *ngIf="productGroup.id">
+                               &nbsp;
+                           </div>
+                           <div class="col-md-10">
+                               <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                   <input #nameInput class="form-control" type="text" name="code" [ngClass]="{'edited':productGroup.productGroupCode}" [(ngModel)]="productGroup.productGroupCode" required>
+                                   <label>{{l("Product Group Code")}} <required_field></required_field></label>
+                               </div>
+
+                               <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                   <input class="form-control" type="text" name="name" [ngClass]="{'edited':productGroup.productGroupName}" [(ngModel)]="productGroup.productGroupName" required>
+                                   <label>{{l("Product Group Name")}} <required_field></required_field> </label>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!createProductGroupForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

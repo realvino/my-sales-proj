@@ -1,0 +1,63 @@
+﻿import { NgModule } from '@angular/core';
+
+import * as ApiServiceProxies from './service-proxies';
+
+@NgModule({
+    providers: [
+        ApiServiceProxies.AuditLogServiceProxy,
+        ApiServiceProxies.CachingServiceProxy,
+        ApiServiceProxies.ChatServiceProxy,
+        ApiServiceProxies.CommonLookupServiceProxy,
+        ApiServiceProxies.EditionServiceProxy,
+        ApiServiceProxies.FriendshipServiceProxy,
+        ApiServiceProxies.HostSettingsServiceProxy,
+        ApiServiceProxies.LanguageServiceProxy,
+        ApiServiceProxies.NotificationServiceProxy,
+        ApiServiceProxies.OrganizationUnitServiceProxy,
+        ApiServiceProxies.PermissionServiceProxy,
+        ApiServiceProxies.ProfileServiceProxy,
+        ApiServiceProxies.RoleServiceProxy,
+        ApiServiceProxies.SessionServiceProxy,
+        ApiServiceProxies.TenantServiceProxy,
+        ApiServiceProxies.TenantDashboardServiceProxy,
+        ApiServiceProxies.TenantSettingsServiceProxy,
+        ApiServiceProxies.TimingServiceProxy,
+        ApiServiceProxies.UserServiceProxy,
+        ApiServiceProxies.UserLinkServiceProxy,
+        ApiServiceProxies.UserLoginServiceProxy,
+        ApiServiceProxies.WebLogServiceProxy,
+        ApiServiceProxies.AccountServiceProxy,
+        ApiServiceProxies.TokenAuthServiceProxy,
+        ApiServiceProxies.TenantRegistrationServiceProxy,
+        ApiServiceProxies.HostDashboardServiceProxy,
+        ApiServiceProxies.PaymentServiceProxy,
+		ApiServiceProxies.InfoTypeServiceProxy,
+        ApiServiceProxies.CustomerTypeServiceProxy,
+		ApiServiceProxies.CompanyContactServiceProxy,
+        ApiServiceProxies.Select2ServiceProxy,
+        ApiServiceProxies.CurrencyServiceProxy,
+		ApiServiceProxies.EnquiryServiceProxy,
+		ApiServiceProxies.MilestoneServiceProxy,
+		ApiServiceProxies.MileStoneStatusServiceProxy,
+		ApiServiceProxies.ProductServiceProxy,
+		ApiServiceProxies.ProductGroupServiceProxy,
+		ApiServiceProxies.ProductSubGroupServiceProxy,
+		ApiServiceProxies.DeliveryServiceProxy,
+		ApiServiceProxies.FreightServiceProxy,
+		ApiServiceProxies.PackingServiceProxy,
+		ApiServiceProxies.QPaymentServiceProxy,
+		ApiServiceProxies.QuotationStatusServiceProxy,
+		ApiServiceProxies.ReasonServiceProxy,
+		ApiServiceProxies.TitleOfQuotationServiceProxy,
+		ApiServiceProxies.ValidityServiceProxy,
+		ApiServiceProxies.WarrantyServiceProxy,
+		ApiServiceProxies.PriceLevelServiceProxy,
+        ApiServiceProxies.QuotationServiceProxy,
+        ApiServiceProxies.DashboardGraphServiceProxy,
+        ApiServiceProxies.ActivityServiceProxy,
+        ApiServiceProxies.ActivityTypeServiceProxy,
+        ApiServiceProxies.ServiceServiceProxy
+		
+    ]
+})
+export class ServiceProxyModule { }

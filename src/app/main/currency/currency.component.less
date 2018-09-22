@@ -1,0 +1,65 @@
+.list-group-item-heading {
+    button.delete-person {
+        float: right;
+        margin-right: 10px;
+    }
+     button.edit-person {
+        float: right;
+    }
+    
+}
+
+.table-phones {
+    display: none;
+}
+
+.person-editing {
+    background-color: #ccffcc;
+
+    h4 {
+        font-weight: bold;
+    }
+
+    .table-phones {
+        display: table;
+    }
+
+    &:hover {
+        background-color: #ccffcc;
+    }
+}
+
+  .ribbon {
+    background: #3c485f;
+    height: 20px;
+    width: 50px;
+    display: inline-block;
+    padding: 0 40px 0 0;
+    margin: auto;
+    position: relative;
+    color: #fff;
+    line-height: 23px;
+    font-size: 12px;
+    text-align: center;
+    float: right;
+
+      &:before{
+        content: '';
+        content: '';
+        border: 10px solid #3c485f;
+        border-left-color: transparent;
+        border-left-width: 12px;
+        position: absolute;
+        top: 0;
+        left: -22px;
+      }
+      &:after {
+        content: '';
+        border: 10px solid transparent;
+        border-left-color: #3c485f;
+        border-left-width: 12px;
+        position: absolute;
+        top: 0;
+        right: -22px;
+      }
+  }

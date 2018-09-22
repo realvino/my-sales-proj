@@ -1,0 +1,51 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form *ngIf="active" #createquotationForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span *ngIf="quotationstat.id">{{l("Edit Quotation Status")}}: {{quotationstat.quotationStatusName}}</span>
+                        <span *ngIf="!quotationstat.id">{{l("Create Quotation Status")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input #nameInput class="form-control" type="text" name="code" [ngClass]="{'edited':quotationstat.quotationStatusCode}" [(ngModel)]="quotationstat.quotationStatusCode" required>
+                        <label>{{l("Quotation Status Code")}}  <required_field></required_field></label>
+
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input class="form-control" type="text" name="name" [ngClass]="{'edited':quotationstat.quotationStatusName}" [(ngModel)]="quotationstat.quotationStatusName" required>
+                        <label>{{l("Quotation Status Name")}}  <required_field></required_field></label>
+                    </div>
+                    <div class="form-group">
+                        <label>Milestone </label>
+                        <ng-select  [allowClear]="true" [active]="active_mile" [items]="milestone" (selected)="selectMilestone($event)" (removed)="removeMilestone($event)" placeholder="No Milestone selected">
+                        </ng-select>
+                    </div>
+                    <div class="md-radio-list">
+                        <div class="md-radio" *ngFor="let option  of statusArray">
+                            <input id="Edit_{{option.name}}"  type="radio" class="md-radio" name="status" [(ngModel)]="selected"
+                                [checked]="option.name == selected"
+                                value= {{option.name}} (click)=radioChange(option.id)>
+                                <label for="Edit_{{option.name}}">
+                                    <span class="inc"></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    {{option.name}}
+                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!createquotationForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

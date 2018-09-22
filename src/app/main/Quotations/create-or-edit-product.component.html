@@ -1,0 +1,90 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+    <div class="modal-dialog" style="width:70% !important">
+        <div class="modal-content">
+          <div class="modal-header">
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <span *ngIf="pro_input.id">{{l("Edit Quotation Product")}}: {{pro_edit.productName}}</span>
+                    <span *ngIf="!pro_input.id">{{l("Create Quotation Product")}}</span>
+              </h4>
+          </div>  
+           <tabset class="tab-container tabbable-line">
+           <tab heading="Product Detail"> 
+            <form *ngIf="active" #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div #nameInput class="form-group">
+                                <label>Product Code<required_field></required_field></label>
+                                <ng-select  [active]="active_code" [allowClear]="true" [items]="codes" (selected)="selectedCode($event)" (removed)="removedCode($event)" placeholder="Choose Product Code">
+                                </ng-select>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Price Level <required_field></required_field> </label>
+                                <ng-select [active]="active_level" [allowClear]="true" [items]="levels" (selected)="selectedLevel($event)" (removed)="removeLevel($event)" placeholder="Choose a price level">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+
+                       <div class="row">
+                           <div class="col-sm-6">
+                               <label style="display:block">Unit Price <required_field></required_field></label>
+                               <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                   <input type="number" class="form-control" name="unitprice" [disabled]="true" [(ngModel)]="pro_input.price" required>
+                               </div>
+                           </div>
+                       </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label style="display:block">Quantity <required_field></required_field></label>
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                    <input type="number" class="form-control" name="quantity"  [(ngModel)]="pro_input.quantity" (ngModelChange)="estimatePrice(pro_input.quantity)"  >
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label style="display:block">Extended Price <required_field></required_field></label>
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                    <input type="text" class="form-control" name="extend_price" [disabled]="true" [(ngModel)]="pro_input.estimatedPrice" required>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Optional:</label>
+                            <div class="onoffswitch">
+                                <input #optionalcb type="checkbox" name="optional" class="onoffswitch-checkbox" (change)="optional=optionalcb.checked" id="optionalb" [(ngModel)]="pro_input.optimizer" checked>
+                                <label class="onoffswitch-label" for="optionalb" >
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch" ></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Discounted:</label>
+                            <div class="onoffswitch">
+                                <input #discountcb type="checkbox" name="discount" (change)="origin=discountcb.checked" class="onoffswitch-checkbox" id="discount_p" [(ngModel)]="pro_input.discount" checked>
+                                <label class="onoffswitch-label" for="discount_p" >
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch" ></span>
+                                </label>
+                            </div>
+                        </div>
+                     </div>
+
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!createCompanyForm.valid || !pro_input.productId || !pro_input.priceLevelProductId"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        </div>
+                    </div>
+                </form>
+             </tab>
+          </tabset>
+        </div>
+    </div>
+</div>

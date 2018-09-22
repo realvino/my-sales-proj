@@ -1,0 +1,35 @@
+<div [@routerTransition]>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Monthly View</h3>
+        </div>
+        <!-- <div class="col-md-6">
+            <div class="pull-right">
+                <a class="btn btn-primary" [routerLink]="['/app/main/leads-grid']">Grid View</a>&nbsp;&nbsp;
+                <button class="btn btn-primary" (click)="createEnquiry()">Create New</button>
+            </div>
+        </div> -->
+    </div>
+    <div class='wrapper'>
+
+      <div class='dndcontainer' *ngFor="let month of ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Seb','Oct','Nov','Dec']" >
+        <div class="itemHead"><h4>{{month}}</h4> <small>2017</small></div>
+        <div class="desk-items" [dragula]='"nested-bag"' [attr.data-milestoneId]="5">
+            <div *ngFor='let number of [0,1,2,3]' [attr.data-itemId]="5" class="deskItem">
+                <div>dragula <small class="pull-right">10 hours ago</small></div>
+                <p class="name">Progress <small>(India)</small></p>
+                
+                <div class="row">
+                    <div class="col-sm-6">
+                        <!--<img *ngIf="item.profilePicture" width="32px" [src]="item.profilePicture" alt="" />-->
+                        <span><i class="fa fa-user-circle-o fa-2x"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+<!-- <createEnquiryModal #createEnquiryModal modalSave="getEnquiryTic()"></createEnquiryModal>
+<router-outlet></router-outlet> -->

@@ -1,0 +1,131 @@
+.gu-mirror{position:fixed!important;margin:0!important;z-index:9999!important;opacity:.8;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";filter:alpha(opacity=80)}.gu-hide{display:none!important}.gu-unselectable{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important}.gu-transit{opacity:.2;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";filter:alpha(opacity=20)}
+.page-head .page-title{ padding:0px; margin-top:5px;}
+/* dragula-specific example page styles */
+.wrapper {
+    height: 75vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 0px;
+    white-space: nowrap;
+}
+.dndcontainer {
+    background-color: #e4e5e9;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 10px;
+    overflow: hidden;
+    padding-bottom: 20px;
+    vertical-align: top;
+  	width:24.21%;
+  	min-width:290px;
+}
+.desk-items {
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+.itemHead{ padding:0px 7px; position:relative;}
+.itemHead .btn{ position: absolute;
+    right: 6px;
+    top: -3px;
+    padding: 4px 6px;}
+.dndcontainer .desk-items .gu-mirror{ min-height:100px;}
+.dndcontainer .desk-items .btn{ padding:0px;}
+.dndcontainer .desk-items .btn i.fa{ margin-top:2px;}
+.dndcontainer .desk-items .deskItem p{ margin:7px 0px;}
+.dndcontainer .desk-items .deskItem .name{
+   font-size: 11px;
+  }
+/*
+ * note that styling gu-mirror directly is a bad practice because it's too generic.
+ * you're better off giving the draggable elements a unique class and styling that directly!
+ */
+.dndcontainer .desk-items .deskItem,
+.gu-mirror {
+  margin: 10px;
+  padding: 10px;
+  background-color: #fff;
+  transition: opacity 0.9s ease-in-out;
+  height: auto;
+}
+.dndcontainer .desk-items .deskItem {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+.gu-mirror {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+.dndcontainer .ex-moved {
+  background-color: #e74c3c;
+}
+.dndcontainer.ex-over {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.handle {
+  padding: 0 5px;
+  margin-right: 5px;
+  background-color: rgba(0, 0, 0, 0.4);
+  cursor: move;
+}
+nested-repeat-example .dndcontainer span {
+  display: block;
+  padding: 8px;
+}
+.chldcontainer{
+    border: 1px solid #fff;
+    padding-bottom: 10px;
+    height: 50%;
+    min-height: 50px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: #ccc;
+}
+.deskItem1{
+  margin: 10px;
+    background: #fff;
+     padding: 10px; 
+    border-radius: 3px;
+    padding-left: 16px;
+    padding-bottom: 0px;
+}
+.chld_name{
+  margin:0px;
+}
+
+.desk-1::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  background-color: #F5F5F5;
+}
+
+.desk-1::-webkit-scrollbar
+{
+  width: 6px;
+  background-color: #F5F5F5;
+}
+
+.desk-1::-webkit-scrollbar-thumb
+{
+  background-color: #000000;
+}
+.desk-1{
+  padding-bottom: 0px;
+}
+.chld_itemHead{
+    padding-left: 13px;
+}
+#quotlist{
+  margin-top:-6px;
+  margin-left: -43px; 
+  margin-bottom: -9px;
+  margin-right: 0px;
+}
+.ddns
+{
+    overflow: hidden;
+    white-space: normal;
+}

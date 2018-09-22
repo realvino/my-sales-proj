@@ -1,0 +1,41 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+    <div class="modal-dialog" style="width:40% !important">
+        <div class="modal-content">
+          <div class="modal-header">
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <span *ngIf="qser_input.id">{{l("Edit Quotation Service")}}: {{qser_input.serviceCode}}</span>
+                    <span *ngIf="!qser_input.id">{{l("Create Quotation Service")}}</span>
+              </h4>
+          </div>  
+           <tabset class="tab-container tabbable-line">
+           <tab heading="Service Detail"> 
+            <form #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-body">
+                    <div class="row" style="margin-left: 1%;width: 100%;">
+                            <div #nameInput class="form-group">
+                                <label>Service Code<required_field></required_field></label>
+                                <ng-select  [active]="active_qservice" (selected)="selectedCode($event)" [items]="qservices" placeholder="Choose Service Code">
+                                </ng-select>
+
+                            </div>
+                    </div>
+                       <div class="row" style="margin-left: 1%;width: 100%;">
+                               <label style="display:block">Unit Price <required_field></required_field></label>
+                               <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                   <input type="number" class="form-control" name="unitprice"  [(ngModel)]="qser_input.covertPrice" required>
+                               </div>
+                       </div>
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')" [disabled]="!createCompanyForm.valid"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        </div>
+                    </div>
+                </form>
+             </tab>
+          </tabset>
+        </div>
+    </div>
+</div>

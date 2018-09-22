@@ -1,0 +1,6 @@
+﻿{
+  "remoteServiceBaseUrl": "http://localhost:22742/",
+  "appBaseUrl": "http://localhost:4200/",
+  "recaptchaSiteKey": "6LeFJywUAAAAANNItFb72fMOVN3aOHD6CIM2JxJN",
+  "subscriptionExpireNootifyDayCount": 7
+}

@@ -1,0 +1,84 @@
+<div [@routerTransition] id="pager">
+    <tabset class="tab-container tabbable-line"><br>
+        <tab heading="Standard Preview">
+            <div class="portlet light margin-bottom-0">
+                <div class="modal-header">
+                <button type="button" class="btn btn-circle btn-icon-only white" style="float: right;margin-left: 1%;" (click)="close()" aria-label="Close">
+                    <span class="fa fa-times" aria-hidden="true"></span>
+                </button>
+                <button type="btn btn" class="btn btn-circle btn-icon-only white" style="float: right;" (click)="download()" aria-label="Download">
+                    <span class="fa fa-cloud-download"></span>
+                </button>
+                </div>
+                <div class="modal-body" style="padding-top: 50px;">
+                    <div class="row">
+                        <div class="col-md-12" id="myDiv">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Payment Schedule"> 
+            <div class="portlet light margin-bottom-0">
+               <div class="portlet-body">
+                   <div class="row">
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-6 text-right" style="top: -10px;">
+                            <button class="btn btn-circle btn-icon-only btn-default" (click)="createPaymentSchedule()" title="{{l('Create')}}" href="javascript:;"><i class="fa fa-plus"></i></button>
+                        </div>
+                   </div>
+                    <div class="list-group">
+                        <a *ngFor="let paySchedule of paymentScheduleList" href="javascript:;" class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                {{paySchedule.userName }}
+                                <button (click)="editPaymentSchedule(paySchedule)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person" style="float: right;right: 80px;">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                                <button (click)="deletePaymentSchedule(paySchedule)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;" style="float: right;">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </h4>
+                            <p class="list-group-item-text">
+                                {{paySchedule.total}}
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab heading="Payment Collection"> 
+            <div class="portlet light margin-bottom-0">
+               <div class="portlet-body">
+                   <div class="row">
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-6 text-right" style="top: -10px;">
+                            <button class="btn btn-circle btn-icon-only btn-default" (click)="createPayCollection()" title="{{l('Create')}}" href="javascript:;"><i class="fa fa-plus"></i></button>
+                        </div>
+                   </div>
+                    <div class="list-group">
+                        <a *ngFor="let payCollection of paymentCollectionList" href="javascript:;" class="list-group-item">
+                            <h4 class="list-group-item-heading">
+                                Sales Invoice No: {{payCollection.salesInvoiceNUmber }}
+                                <button (click)="editPayCollection(payCollection)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person" style="float: right;right: 80px;">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                                <button (click)="deletePayCollection(payCollection)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;" style="float: right;">
+                                    <i class="icon-trash"></i>
+                                </button>
+                            </h4>
+                            <p class="list-group-item-text">
+                               Amount: {{payCollection.amount}}
+                               <span>
+                                    <i *ngIf="payCollection.received" class="fa fa-check-circle-o" style="font-size: 25px;color: #0fb11c;margin-left: 20px;"></i>
+                                    <i *ngIf="!payCollection.received" class="fa fa-check-circle-o" style="font-size: 25px;color: #80808057;margin-left: 20px;"></i>
+                                </span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+    <createPaymentCollectionModal #createPaymentCollectionModal (modalSave)="getPayCollection()" > </createPaymentCollectionModal>
+    <createPaymentScheduleModal #createPaymentScheduleModal (modalSave)="getPaySchedule()" > </createPaymentScheduleModal>
+</div>

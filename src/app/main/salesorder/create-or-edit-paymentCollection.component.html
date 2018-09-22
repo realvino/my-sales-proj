@@ -1,0 +1,106 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form *ngIf="active" #createPaymentCollectionForm="ngForm" novalidate (ngSubmit)="save()">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="close()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">
+                            <span *ngIf="paymentCollectionInput.id">{{l("Edit Payment Collection")}}: {{paymentCollection.salesInvoiceNUmber}}</span>
+                            <span *ngIf="!paymentCollectionInput.id">{{l("Create Payment Collection")}}</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                       <input class="form-control" type="text" name="salesNo" [ngClass]="{'edited':paymentCollectionInput.salesInvoiceNUmber}" [(ngModel)]="paymentCollectionInput.salesInvoiceNUmber" required>
+                                        <label>{{l("Sales Invoice Number")}}  <required_field></required_field></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Payment <required_field></required_field></label>
+                                        <ng-select  [active]="active_payment" [allowClear]="true" [items]="payment" (selected)="selectPayment($event)" (removed)="removePayment($event)" placeholder="Select A Payment">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-sm-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input type="number" class="form-control" name="amount" [ngClass]="{'edited':paymentCollectionInput.amount}" [(ngModel)]="paymentCollectionInput.amount" required>
+                                        <label>Amount <required_field></required_field></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input type="number" class="form-control" name="dueAmount" [ngClass]="{'edited':paymentCollectionInput.dueAmount}" [(ngModel)]="paymentCollectionInput.dueAmount" disabled="true">
+                                        <label>Due Amount <required_field></required_field></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-sm-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input type="text" class="form-control" name="chequeNo" [ngClass]="{'edited':paymentCollectionInput.chequeNo}" [(ngModel)]="paymentCollectionInput.chequeNo" required>
+                                        <label>Cheque Number <required_field></required_field></label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input type="text" class="form-control" name="voucherno" [ngClass]="{'edited':paymentCollectionInput.voucherNo}" [(ngModel)]="paymentCollectionInput.voucherNo" required>
+                                        <label>Voucher Number <required_field></required_field></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                       <label>{{l("Cheque Date")}} <required_field></required_field> </label>
+                                        <p-calendar [style]="{'width':'433px'}" [(ngModel)]="chequeDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                       <label>{{l("Bank Date")}} <required_field></required_field> </label>
+                                        <p-calendar [style]="{'width':'433px'}" [(ngModel)]="bankDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-sm-12">
+                                    <label>{{l("Remarks")}}</label>
+    								<textarea class="form-control" [(ngModel)]="paymentCollectionInput.remarks" placeholder="Remarks" [ngModelOptions]="{standalone: true}" style="height:102px;"></textarea>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 20px;">  
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Currency <required_field></required_field></label>
+                                        <ng-select  [active]="active_currency" [allowClear]="true" [items]="currency" (selected)="selectCurrency($event)" (removed)="removeCurrency($event)" placeholder="Select A Currency">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" style="left: 30px;">
+                                    <label>Received:</label>
+                                        <div class="onoffswitch">
+                                            <input #discountcb type="checkbox" name="receive" (change)="origin=discountcb.checked" class="onoffswitch-checkbox" id="received" [(ngModel)]="paymentCollectionInput.received" checked>
+                                            <label class="onoffswitch-label" for="received" >
+                                                <span class="onoffswitch-inner"></span>
+                                                <span class="onoffswitch-switch" ></span>
+                                            </label>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                                <button type="submit" class="btn btn-primary blue" [disabled]="!createPaymentCollectionForm.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                            </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    

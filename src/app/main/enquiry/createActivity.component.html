@@ -1,0 +1,71 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form *ngIf="active" #createcountryForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span *ngIf="activity.id">{{l("Edit Activity")}}</span>
+                        <span *ngIf="!activity.id">{{l("CreateNewActivity")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input #nameInput class="form-control" type="text" name="activityTitle" [(ngModel)]="activity.title"  required>
+                                <label>{{l("Activity Title")}}</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <label>{{l("Activity Type")}}</label>
+                            <ng-select class="customselectcs" [allowClear]="true" [active]="active_type" [items]="activitytypo" (selected)="doSomething($event)" (removed)="removeType($event)" placeholder="No Type  selected">
+                            </ng-select>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <label>{{l("Contact ")}}</label>
+                            <ng-select class="customselectcs" [allowClear]="true" [active]="active_contact" [items]="contact" (selected)="selectContact($event)" (removed)="removeContact($event)" placeholder="No Contact is selected">
+                            </ng-select>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">{{l("Scheduled At")}}</label>
+                            <p-calendar [style]="{'width':'433px'}" class="pcalendar" [(ngModel)]="sc_date" [ngModelOptions]="{standalone: true}"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-md-6">
+                            <label class="control-label">{{l("Status")}}</label>
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="Sonoffswitch" [(ngModel)]="activity.status" checked>
+                                <label class="onoffswitch-label" for="Sonoffswitch" >
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch" ></span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">{{l("Description")}}</label>
+                            <textarea class="form-control"  placeholder="Remarks"  style="" [(ngModel)]="activity.description" [ngModelOptions]="{standalone: true}"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!createcountryForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

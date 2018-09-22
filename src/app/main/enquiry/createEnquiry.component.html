@@ -1,0 +1,67 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+    <div class="modal-dialog" style="width:70% !important">
+        <div class="modal-content">
+            <form *ngIf="active" #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <!--<span *ngIf="company.id">{{l("EditCompany")}}: {{company.cityName}}</span>-->
+                        <span>{{l("Create Enquiry")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                        <div class="row padding10px">
+                            <div class="col-md-6">
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                    <input #nameInput class="form-control" name="name" type="text" [(ngModel)]="enquiry.title" required>
+                                    <label>{{l("Title")}} <required_field></required_field></label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Company <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [items]="companytypo" (selected)="doSomething($event)" (removed)="removeType($event)" (data)="refreshCompany($event)" placeholder="No Company selected">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row padding10px">
+                            <div class="col-md-6 form-group">
+                                <label>Milestone <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [active]="active_mile" (data)="refreshMile($event)" [items]="milestone" (selected)="selectMilestone($event)" (removed)="removeMilestone($event)" placeholder="No Milestone selected">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Contact <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [active]="active_contact" [items]="contact" (selected)="selectContact($event)" (removed)="removeContact($event)" placeholder="No Contact is selected">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="row padding10px">
+                            <div class="col-md-6" style="padding: 1px;">
+                            <div class="col-md-12 form-group">
+                                <label>Milestone Status</label>
+                                <ng-select  [allowClear]="true" [active]="active_milestonestatus" [items]="status" (selected)="selectStatus($event)" (removed)="removeStatus($event)" placeholder="No Status is selected">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-12 padding10px form-group">
+                                <label class="control-label">{{l("Closed Date")}}</label>
+                                <div class="form-group">
+                                    <p-calendar [style]="{'width':'433px'}" [(ngModel)]="closedDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="control-label">{{l("Remarks")}}</label>
+                                <textarea class="form-control" [(ngModel)]="enquiry.remarks" placeholder="Remarks" [ngModelOptions]="{standalone: true}" style="height:102px;"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [disabled]="!createCompanyForm.valid || !enquiry.contactId ||!enquiry.mileStoneId || !enquiry.companyId" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
