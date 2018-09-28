@@ -56,8 +56,8 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.DashboardGraphServiceProxy,
         ApiServiceProxies.ActivityServiceProxy,
         ApiServiceProxies.ActivityTypeServiceProxy,
-        ApiServiceProxies.ServiceServiceProxy
-		
+        ApiServiceProxies.ServiceServiceProxy,
+        ApiServiceProxies.ReportServiceProxy
     ]
 })
 export class ServiceProxyModule { }

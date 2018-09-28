@@ -153,7 +153,7 @@ export class CreateEnquiryComponent extends AppComponentBase  {
 
     getMilestone():void{
 
-        this._selectProxyService.getMilestone().
+        this._selectProxyService.getEnqMilestone().
             subscribe((result)=>{
                 if(result.select2data != null){
                     this.milestones=result.select2data;

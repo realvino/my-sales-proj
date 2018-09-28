@@ -36,6 +36,11 @@ import { ReasonComponent } from "app/main/reason/reason.component";
 import { PriceLevelComponent } from "app/main/pricelevel/pricelevel.component"; 
 import { SalesOrderComponent } from "app/main/salesorder/salesorder.component";
 import { SalesOrderEditComponent } from "app/main/salesorder/salesorder-edit.component";
+import { SubmittedReportComponent } from '@app/main/quotationReport/submittedReport.component';
+import { WonReportComponent } from '@app/main/quotationReport/wonReport.component';
+import { LostReportComponent } from '@app/main/quotationReport/lostReport.component';
+import { GlobalReportComponent } from '@app/main/quotationReport/globalReport.component';
+import { OtherReportComponent } from '@app/main/quotationReport/otherReport.component';
 
 @NgModule({
     imports: [
@@ -77,7 +82,12 @@ import { SalesOrderEditComponent } from "app/main/salesorder/salesorder-edit.com
                     { path:'dashboard', component:ReportComponent, data:{permission:null}},
                     { path: 'reason', component: ReasonComponent, data:{permission:null} },
 					{ path: 'pricelevel', component: PriceLevelComponent, data:{permission:null} },
-					{ path: 'salesorder', component: SalesOrderComponent, data:{permission:null} },
+                    { path: 'salesorder', component: SalesOrderComponent, data:{permission:null} },
+                    { path: 'submittedReport', component: SubmittedReportComponent},
+                    { path: 'wonReport', component: WonReportComponent},
+                    { path: 'lostReport', component: LostReportComponent},                   
+                    { path: 'globalReport', component: GlobalReportComponent},
+                    { path: 'otherReport', component: OtherReportComponent},
                     { path: 'salesorder/editsalesorder/:id/:static_number', component: SalesOrderEditComponent, data:{permission:null} }
                 ]
             }

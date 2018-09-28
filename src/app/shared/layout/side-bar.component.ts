@@ -66,7 +66,14 @@ export class SideBarComponent extends AppComponentBase {
             new SideBarMenuItem("MileStone", "Pages.Tenant.Master.MileStone", "fa fa-line-chart", "/app/main/milestone"),
 			new SideBarMenuItem("MileStone Status", "Pages.Tenant.Master.MileStoneStatus", "fa fa-flask", "/app/main/milestone-status"),
             new SideBarMenuItem("Currency", "Pages.Tenant.Master.Currency", "fa fa-dollar", "/app/main/currency")
-			  ]),
+              ]),
+              new SideBarMenuItem("Reports", "", "fa fa-file", "", [
+                new SideBarMenuItem("Submitted Report", "", "fa fa-thumb-tack", "/app/main/submittedReport"),
+                new SideBarMenuItem("Won Report", "", "fa fa-thumbs-up", "/app/main/wonReport"),
+                new SideBarMenuItem("Lost Report", "", "fa fa-thumbs-down", "/app/main/lostReport"),
+                new SideBarMenuItem("Global Report", "", "fa fa-globe", "/app/main/globalReport"),
+                new SideBarMenuItem("Other Reports", "", "fa fa-object-group", "/app/main/otherReport")
+            ]),    
         new SideBarMenuItem("Administration", "Pages.Administration", "icon-wrench", "", [
             // new SideBarMenuItem("OrganizationUnits", "Pages.Administration.OrganizationUnits", "icon-layers", "/app/admin/organization-units"),
             new SideBarMenuItem("Roles", "Pages.Administration.Roles", "icon-briefcase", "/app/admin/roles"),

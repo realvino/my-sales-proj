@@ -8,6 +8,7 @@ import { Router,ActivatedRoute,NavigationEnd } from "@angular/router";
 import { QuotationServiceProxy, PaymentScheduleLists, PaymentCollectionLists } from '@shared/service-proxies/service-proxies';
 import { CreatePaymentCollectionComponent } from '@app/main/salesorder/create-or-edit-paymentCollection.component';
 import { CreatePaymentScheduleComponent } from '@app/main/salesorder/create-or-edit-paymentSchedule.component';
+import { AppSessionService } from '@shared/common/session/app-session.service';
 
 @Component({
 
@@ -30,13 +31,15 @@ export class SalesOrderEditComponent extends AppComponentBase {
     private static_number : number;
     paymentScheduleList :PaymentScheduleLists[] = [];
     paymentCollectionList :PaymentCollectionLists[] = [];
+    remoteServiceBaseUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(
         injector: Injector,
         private _tokenService: TokenService,
         private _activatedRoute: ActivatedRoute,
         private route:Router,
-        private _quotationService : QuotationServiceProxy
+        private _quotationService : QuotationServiceProxy,
+        private _appSessionService: AppSessionService
     ) {
         super(injector);
     }
@@ -68,10 +71,10 @@ export class SalesOrderEditComponent extends AppComponentBase {
                         }
                     }
                     else if (xmlhttp.status == 400) {
-                        alert('There was an error 400');
+                       // alert('There was an error 400');
                     }
                     else {
-                        alert('something else other than 200 was returned');
+                        //alert('something else other than 200 was returned');
                     }
 
                 }
@@ -84,7 +87,7 @@ export class SalesOrderEditComponent extends AppComponentBase {
                     var url = AppConsts.remoteServiceBaseUrl + "Pdf/ExportQuotationGenerate?QuotationId="+quotationId;
                     this.download_url = AppConsts.remoteServiceBaseUrl +'Pdf/ExportQuotationDownload?QuotationId='+this.quotation_id;
                     this.head_preview = 'Standard';
-
+                    // alert(url);
                     // var url = "http://192.168.1.50:22745/pdf/ExportQuotationGenerate?QuotationId="+quotationId;
                     // this.download_url = "http://192.168.1.50:22745/pdf/ExportQuotationGenerate?QuotationId="+this.quotation_id;
                     // this.head_preview = 'Standard';

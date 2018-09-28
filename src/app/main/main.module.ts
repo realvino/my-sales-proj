@@ -103,6 +103,12 @@ import { CreatePaymentScheduleComponent } from '@app/main/salesorder/create-or-e
 import { CreateServiceComponent } from '@app/main/products/create-or-edit-service.component';
 import { CreateEditqserviceComponent } from '@app/main/Quotations/create-or-edit-qservice.component';
 import { DragulaModule } from 'ng2-dragula';
+import { SubmittedReportComponent } from '@app/main/quotationReport/submittedReport.component';
+import { WonReportComponent } from '@app/main/quotationReport/wonReport.component';
+import { LostReportComponent } from '@app/main/quotationReport/lostReport.component';
+import { GlobalReportComponent } from '@app/main/quotationReport/globalReport.component';
+import { OtherReportComponent } from '@app/main/quotationReport/otherReport.component';
+import { CreateReportComponent } from '@app/main/quotationReport/createReport.component';
 export function highchartsFactory() {
     const hc = require('highcharts');
     const dd = require('highcharts/modules/drilldown');
@@ -205,10 +211,16 @@ export function highchartsFactory() {
 		CreatePaymentCollectionComponent,
 		CreatePaymentScheduleComponent,
 		CreateServiceComponent,
-		CreateEditqserviceComponent
+		CreateEditqserviceComponent,		
+		SubmittedReportComponent,
+		WonReportComponent,
+		LostReportComponent,
+		GlobalReportComponent,
+		OtherReportComponent,
+		CreateReportComponent
 	],
 	providers: [{
-        provide: HighchartsStatic,
+        provide: HighchartsStatic, 
         useFactory: highchartsFactory
       }]
 })

@@ -1,0 +1,364 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+        <div class="modal-dialog" style="width: 91%;">
+            <div class="modal-content">
+                <form *ngIf="active" #createServiceForm="ngForm" novalidate>
+                    <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                       <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span>{{l("Reports")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="md-radio-list" style="display: inline-flex;">
+                        <div class="md-radio" style="margin-left: 10px;" *ngFor="let option  of reports">
+                            <input id="Edit_{{option.text}}"  type="radio" class="md-radio" name="report"
+                                value= {{option.text}} (click)=radioChange(option.id)>
+                                <label for="Edit_{{option.text}}">
+                                    <span class="inc"></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    {{option.text}}
+                                </label>
+                        </div>
+                    </div>
+                    <div *ngIf="reportId > 0" class="row" style="margin-bottom: 15px;">
+                        <div class="col-md-6"> 
+                            <button class="btn btn-primary blue" (click)="generateReport()">
+                                {{l("Generate")}}
+                             </button>
+                        </div>
+                    </div>
+                    <div *ngIf="showGrid" class="portlet-body">
+                         <div *ngIf="reportId == 1" class="primeng-datatable-container" 
+                            [busyIf]="primengDatatableHelper.isLoading">
+                           <p-dataTable #dataTable
+                                        [value]="primengDatatableHelper.records"
+                                        rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                        [paginator]="false"
+                                        [lazy]="false"
+                                        emptyMessage="{{l('NoData')}}"
+                                        scrollable="true" 
+                                        responsive="primengDatatableHelper.isResponsive">
+                              
+                              <p-column field="enquiryTitle" header="{{l('Enquiry Title')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryTitle}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryNo" header="{{l('Enquiry No')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryNo}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="mileStones" header="{{l('Milestone')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.mileStones}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="mileStoneStatus" header="{{l('MilestoneStatus')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.mileStoneStatus}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="companyName" header="{{l('Company')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.companyName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="contactName" header="{{l('Contact')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.contactName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="salesperson" header="{{l('Salesperson')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.salesperson}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="remarks" header="{{l('Remarks')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.remarks}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="total" header="{{l('Total')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.total}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creator" header="{{l('Creator')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creator}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryClosureDate" header="{{l('Closure Date')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryClosureDate | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creationTime" header="{{l('Creation Time')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creationTime | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                           </p-dataTable>
+                           <div class="primeng-paging-container">
+                               <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                               #paginator
+                               (onPageChange)="getInqiuryReport($event)"
+                               [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                               [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                               </p-paginator>
+                               <span class="total-records-count">
+                                   {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                               </span>
+                           </div>
+                       </div>
+           
+                       <div *ngIf="reportId == 2" class="primeng-datatable-container" 
+                            [busyIf]="primengDatatableHelper.isLoading">
+                           <p-dataTable #dataTable
+                                        [value]="quotationArray"
+                                        rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                        [paginator]="false"
+                                        [lazy]="false"
+                                        emptyMessage="{{l('NoData')}}"
+                                        scrollable="true" 
+                                        responsive="primengDatatableHelper.isResponsive">
+                              
+                               <p-column field="subjectName" header="{{l('Subject')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.subjectName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="qRefno" header="{{l('Ref No')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.qRefno}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="salesperson" header="{{l('Salesperson')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.salesperson}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryTitle" header="{{l('Enquiry Title')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryTitle}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryNo" header="{{l('Enquiry No')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryNo}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="companyName" header="{{l('Company')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.companyName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="contactName" header="{{l('Contact')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.contactName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="mileStones" header="{{l('Milestone')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.mileStones}}
+                                   </ng-template>
+                               </p-column>
+                                <p-column field="mileStoneStatus" header="{{l('MileStone Status')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.mileStoneStatus}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="statusName" header="{{l('Quotation Status')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.statusName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="submittedDate" header="{{l('Submitted Date')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.submittedDate | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="wonDate" header="{{l('Won Date')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.wonDate | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="lostDate" header="{{l('Lost Date')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.lostDate | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="total" header="{{l('Total')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.total}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creator" header="{{l('Creator')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creator}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryClosureDate" header="{{l('Closure Date')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryClosureDate | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creationTime" header="{{l('Creation Time')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creationTime | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                           </p-dataTable>
+                           <div class="primeng-paging-container">
+                               <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                               #paginator
+                               (onPageChange)="getQuotationReport($event)"
+                               [totalRecords]="quotationArrayCount"
+                               [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                               </p-paginator>
+                               <span class="total-records-count">
+                                   {{l('TotalRecordsCount', quotationArrayCount)}}
+                               </span>
+                           </div>
+                       </div>
+           
+                       <div *ngIf="reportId == 3" class="primeng-datatable-container" 
+                            [busyIf]="primengDatatableHelper.isLoading">
+                           <p-dataTable #dataTable
+                                        [value]="companyArray"
+                                        rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                        [paginator]="false"
+                                        [lazy]="false"
+                                        emptyMessage="{{l('NoData')}}"
+                                        scrollable="true" 
+                                        responsive="primengDatatableHelper.isResponsive">
+                              
+                              <p-column field="name" header="{{l('Company')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.name}}
+                                   </ng-template>
+                               </p-column>          
+                               <p-column field="salesperson" header="{{l('Salesperson')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.salesperson}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creator" header="{{l('Creator')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creator}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="countryOrCompanyName" header="{{l('Country')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.countryOrCompanyName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="currencyOrTitleName" header="{{l('Currency')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.currencyOrTitleName}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="customerType" header="{{l('Customer Type')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.customerType}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="enquiryCount" header="{{l('Enquiry Count')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.enquiryCount}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="quotationCount" header="{{l('Quotation Count')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.quotationCount}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creationTime" header="{{l('Creation Time')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creationTime | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                           </p-dataTable>
+                           <div class="primeng-paging-container">
+                               <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                               #paginator
+                               (onPageChange)="getContactReport($event)"
+                               [totalRecords]="companyArrayCount"
+                               [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                               </p-paginator>
+                               <span class="total-records-count">
+                                   {{l('TotalRecordsCount', companyArrayCount)}}
+                               </span>
+                           </div>
+                       </div>
+           
+                       <div *ngIf="reportId == 4" class="primeng-datatable-container" 
+                            [busyIf]="primengDatatableHelper.isLoading">
+                           <p-dataTable #dataTable
+                                        [value]="contactArray"
+                                        rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                        [paginator]="false"
+                                        [lazy]="false"
+                                        emptyMessage="{{l('NoData')}}"
+                                        scrollable="true" 
+                                        responsive="primengDatatableHelper.isResponsive">
+           
+                              <p-column field="currencyOrTitleName" header="{{l('Title')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.currencyOrTitleName}}
+                                   </ng-template>
+                               </p-column>
+                              <p-column field="name" header="{{l('Nane')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.name}}
+                                   </ng-template>
+                               </p-column>  
+                               <p-column field="countryOrCompanyName" header="{{l('Company')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.countryOrCompanyName}}
+                                   </ng-template>
+                               </p-column>        
+                               <p-column field="salesperson" header="{{l('Salesperson')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.salesperson}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creator" header="{{l('Creator')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creator}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="customerType" header="{{l('Customer Type')}}" [sortable]="false" [style]="{'width':'150px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.customerType}}
+                                   </ng-template>
+                               </p-column>
+                               <p-column field="creationTime" header="{{l('Creation Time')}}" [sortable]="false" [style]="{'width':'200px'}">
+                                   <ng-template let-record="rowData" pTemplate="body">
+                                       {{record.creationTime | amDateFormat :'MM/DD/YYYY'}}
+                                   </ng-template>
+                               </p-column>
+                           </p-dataTable>
+                           <div class="primeng-paging-container">
+                               <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                               #paginator
+                               (onPageChange)="getContactReport($event)"
+                               [totalRecords]="contactArrayCount"
+                               [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                               </p-paginator>
+                               <span class="total-records-count">
+                                   {{l('TotalRecordsCount',contactArrayCount)}}
+                               </span>
+                           </div>
+                       </div>
+                        
+                    </div>
+                 </div>
+                </form>
+            </div>
+        </div>
+    </div>

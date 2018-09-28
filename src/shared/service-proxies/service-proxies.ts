@@ -5871,6 +5871,110 @@ export class EnquiryServiceProxy {
         }
         return Observable.of<any[]>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    getGlobalReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfEnquiryQuotationKanbanList> {
+        let url_ = this.baseUrl + "/api/services/app/Enquiry/GetGlobalReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetGlobalReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetGlobalReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfEnquiryQuotationKanbanList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfEnquiryQuotationKanbanList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetGlobalReport(response: Response): Observable<PagedResultDtoOfEnquiryQuotationKanbanList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfEnquiryQuotationKanbanList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfEnquiryQuotationKanbanList.fromJS(resultData200) : new PagedResultDtoOfEnquiryQuotationKanbanList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfEnquiryQuotationKanbanList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getGlobalReportToExcel(): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Enquiry/GetGlobalReportToExcel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetGlobalReportToExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetGlobalReportToExcel(response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<FileDto>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetGlobalReportToExcel(response: Response): Observable<FileDto> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: FileDto = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<FileDto>(<any>null);
+    }
 }
 
 @Injectable()
@@ -14351,6 +14455,651 @@ export class ReasonServiceProxy {
 }
 
 @Injectable()
+export class ReportServiceProxy {
+    private http: Http;
+    private baseUrl: string;
+    protected jsonParseReviver: (key: string, value: any) => any = undefined;
+
+    constructor(@Inject(Http) http: Http, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    getQuotationSubmittedReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfReportList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetQuotationSubmittedReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetQuotationSubmittedReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetQuotationSubmittedReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetQuotationSubmittedReport(response: Response): Observable<PagedResultDtoOfReportList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfReportList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfReportList.fromJS(resultData200) : new PagedResultDtoOfReportList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfReportList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getQuotationWonReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfReportList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetQuotationWonReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetQuotationWonReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetQuotationWonReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetQuotationWonReport(response: Response): Observable<PagedResultDtoOfReportList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfReportList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfReportList.fromJS(resultData200) : new PagedResultDtoOfReportList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfReportList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getQuotationLostReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfReportList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetQuotationLostReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetQuotationLostReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetQuotationLostReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfReportList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetQuotationLostReport(response: Response): Observable<PagedResultDtoOfReportList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfReportList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfReportList.fromJS(resultData200) : new PagedResultDtoOfReportList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfReportList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getQuotationReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfQuotationReportDtoList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetQuotationReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetQuotationReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetQuotationReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfQuotationReportDtoList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfQuotationReportDtoList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetQuotationReport(response: Response): Observable<PagedResultDtoOfQuotationReportDtoList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfQuotationReportDtoList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfQuotationReportDtoList.fromJS(resultData200) : new PagedResultDtoOfQuotationReportDtoList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfQuotationReportDtoList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getInquiryReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfQuotationReportDtoList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetInquiryReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetInquiryReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetInquiryReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfQuotationReportDtoList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfQuotationReportDtoList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetInquiryReport(response: Response): Observable<PagedResultDtoOfQuotationReportDtoList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfQuotationReportDtoList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfQuotationReportDtoList.fromJS(resultData200) : new PagedResultDtoOfQuotationReportDtoList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfQuotationReportDtoList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getCompanyReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfCompanyReportList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetCompanyReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetCompanyReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetCompanyReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfCompanyReportList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfCompanyReportList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetCompanyReport(response: Response): Observable<PagedResultDtoOfCompanyReportList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfCompanyReportList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfCompanyReportList.fromJS(resultData200) : new PagedResultDtoOfCompanyReportList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfCompanyReportList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getContactReport(filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfCompanyReportList> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetContactReport?";
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetContactReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetContactReport(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfCompanyReportList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfCompanyReportList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetContactReport(response: Response): Observable<PagedResultDtoOfCompanyReportList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfCompanyReportList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfCompanyReportList.fromJS(resultData200) : new PagedResultDtoOfCompanyReportList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfCompanyReportList>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getGlobalReportColumn(): Observable<any[]> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetGlobalReportColumn";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetGlobalReportColumn(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetGlobalReportColumn(response_);
+                } catch (e) {
+                    return <Observable<any[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<any[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetGlobalReportColumn(response: Response): Observable<any[]> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: any[] = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<any[]>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getSubmittedReportToExcel(): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetSubmittedReportToExcel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetSubmittedReportToExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetSubmittedReportToExcel(response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<FileDto>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetSubmittedReportToExcel(response: Response): Observable<FileDto> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: FileDto = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<FileDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getWonReportToExcel(): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetWonReportToExcel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetWonReportToExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetWonReportToExcel(response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<FileDto>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetWonReportToExcel(response: Response): Observable<FileDto> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: FileDto = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<FileDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getLostReportToExcel(): Observable<FileDto> {
+        let url_ = this.baseUrl + "/api/services/app/Report/GetLostReportToExcel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetLostReportToExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetLostReportToExcel(response_);
+                } catch (e) {
+                    return <Observable<FileDto>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<FileDto>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetLostReportToExcel(response: Response): Observable<FileDto> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: FileDto = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? FileDto.fromJS(resultData200) : new FileDto();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<FileDto>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    createReport(input: ReportGeneratorInput): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Report/CreateReport";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input ? input.toJSON() : null);
+        
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processCreateReport(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processCreateReport(response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processCreateReport(response: Response): Observable<void> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<void>(<any>null);
+    }
+}
+
+@Injectable()
 export class RoleServiceProxy {
     private http: Http;
     private baseUrl: string;
@@ -14936,6 +15685,54 @@ export class Select2ServiceProxy {
     }
 
     protected processGetMilestone(response: Response): Observable<Select2Result> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: Select2Result = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Select2Result.fromJS(resultData200) : new Select2Result();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<Select2Result>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getEnqMilestone(): Observable<Select2Result> {
+        let url_ = this.baseUrl + "/api/services/app/Select2/GetEnqMilestone";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetEnqMilestone(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetEnqMilestone(response_);
+                } catch (e) {
+                    return <Observable<Select2Result>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Select2Result>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetEnqMilestone(response: Response): Observable<Select2Result> {
         const status = response.status; 
 
         if (status === 200) {
@@ -26222,6 +27019,184 @@ export interface IQuotationList {
     vatAmount: number;
 }
 
+export class PagedResultDtoOfEnquiryQuotationKanbanList implements IPagedResultDtoOfEnquiryQuotationKanbanList {
+    totalCount: number;
+    items: EnquiryQuotationKanbanList[];
+
+    constructor(data?: IPagedResultDtoOfEnquiryQuotationKanbanList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(EnquiryQuotationKanbanList.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfEnquiryQuotationKanbanList {
+        let result = new PagedResultDtoOfEnquiryQuotationKanbanList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfEnquiryQuotationKanbanList {
+    totalCount: number;
+    items: EnquiryQuotationKanbanList[];
+}
+
+export class EnquiryQuotationKanbanList implements IEnquiryQuotationKanbanList {
+    id: number;
+    enquiryNo: string;
+    title: string;
+    mileStoneId: number;
+    mileStoneName: string;
+    mileStoneStatusId: number;
+    mileStoneStatusName: string;
+    companyId: number;
+    companyName: string;
+    contactId: number;
+    contactName: string;
+    creationTime: moment.Moment;
+    isQuotation: boolean;
+    quotationId: number;
+    subjectName: string;
+    closeDate: moment.Moment;
+    total: number;
+    quotationCount: number;
+    enqQuotation: string;
+    qRefno: string;
+    creator: string;
+    creatorImg: string;
+    salesperson: string;
+    salespersonImg: string;
+    remarks: string;
+
+    constructor(data?: IEnquiryQuotationKanbanList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.enquiryNo = data["enquiryNo"];
+            this.title = data["title"];
+            this.mileStoneId = data["mileStoneId"];
+            this.mileStoneName = data["mileStoneName"];
+            this.mileStoneStatusId = data["mileStoneStatusId"];
+            this.mileStoneStatusName = data["mileStoneStatusName"];
+            this.companyId = data["companyId"];
+            this.companyName = data["companyName"];
+            this.contactId = data["contactId"];
+            this.contactName = data["contactName"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.isQuotation = data["isQuotation"];
+            this.quotationId = data["quotationId"];
+            this.subjectName = data["subjectName"];
+            this.closeDate = data["closeDate"] ? moment(data["closeDate"].toString()) : <any>undefined;
+            this.total = data["total"];
+            this.quotationCount = data["quotationCount"];
+            this.enqQuotation = data["enqQuotation"];
+            this.qRefno = data["qRefno"];
+            this.creator = data["creator"];
+            this.creatorImg = data["creatorImg"];
+            this.salesperson = data["salesperson"];
+            this.salespersonImg = data["salespersonImg"];
+            this.remarks = data["remarks"];
+        }
+    }
+
+    static fromJS(data: any): EnquiryQuotationKanbanList {
+        let result = new EnquiryQuotationKanbanList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["enquiryNo"] = this.enquiryNo;
+        data["title"] = this.title;
+        data["mileStoneId"] = this.mileStoneId;
+        data["mileStoneName"] = this.mileStoneName;
+        data["mileStoneStatusId"] = this.mileStoneStatusId;
+        data["mileStoneStatusName"] = this.mileStoneStatusName;
+        data["companyId"] = this.companyId;
+        data["companyName"] = this.companyName;
+        data["contactId"] = this.contactId;
+        data["contactName"] = this.contactName;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["isQuotation"] = this.isQuotation;
+        data["quotationId"] = this.quotationId;
+        data["subjectName"] = this.subjectName;
+        data["closeDate"] = this.closeDate ? this.closeDate.toISOString() : <any>undefined;
+        data["total"] = this.total;
+        data["quotationCount"] = this.quotationCount;
+        data["enqQuotation"] = this.enqQuotation;
+        data["qRefno"] = this.qRefno;
+        data["creator"] = this.creator;
+        data["creatorImg"] = this.creatorImg;
+        data["salesperson"] = this.salesperson;
+        data["salespersonImg"] = this.salespersonImg;
+        data["remarks"] = this.remarks;
+        return data; 
+    }
+}
+
+export interface IEnquiryQuotationKanbanList {
+    id: number;
+    enquiryNo: string;
+    title: string;
+    mileStoneId: number;
+    mileStoneName: string;
+    mileStoneStatusId: number;
+    mileStoneStatusName: string;
+    companyId: number;
+    companyName: string;
+    contactId: number;
+    contactName: string;
+    creationTime: moment.Moment;
+    isQuotation: boolean;
+    quotationId: number;
+    subjectName: string;
+    closeDate: moment.Moment;
+    total: number;
+    quotationCount: number;
+    enqQuotation: string;
+    qRefno: string;
+    creator: string;
+    creatorImg: string;
+    salesperson: string;
+    salespersonImg: string;
+    remarks: string;
+}
+
 export class ListResultDtoOfFreightListDto implements IListResultDtoOfFreightListDto {
     items: FreightListDto[];
 
@@ -33278,6 +34253,683 @@ export interface ICreateReasonInput {
     code: string;
     name: string;
     tenantId: number;
+}
+
+export class PagedResultDtoOfReportList implements IPagedResultDtoOfReportList {
+    totalCount: number;
+    items: ReportList[];
+
+    constructor(data?: IPagedResultDtoOfReportList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(ReportList.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfReportList {
+        let result = new PagedResultDtoOfReportList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfReportList {
+    totalCount: number;
+    items: ReportList[];
+}
+
+export class ReportList implements IReportList {
+    id: number;
+    subjectName: string;
+    proposalNumber: string;
+    projectRef: string;
+    total: number;
+    salesOrderNumber: string;
+    customerPONumber: string;
+    exchangeRate: number;
+    enquiryId: number;
+    enquiryName: string;
+    enquiryNumber: string;
+    enquiryClosureDate: string;
+    quotationTitleId: number;
+    quotationTitleName: string;
+    companyId: number;
+    companyName: string;
+    contactId: number;
+    contactName: string;
+    statusId: number;
+    statusName: string;
+    freightId: number;
+    freightName: string;
+    paymentId: number;
+    paymentName: string;
+    packingId: number;
+    packingName: string;
+    warrantyId: number;
+    warrantyName: string;
+    validityId: number;
+    validityName: string;
+    deliveryId: number;
+    deliveryName: string;
+    currencyId: number;
+    currencyName: string;
+    salesmanId: number;
+    salesman: string;
+    reasonId: number;
+    reasonName: string;
+    creationTime: string;
+    mileStoneId: number;
+    mileStones: string;
+    submitted: boolean;
+    submittedDate: moment.Moment;
+    won: boolean;
+    wonDate: moment.Moment;
+    lost: boolean;
+    lostDate: moment.Moment;
+    vat: boolean;
+    vatPercentage: number;
+    vatAmount: number;
+
+    constructor(data?: IReportList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.subjectName = data["subjectName"];
+            this.proposalNumber = data["proposalNumber"];
+            this.projectRef = data["projectRef"];
+            this.total = data["total"];
+            this.salesOrderNumber = data["salesOrderNumber"];
+            this.customerPONumber = data["customerPONumber"];
+            this.exchangeRate = data["exchangeRate"];
+            this.enquiryId = data["enquiryId"];
+            this.enquiryName = data["enquiryName"];
+            this.enquiryNumber = data["enquiryNumber"];
+            this.enquiryClosureDate = data["enquiryClosureDate"];
+            this.quotationTitleId = data["quotationTitleId"];
+            this.quotationTitleName = data["quotationTitleName"];
+            this.companyId = data["companyId"];
+            this.companyName = data["companyName"];
+            this.contactId = data["contactId"];
+            this.contactName = data["contactName"];
+            this.statusId = data["statusId"];
+            this.statusName = data["statusName"];
+            this.freightId = data["freightId"];
+            this.freightName = data["freightName"];
+            this.paymentId = data["paymentId"];
+            this.paymentName = data["paymentName"];
+            this.packingId = data["packingId"];
+            this.packingName = data["packingName"];
+            this.warrantyId = data["warrantyId"];
+            this.warrantyName = data["warrantyName"];
+            this.validityId = data["validityId"];
+            this.validityName = data["validityName"];
+            this.deliveryId = data["deliveryId"];
+            this.deliveryName = data["deliveryName"];
+            this.currencyId = data["currencyId"];
+            this.currencyName = data["currencyName"];
+            this.salesmanId = data["salesmanId"];
+            this.salesman = data["salesman"];
+            this.reasonId = data["reasonId"];
+            this.reasonName = data["reasonName"];
+            this.creationTime = data["creationTime"];
+            this.mileStoneId = data["mileStoneId"];
+            this.mileStones = data["mileStones"];
+            this.submitted = data["submitted"];
+            this.submittedDate = data["submittedDate"] ? moment(data["submittedDate"].toString()) : <any>undefined;
+            this.won = data["won"];
+            this.wonDate = data["wonDate"] ? moment(data["wonDate"].toString()) : <any>undefined;
+            this.lost = data["lost"];
+            this.lostDate = data["lostDate"] ? moment(data["lostDate"].toString()) : <any>undefined;
+            this.vat = data["vat"];
+            this.vatPercentage = data["vatPercentage"];
+            this.vatAmount = data["vatAmount"];
+        }
+    }
+
+    static fromJS(data: any): ReportList {
+        let result = new ReportList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["subjectName"] = this.subjectName;
+        data["proposalNumber"] = this.proposalNumber;
+        data["projectRef"] = this.projectRef;
+        data["total"] = this.total;
+        data["salesOrderNumber"] = this.salesOrderNumber;
+        data["customerPONumber"] = this.customerPONumber;
+        data["exchangeRate"] = this.exchangeRate;
+        data["enquiryId"] = this.enquiryId;
+        data["enquiryName"] = this.enquiryName;
+        data["enquiryNumber"] = this.enquiryNumber;
+        data["enquiryClosureDate"] = this.enquiryClosureDate;
+        data["quotationTitleId"] = this.quotationTitleId;
+        data["quotationTitleName"] = this.quotationTitleName;
+        data["companyId"] = this.companyId;
+        data["companyName"] = this.companyName;
+        data["contactId"] = this.contactId;
+        data["contactName"] = this.contactName;
+        data["statusId"] = this.statusId;
+        data["statusName"] = this.statusName;
+        data["freightId"] = this.freightId;
+        data["freightName"] = this.freightName;
+        data["paymentId"] = this.paymentId;
+        data["paymentName"] = this.paymentName;
+        data["packingId"] = this.packingId;
+        data["packingName"] = this.packingName;
+        data["warrantyId"] = this.warrantyId;
+        data["warrantyName"] = this.warrantyName;
+        data["validityId"] = this.validityId;
+        data["validityName"] = this.validityName;
+        data["deliveryId"] = this.deliveryId;
+        data["deliveryName"] = this.deliveryName;
+        data["currencyId"] = this.currencyId;
+        data["currencyName"] = this.currencyName;
+        data["salesmanId"] = this.salesmanId;
+        data["salesman"] = this.salesman;
+        data["reasonId"] = this.reasonId;
+        data["reasonName"] = this.reasonName;
+        data["creationTime"] = this.creationTime;
+        data["mileStoneId"] = this.mileStoneId;
+        data["mileStones"] = this.mileStones;
+        data["submitted"] = this.submitted;
+        data["submittedDate"] = this.submittedDate ? this.submittedDate.toISOString() : <any>undefined;
+        data["won"] = this.won;
+        data["wonDate"] = this.wonDate ? this.wonDate.toISOString() : <any>undefined;
+        data["lost"] = this.lost;
+        data["lostDate"] = this.lostDate ? this.lostDate.toISOString() : <any>undefined;
+        data["vat"] = this.vat;
+        data["vatPercentage"] = this.vatPercentage;
+        data["vatAmount"] = this.vatAmount;
+        return data; 
+    }
+}
+
+export interface IReportList {
+    id: number;
+    subjectName: string;
+    proposalNumber: string;
+    projectRef: string;
+    total: number;
+    salesOrderNumber: string;
+    customerPONumber: string;
+    exchangeRate: number;
+    enquiryId: number;
+    enquiryName: string;
+    enquiryNumber: string;
+    enquiryClosureDate: string;
+    quotationTitleId: number;
+    quotationTitleName: string;
+    companyId: number;
+    companyName: string;
+    contactId: number;
+    contactName: string;
+    statusId: number;
+    statusName: string;
+    freightId: number;
+    freightName: string;
+    paymentId: number;
+    paymentName: string;
+    packingId: number;
+    packingName: string;
+    warrantyId: number;
+    warrantyName: string;
+    validityId: number;
+    validityName: string;
+    deliveryId: number;
+    deliveryName: string;
+    currencyId: number;
+    currencyName: string;
+    salesmanId: number;
+    salesman: string;
+    reasonId: number;
+    reasonName: string;
+    creationTime: string;
+    mileStoneId: number;
+    mileStones: string;
+    submitted: boolean;
+    submittedDate: moment.Moment;
+    won: boolean;
+    wonDate: moment.Moment;
+    lost: boolean;
+    lostDate: moment.Moment;
+    vat: boolean;
+    vatPercentage: number;
+    vatAmount: number;
+}
+
+export class PagedResultDtoOfQuotationReportDtoList implements IPagedResultDtoOfQuotationReportDtoList {
+    totalCount: number;
+    items: QuotationReportDtoList[];
+
+    constructor(data?: IPagedResultDtoOfQuotationReportDtoList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(QuotationReportDtoList.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfQuotationReportDtoList {
+        let result = new PagedResultDtoOfQuotationReportDtoList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfQuotationReportDtoList {
+    totalCount: number;
+    items: QuotationReportDtoList[];
+}
+
+export class QuotationReportDtoList implements IQuotationReportDtoList {
+    quotationId: number;
+    subjectName: string;
+    qRefno: string;
+    total: number;
+    enquiryId: number;
+    enquiryTitle: string;
+    enquiryNo: string;
+    remarks: string;
+    enquiryClosureDate: moment.Moment;
+    companyName: string;
+    contactName: string;
+    statusName: string;
+    salesperson: string;
+    creator: string;
+    creationTime: moment.Moment;
+    mileStones: string;
+    mileStoneStatus: string;
+    submittedDate: moment.Moment;
+    wonDate: moment.Moment;
+    lostDate: moment.Moment;
+
+    constructor(data?: IQuotationReportDtoList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.quotationId = data["quotationId"];
+            this.subjectName = data["subjectName"];
+            this.qRefno = data["qRefno"];
+            this.total = data["total"];
+            this.enquiryId = data["enquiryId"];
+            this.enquiryTitle = data["enquiryTitle"];
+            this.enquiryNo = data["enquiryNo"];
+            this.remarks = data["remarks"];
+            this.enquiryClosureDate = data["enquiryClosureDate"] ? moment(data["enquiryClosureDate"].toString()) : <any>undefined;
+            this.companyName = data["companyName"];
+            this.contactName = data["contactName"];
+            this.statusName = data["statusName"];
+            this.salesperson = data["salesperson"];
+            this.creator = data["creator"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.mileStones = data["mileStones"];
+            this.mileStoneStatus = data["mileStoneStatus"];
+            this.submittedDate = data["submittedDate"] ? moment(data["submittedDate"].toString()) : <any>undefined;
+            this.wonDate = data["wonDate"] ? moment(data["wonDate"].toString()) : <any>undefined;
+            this.lostDate = data["lostDate"] ? moment(data["lostDate"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): QuotationReportDtoList {
+        let result = new QuotationReportDtoList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quotationId"] = this.quotationId;
+        data["subjectName"] = this.subjectName;
+        data["qRefno"] = this.qRefno;
+        data["total"] = this.total;
+        data["enquiryId"] = this.enquiryId;
+        data["enquiryTitle"] = this.enquiryTitle;
+        data["enquiryNo"] = this.enquiryNo;
+        data["remarks"] = this.remarks;
+        data["enquiryClosureDate"] = this.enquiryClosureDate ? this.enquiryClosureDate.toISOString() : <any>undefined;
+        data["companyName"] = this.companyName;
+        data["contactName"] = this.contactName;
+        data["statusName"] = this.statusName;
+        data["salesperson"] = this.salesperson;
+        data["creator"] = this.creator;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["mileStones"] = this.mileStones;
+        data["mileStoneStatus"] = this.mileStoneStatus;
+        data["submittedDate"] = this.submittedDate ? this.submittedDate.toISOString() : <any>undefined;
+        data["wonDate"] = this.wonDate ? this.wonDate.toISOString() : <any>undefined;
+        data["lostDate"] = this.lostDate ? this.lostDate.toISOString() : <any>undefined;
+        return data; 
+    }
+}
+
+export interface IQuotationReportDtoList {
+    quotationId: number;
+    subjectName: string;
+    qRefno: string;
+    total: number;
+    enquiryId: number;
+    enquiryTitle: string;
+    enquiryNo: string;
+    remarks: string;
+    enquiryClosureDate: moment.Moment;
+    companyName: string;
+    contactName: string;
+    statusName: string;
+    salesperson: string;
+    creator: string;
+    creationTime: moment.Moment;
+    mileStones: string;
+    mileStoneStatus: string;
+    submittedDate: moment.Moment;
+    wonDate: moment.Moment;
+    lostDate: moment.Moment;
+}
+
+export class PagedResultDtoOfCompanyReportList implements IPagedResultDtoOfCompanyReportList {
+    totalCount: number;
+    items: CompanyReportList[];
+
+    constructor(data?: IPagedResultDtoOfCompanyReportList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.totalCount = data["totalCount"];
+            if (data["items"] && data["items"].constructor === Array) {
+                this.items = [];
+                for (let item of data["items"])
+                    this.items.push(CompanyReportList.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PagedResultDtoOfCompanyReportList {
+        let result = new PagedResultDtoOfCompanyReportList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["totalCount"] = this.totalCount;
+        if (this.items && this.items.constructor === Array) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data; 
+    }
+}
+
+export interface IPagedResultDtoOfCompanyReportList {
+    totalCount: number;
+    items: CompanyReportList[];
+}
+
+export class CompanyReportList implements ICompanyReportList {
+    id: number;
+    name: string;
+    salesperson: string;
+    creator: string;
+    creationTime: moment.Moment;
+    countryOrCompanyName: string;
+    customerType: string;
+    currencyOrTitleName: string;
+    enquiryCount: number;
+    quotationCount: number;
+
+    constructor(data?: ICompanyReportList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.salesperson = data["salesperson"];
+            this.creator = data["creator"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
+            this.countryOrCompanyName = data["countryOrCompanyName"];
+            this.customerType = data["customerType"];
+            this.currencyOrTitleName = data["currencyOrTitleName"];
+            this.enquiryCount = data["enquiryCount"];
+            this.quotationCount = data["quotationCount"];
+        }
+    }
+
+    static fromJS(data: any): CompanyReportList {
+        let result = new CompanyReportList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["salesperson"] = this.salesperson;
+        data["creator"] = this.creator;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        data["countryOrCompanyName"] = this.countryOrCompanyName;
+        data["customerType"] = this.customerType;
+        data["currencyOrTitleName"] = this.currencyOrTitleName;
+        data["enquiryCount"] = this.enquiryCount;
+        data["quotationCount"] = this.quotationCount;
+        return data; 
+    }
+}
+
+export interface ICompanyReportList {
+    id: number;
+    name: string;
+    salesperson: string;
+    creator: string;
+    creationTime: moment.Moment;
+    countryOrCompanyName: string;
+    customerType: string;
+    currencyOrTitleName: string;
+    enquiryCount: number;
+    quotationCount: number;
+}
+
+export class ReportGeneratorInput implements IReportGeneratorInput {
+    id: number;
+    tenantId: number;
+    name: string;
+    reportTypeId: number;
+    mileStone: string;
+    mileStoneStatus: string;
+    salesperson: string;
+    creator: string;
+    country: string;
+    currency: string;
+    customerType: string;
+    quotationStatus: string;
+    enquiryCreationTime: moment.Moment;
+    enquiryCreationTypeId: number;
+    quotationCreationTime: moment.Moment;
+    quotationCreationTypeId: number;
+    submitttedDate: moment.Moment;
+    submitttedDateId: number;
+    wonDate: moment.Moment;
+    wonDateId: number;
+    lostDate: moment.Moment;
+    lostDateId: number;
+    hiddenColumns: string;
+
+    constructor(data?: IReportGeneratorInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.tenantId = data["tenantId"];
+            this.name = data["name"];
+            this.reportTypeId = data["reportTypeId"];
+            this.mileStone = data["mileStone"];
+            this.mileStoneStatus = data["mileStoneStatus"];
+            this.salesperson = data["salesperson"];
+            this.creator = data["creator"];
+            this.country = data["country"];
+            this.currency = data["currency"];
+            this.customerType = data["customerType"];
+            this.quotationStatus = data["quotationStatus"];
+            this.enquiryCreationTime = data["enquiryCreationTime"] ? moment(data["enquiryCreationTime"].toString()) : <any>undefined;
+            this.enquiryCreationTypeId = data["enquiryCreationTypeId"];
+            this.quotationCreationTime = data["quotationCreationTime"] ? moment(data["quotationCreationTime"].toString()) : <any>undefined;
+            this.quotationCreationTypeId = data["quotationCreationTypeId"];
+            this.submitttedDate = data["submitttedDate"] ? moment(data["submitttedDate"].toString()) : <any>undefined;
+            this.submitttedDateId = data["submitttedDateId"];
+            this.wonDate = data["wonDate"] ? moment(data["wonDate"].toString()) : <any>undefined;
+            this.wonDateId = data["wonDateId"];
+            this.lostDate = data["lostDate"] ? moment(data["lostDate"].toString()) : <any>undefined;
+            this.lostDateId = data["lostDateId"];
+            this.hiddenColumns = data["hiddenColumns"];
+        }
+    }
+
+    static fromJS(data: any): ReportGeneratorInput {
+        let result = new ReportGeneratorInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["tenantId"] = this.tenantId;
+        data["name"] = this.name;
+        data["reportTypeId"] = this.reportTypeId;
+        data["mileStone"] = this.mileStone;
+        data["mileStoneStatus"] = this.mileStoneStatus;
+        data["salesperson"] = this.salesperson;
+        data["creator"] = this.creator;
+        data["country"] = this.country;
+        data["currency"] = this.currency;
+        data["customerType"] = this.customerType;
+        data["quotationStatus"] = this.quotationStatus;
+        data["enquiryCreationTime"] = this.enquiryCreationTime ? this.enquiryCreationTime.toISOString() : <any>undefined;
+        data["enquiryCreationTypeId"] = this.enquiryCreationTypeId;
+        data["quotationCreationTime"] = this.quotationCreationTime ? this.quotationCreationTime.toISOString() : <any>undefined;
+        data["quotationCreationTypeId"] = this.quotationCreationTypeId;
+        data["submitttedDate"] = this.submitttedDate ? this.submitttedDate.toISOString() : <any>undefined;
+        data["submitttedDateId"] = this.submitttedDateId;
+        data["wonDate"] = this.wonDate ? this.wonDate.toISOString() : <any>undefined;
+        data["wonDateId"] = this.wonDateId;
+        data["lostDate"] = this.lostDate ? this.lostDate.toISOString() : <any>undefined;
+        data["lostDateId"] = this.lostDateId;
+        data["hiddenColumns"] = this.hiddenColumns;
+        return data; 
+    }
+}
+
+export interface IReportGeneratorInput {
+    id: number;
+    tenantId: number;
+    name: string;
+    reportTypeId: number;
+    mileStone: string;
+    mileStoneStatus: string;
+    salesperson: string;
+    creator: string;
+    country: string;
+    currency: string;
+    customerType: string;
+    quotationStatus: string;
+    enquiryCreationTime: moment.Moment;
+    enquiryCreationTypeId: number;
+    quotationCreationTime: moment.Moment;
+    quotationCreationTypeId: number;
+    submitttedDate: moment.Moment;
+    submitttedDateId: number;
+    wonDate: moment.Moment;
+    wonDateId: number;
+    lostDate: moment.Moment;
+    lostDateId: number;
+    hiddenColumns: string;
 }
 
 export class ListResultDtoOfRoleListDto implements IListResultDtoOfRoleListDto {

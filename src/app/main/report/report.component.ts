@@ -193,7 +193,7 @@ export class ReportComponent extends AppComponentBase implements OnInit {
 
     ngOnInit():void {
         this.loadSlider();
-        this.getUserTarget();
+        //this.getUserTarget();
     }
     activePotentialGraph(value:any){
         this._graphService.getActivepotential(value.id).subscribe(result=>{
@@ -350,6 +350,7 @@ export class ReportComponent extends AppComponentBase implements OnInit {
         this.carousel.slideClicked(this.cardIndex);
         this.activePotentialGraph(this.slides[this.cardIndex]);
         this.wonGraph(this.slides[this.cardIndex]);
+        this.getUserTarget(this.slides[this.cardIndex]);
     }
     loadSlider(){
         this.slides = [];
@@ -367,11 +368,12 @@ export class ReportComponent extends AppComponentBase implements OnInit {
             this.slides = newSlide.concat(this.slides);
             this.activePotentialGraph(this.slides[this.cardIndex]);
             this.wonGraph(this.slides[this.cardIndex]);
+            this.getUserTarget(this.slides[this.cardIndex]);
         });
     }
-    getUserTarget():void{
-       this._dashboardService.getUserTarget(0).subscribe((result) => {
-
+    getUserTarget(value:any):void{
+        console.log(value);
+        this._dashboardService.getUserTarget(value.id).subscribe((result) => {
         this.yeartarget = result[0].yeartarget;
         this.monthtarget = result[0].monthTarget;
         this.yearachived = result[0].yearAchived;
@@ -380,6 +382,7 @@ export class ReportComponent extends AppComponentBase implements OnInit {
         this.yearPercent.value = result[0]._Year;
         this.monthPercent.value =  result[0]._Month;
        });
+
     }
 
     public lineChartOptions:any = {
