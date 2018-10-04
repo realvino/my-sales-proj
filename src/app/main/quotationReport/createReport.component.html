@@ -1,5 +1,5 @@
 <div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
-        <div class="modal-dialog" style="width: 91%;">
+        <div class="modal-dialog" style="width: 80%;">
             <div class="modal-content">
                 <form *ngIf="active" #createServiceForm="ngForm" novalidate>
                     <div class="modal-header">
@@ -11,8 +11,8 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <div class="md-radio-list" style="display: inline-flex;">
-                        <div class="md-radio" style="margin-left: 10px;" *ngFor="let option  of reports">
+                    <div class="md-radio-list">
+                        <div class="md-radio" *ngFor="let option  of reports">
                             <input id="Edit_{{option.text}}"  type="radio" class="md-radio" name="report"
                                 value= {{option.text}} (click)=radioChange(option.id)>
                                 <label for="Edit_{{option.text}}">
@@ -34,73 +34,62 @@
                          <div *ngIf="reportId == 1" class="primeng-datatable-container" 
                             [busyIf]="primengDatatableHelper.isLoading">
                            <p-dataTable #dataTable
-                                        [value]="primengDatatableHelper.records"
-                                        rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
-                                        [paginator]="false"
-                                        [lazy]="false"
-                                        emptyMessage="{{l('NoData')}}"
-                                        scrollable="true" 
-                                        responsive="primengDatatableHelper.isResponsive">
+                                (onLazyLoad)="getInqiuryReport($event)"
+                                [value]="primengDatatableHelper.records"
+                                rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                [paginator]="false"
+                                [lazy]="false"
+                                emptyMessage="{{l('NoData')}}"
+                                scrollable="true" 
+                                responsive="primengDatatableHelper.isResponsive">
                               
                               <p-column field="enquiryTitle" header="{{l('Enquiry Title')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.enquiryTitle}}
-                                   </ng-template>
                                </p-column>
                                <p-column field="enquiryNo" header="{{l('Enquiry No')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.enquiryNo}}
-                                   </ng-template>
                                </p-column>
-                               <p-column field="mileStones" header="{{l('Milestone')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.mileStones}}
-                                   </ng-template>
-                               </p-column>
+                               <p-column [filter]="true" field="mileStones" header="MileStones" [sortable]="false" [style]="{'width':'150px'}">
+                                    <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="mileStoneFilter.toggle($event)"></i>
+                                    </ng-template>
+                                </p-column>
                                <p-column field="mileStoneStatus" header="{{l('MilestoneStatus')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.mileStoneStatus}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="mileStoneStatusFilter.toggle($event)" ></i>
+                                    </ng-template>
                                </p-column>
                                <p-column field="companyName" header="{{l('Company')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.companyName}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="companyFilter.toggle($event)" ></i>
+                                    </ng-template>
                                </p-column>
                                <p-column field="contactName" header="{{l('Contact')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.contactName}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="contactFilter.toggle($event)" ></i>
+                                    </ng-template>
                                </p-column>
                                <p-column field="salesperson" header="{{l('Salesperson')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.salesperson}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="salespersonFilter.toggle($event)" ></i>
+                                    </ng-template>
                                </p-column>
                                <p-column field="remarks" header="{{l('Remarks')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.remarks}}
-                                   </ng-template>
                                </p-column>
                                <p-column field="total" header="{{l('Total')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.total}}
-                                   </ng-template>
                                </p-column>
                                <p-column field="creator" header="{{l('Creator')}}" [sortable]="false" [style]="{'width':'150px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.creator}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="creatorFilter.toggle($event)" ></i>
+                                    </ng-template>
                                </p-column>
-                               <p-column field="enquiryClosureDate" header="{{l('Closure Date')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.enquiryClosureDate | amDateFormat :'MM/DD/YYYY'}}
-                                   </ng-template>
-                               </p-column>
+                               <p-column [filter]="false" field="enquiryClosureDate" header="Closure Date" [sortable]="true" [style]="{'width':'150px'}">
+                                    <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="closureDateFilter.toggle($event,2)" ></i>
+                                    </ng-template>  
+                                </p-column>
                                <p-column field="creationTime" header="{{l('Creation Time')}}" [sortable]="false" [style]="{'width':'200px'}">
-                                   <ng-template let-record="rowData" pTemplate="body">
-                                       {{record.creationTime | amDateFormat :'MM/DD/YYYY'}}
-                                   </ng-template>
+                                   <ng-template #filterTemplate pTemplate="filter" let-col>
+                                        <i  style="cursor: pointer;" class="fa fa-filter" (mouseenter)="closureDateFilter.toggle($event,1)" ></i>
+                                    </ng-template>  
                                </p-column>
                            </p-dataTable>
                            <div class="primeng-paging-container">
@@ -359,6 +348,13 @@
                     </div>
                  </div>
                 </form>
+                <mileStoneFilterModal #mileStoneFilter [options]="mileStoness" (onChange)="selectedMileStone($event)" [(ngModel)]="filter.mileStones"></mileStoneFilterModal>
+                <mileStoneStatusFilterModal #mileStoneStatusFilter [options]="mileStoneStatuss" (onChange)="selectedMileStoneStatus($event)" [(ngModel)]="filter.mileStoneStatus"></mileStoneStatusFilterModal>
+                <salespersonFilterModal #salespersonFilter [options]="salespersons" (onChange)="selectedSalesperson($event)" [(ngModel)]="filter.salesperson"></salespersonFilterModal>
+                <companyFilterModal #companyFilter [options]="companyNames" (onChange)="selectedCompany($event)" [(ngModel)]="filter.companyName"></companyFilterModal>
+                <contactFilterModal #contactFilter [options]="contactNames" (onChange)="selectedContact($event)" [(ngModel)]="filter.contactName"></contactFilterModal>
+                <closureDateFilterModal #closureDateFilter [options]="newView" (onChange)="selectedClosedDate($event)" [(ngModel)]="filter.enquiryClosureDate"></closureDateFilterModal>
+                <creatorFilterModal #creatorFilter [options]="creators" (onChange)="selectedCreator($event)" [(ngModel)]="filter.contactName"></creatorFilterModal>
             </div>
         </div>
     </div>

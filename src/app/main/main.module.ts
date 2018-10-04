@@ -10,7 +10,7 @@ import { CountoModule } from '@node_modules/angular2-counto';
 import { EasyPieChartModule } from 'ng2modules-easypiechart';
 import {NewCustomerTypeComponent} from './newCustomerType/newCustomerType.component';
 import {InfoTypeComponent} from './InfoType/InfoType.component';
-import { DataTableModule } from 'primeng/primeng';
+import { DataTableModule, OverlayPanelModule, ListboxModule, SharedModule, MultiSelectModule } from 'primeng/primeng';
 import { PaginatorModule } from 'primeng/primeng';
 import { CreateOrEditNewCustomerTypeComponent } from "app/main/newCustomerType/createEditNewCustomerType.component";
 import { CreateOrEditNewInfoTypeComponent } from "app/main/InfoType/createEditNewInfoType.component";
@@ -109,6 +109,13 @@ import { LostReportComponent } from '@app/main/quotationReport/lostReport.compon
 import { GlobalReportComponent } from '@app/main/quotationReport/globalReport.component';
 import { OtherReportComponent } from '@app/main/quotationReport/otherReport.component';
 import { CreateReportComponent } from '@app/main/quotationReport/createReport.component';
+import { MileStoneFilterComponent } from '@app/main/reportFilters/mileStoneFilterModal.component';
+import { MileStoneStatusFilterComponent } from '@app/main/reportFilters/mileStoneStatusFilterModal.component';
+import { SalespersonFilterComponent } from '@app/main/reportFilters/salespersonFilterModal.component';
+import { ClosureDateFilterComponent } from '@app/main/reportFilters/closureDateFilterModal.component';
+import { ContactFilterComponent } from '@app/main/reportFilters/contactFilterModal.component';
+import { CompanyFilterComponent } from '@app/main/reportFilters/companyFilterModal.component';
+import { CreatorFilterComponent } from '@app/main/reportFilters/creatorFilterModal.component';
 export function highchartsFactory() {
     const hc = require('highcharts');
     const dd = require('highcharts/modules/drilldown');
@@ -142,7 +149,12 @@ export function highchartsFactory() {
 		CalendarModule,
         FileUploadModule,
 		ChartsModule,
-		Ng2Carousel3dModule
+		Ng2Carousel3dModule,
+		OverlayPanelModule,
+		ListboxModule,
+		SharedModule,
+		MultiSelectModule
+
     ],
     declarations: [
 
@@ -217,7 +229,14 @@ export function highchartsFactory() {
 		LostReportComponent,
 		GlobalReportComponent,
 		OtherReportComponent,
-		CreateReportComponent
+		CreateReportComponent,
+		MileStoneFilterComponent,
+		ClosureDateFilterComponent,
+		MileStoneStatusFilterComponent,
+		SalespersonFilterComponent,
+		CompanyFilterComponent,
+		ContactFilterComponent,
+		CreatorFilterComponent
 	],
 	providers: [{
         provide: HighchartsStatic, 

@@ -1,4 +1,4 @@
-import { Component, ViewChild, Injector, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, Injector, Output, EventEmitter, Pipe } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { DataTable } from 'primeng/components/datatable/datatable';
@@ -9,6 +9,9 @@ import { ReportServiceProxy } from '@shared/service-proxies/service-proxies';
 @Component({
     selector: 'createReportModal',
     templateUrl: './createReport.component.html'
+})
+@Pipe({
+    name: 'filter'
 })
 export class CreateReportComponent extends AppComponentBase {
  
@@ -29,7 +32,31 @@ export class CreateReportComponent extends AppComponentBase {
     companyArrayCount: number=0;
     contactArray:Array<any>;
     contactArrayCount: number=0;
-
+    mileStoness: Array<any> = [];
+    mileStoneStatuss: Array<any> = [];
+    companyNames: Array<any> = [];
+    contactNames: Array<any> = [];
+    salespersons: Array<any> = [];
+    creators: Array<any> = [];
+    mileStones: string;
+    mileStoneStatus: string;
+    companyName: string;
+    contactName: string;
+    salesperson: string;
+    creator: string;
+    enquiryClosureDate: any;
+    creationTime:any;
+    newView= [{id:0, selected:false}];
+    filter= {
+        mileStones: [],
+        mileStoneStatus: [],
+        companyName: [],
+        contactName: [],
+        salesperson: [],
+        creator: [],
+        enquiryClosureDate: [],
+        creationTime: []
+    };
     constructor(
         injector: Injector,
         private _reportService: ReportServiceProxy
@@ -44,6 +71,23 @@ export class CreateReportComponent extends AppComponentBase {
                         {id:'3', text:'Company Report'},
                         {id:'4', text:'Contact Report'}
                        ];
+
+        this.mileStoness = [];
+        this.mileStoneStatuss = [];
+        this.salespersons = [];
+        this.companyNames = [];
+        this.contactNames = [];
+        this.creators = [];
+        this. filter= {
+            mileStones: [],
+            mileStoneStatus: [],
+            companyName: [],
+            contactName: [],
+            salesperson: [],
+            creator: [],
+            enquiryClosureDate: [],
+            creationTime: []
+        };
         this.modal.show();
     }
     radioChange(value){
@@ -82,7 +126,6 @@ export class CreateReportComponent extends AppComponentBase {
         else{
             data=this.primengDatatableHelper.getMaxResultCount(this.paginator, event)
         }
-
         this._reportService.getInquiryReport(
             this.filterText,
             this.primengDatatableHelper.getSorting(this.dataTable),
@@ -92,6 +135,72 @@ export class CreateReportComponent extends AppComponentBase {
 				this.primengDatatableHelper.totalRecordsCount = result.totalCount;
                 this.primengDatatableHelper.records = result.items;
                 this.primengDatatableHelper.hideLoadingIndicator();
+                this.primengDatatableHelper.records.forEach((item:{mileStones:string})=>{
+                    if(item.mileStones != ""){
+                        var index = this.mileStoness.findIndex(x => x.label == item.mileStones)
+                        if(index == -1){
+                            this.mileStoness.push({
+                                label: item.mileStones,
+                                value: item.mileStones
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{mileStoneStatus:string})=>{
+                    if(item.mileStoneStatus != ""){
+                        var index = this.mileStoneStatuss.findIndex(x => x.label == item.mileStoneStatus)
+                        if(index == -1){
+                            this.mileStoneStatuss.push({
+                                label: item.mileStoneStatus,
+                                value: item.mileStoneStatus
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{salesperson:string})=>{
+                    if(item.salesperson != ""){
+                        var index = this.salespersons.findIndex(x => x.label == item.salesperson)
+                        if(index == -1){
+                            this.salespersons.push({
+                                label: item.salesperson,
+                                value: item.salesperson
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{companyName:string})=>{
+                    if(item.companyName != ""){
+                        var index = this.companyNames.findIndex(x => x.label == item.companyName)
+                        if(index == -1){
+                            this.companyNames.push({
+                                label: item.companyName,
+                                value: item.companyName
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{contactName:string})=>{
+                    if(item.contactName != ""){
+                        var index = this.contactNames.findIndex(x => x.label == item.contactName)
+                        if(index == -1){
+                            this.contactNames.push({
+                                label: item.contactName,
+                                value: item.contactName
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{creator:string})=>{
+                    if(item.creator != ""){
+                        var index = this.creators.findIndex(x => x.label == item.creator)
+                        if(index == -1){
+                            this.creators.push({
+                                label: item.creator,
+                                value: item.creator
+                            });                   
+                        }
+                    }
+                });
             });
     }
     getQuotationReport(event?: LazyLoadEvent): void {
@@ -165,5 +274,101 @@ export class CreateReportComponent extends AppComponentBase {
         this.active = false;
         this.showGrid = false;
         this.reportId=0;
+    }
+    selectedMileStone(filter) {
+        this.mileStones = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.mileStones =  element ;
+                i = 0;
+            }
+            else{
+                this.mileStones = this.mileStones + "," + element;
+            }
+        });
+    }
+    selectedMileStoneStatus(filter) {
+        this.mileStoneStatus = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.mileStoneStatus =  element ;
+                i = 0;
+            }
+            else{
+                this.mileStoneStatus = this.mileStoneStatus + "," + element;
+            }
+        });
+    }
+    selectedCreator(filter){
+        this.creator = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.creator =  element ;
+                i = 0;
+            }
+            else{
+                this.creator = this.creator + "," + element;
+            }
+        });
+    }
+    selectedSalesperson(filter) {
+        this.salesperson = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.salesperson =  element ;
+                i = 0;
+            }
+            else{
+                this.salesperson = this.salesperson + "," + element;
+            }
+        });
+    }
+    selectedCompany(filter) {
+        this.companyName = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.companyName =  element ;
+                i = 0;
+            }
+            else{
+                this.companyName = this.companyName + "," + element;
+            }
+        });
+    }
+    selectedContact(filter) {
+        this.contactName = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.contactName =  element ;
+                i = 0;
+            }
+            else{
+                this.contactName = this.contactName + "," + element;
+            }
+        });
+    }
+    selectedClosedDate(filter) {
+       if(filter.originalEvent == 1)
+        {
+           this.creationTime = "";
+           this.creationTime = filter.datepicker;
+        }
+        else if(filter.originalEvent == 2)
+        {
+          this.enquiryClosureDate = "";
+          this.enquiryClosureDate = filter.datepicker;
+        }
     }
 }

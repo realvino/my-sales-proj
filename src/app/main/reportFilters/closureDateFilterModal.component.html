@@ -1,0 +1,18 @@
+<p-overlayPanel #menu showCloseIcon="true" class="popups">
+    <div class="row">
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 1">
+            <p> Created Date</p><hr>
+              <p-calendar showButtonBar="true" id="datetime1" [(ngModel)]="filterDate1" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod1($event)"
+               [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 2">
+            <p> Closure Date</p><hr>
+                <p-calendar showButtonBar="true" id="datetime2" [(ngModel)]="filterDate2" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod2($event)"
+                 [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+        <div style="width:200px">
+            <button  style="float:right;margin-top:10px;margin-right :-27px"  type="button" class="btn btn-default" (click)="close()">Clear</button>
+        </div>
+    </div>
+</p-overlayPanel>
