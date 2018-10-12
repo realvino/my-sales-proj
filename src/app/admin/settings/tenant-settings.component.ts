@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Injector, ViewEncapsulation, ViewChild,ElementRef } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { CreateTenantTargetInput,TenantDashboardServiceProxy,TenantTargetListDto,TenantSettingsServiceProxy, HostSettingsServiceProxy, DefaultTimezoneScope, TenantSettingsEditDto, SendTestEmailInput, SettingVatAmountInput } from '@shared/service-proxies/service-proxies';
+import { CreateTenantTargetInput,TenantDashboardServiceProxy,TenantTargetListDto,TenantSettingsServiceProxy, HostSettingsServiceProxy, DefaultTimezoneScope, TenantSettingsEditDto, SendTestEmailInput, SettingVatAmountInput, ProfileServiceProxy } from '@shared/service-proxies/service-proxies';
 import { AppConsts } from '@shared/AppConsts';
 import { AppComponentBase } from '@shared/common/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -55,6 +55,7 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit 
         private _tenantSettingsService: TenantSettingsServiceProxy,
         private _appSessionService: AppSessionService,
         private _tokenService: TokenService,
+        private _profileService: ProfileServiceProxy,
         private _tenantDashboardService:TenantDashboardServiceProxy
     ) {
         super(injector);
@@ -100,6 +101,15 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit 
                 this.appSession.tenant.customCssId = result.id;
                 $('#TenantCustomCss').remove();
                 $('head').append('<link id="TenantCustomCss" href="' + AppConsts.remoteServiceBaseUrl + '/TenantCustomization/GetCustomCss?id=' + this.appSession.tenant.customCssId + '" rel="stylesheet"/>');
+            }
+        );
+
+        this.logoUploader = this.createUploader(
+            "/TenantCustomization/UploadLogo",
+            result => {
+                this._appSessionService.tenant.logoFileType = result.fileType;
+                this._appSessionService.tenant.logoId = result.id;
+                this._profileService.updateLogo().subscribe(()=>{});
             }
         );
     }
@@ -153,6 +163,11 @@ export class TenantSettingsComponent extends AppComponentBase implements OnInit 
     }
     ngAfterViewInit() {
         //this.monthVal = this.calen.nativeElement;
+    }
+    restoreLogo():void{
+        this._profileService.updateLogo().subscribe(()=>{
+            this.notify.info(this.l('Restored Successfully'));
+        });
     }
 
     saveAll(): void {

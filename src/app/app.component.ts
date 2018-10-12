@@ -47,7 +47,7 @@ export class AppComponent extends AppComponentBase implements OnInit, AfterViewI
         return false;
     }
 
-    ngAfterViewInit(): void { console.log('Testttttiiiiii..');
+    ngAfterViewInit(): void { 
         if (App.initialized) {
             return;
         }

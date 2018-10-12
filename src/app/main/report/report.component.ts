@@ -372,7 +372,7 @@ export class ReportComponent extends AppComponentBase implements OnInit {
         });
     }
     getUserTarget(value:any):void{
-        console.log(value);
+        //console.log(value);
         this._dashboardService.getUserTarget(value.id).subscribe((result) => {
         this.yeartarget = result[0].yeartarget;
         this.monthtarget = result[0].monthTarget;

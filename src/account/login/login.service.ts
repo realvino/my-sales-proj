@@ -82,7 +82,6 @@ export class LoginService {
             .authenticate(this.authenticateModel)
             .finally(finallyCallback)
             .subscribe((result: AuthenticateResultModel) => {
-			console.log( result );
                 this.processAuthenticateResult(result, redirectUrl);
             });
     }
@@ -114,7 +113,7 @@ export class LoginService {
         this._tokenAuthService
             .tenentSearching(this.authenticateModel)
             .finally(finallyCallback)
-            .subscribe((result: AuthenticateTenentResultModel) => { console.log( result ); 
+            .subscribe((result: AuthenticateTenentResultModel) => { 
 			if( result.tenentId ){
                //this.processAuthenticateResult(result, redirectUrl);
                sessionStorage.setItem('email', this.authenticateModel.userNameOrEmailAddress);
@@ -147,7 +146,6 @@ export class LoginService {
 
     private processAuthenticateResult(authenticateResult: AuthenticateResultModel, redirectUrl?: string) {
         this.authenticateResult = authenticateResult;
-
         if (authenticateResult.shouldResetPassword) {
             //Password reset
 
@@ -168,6 +166,7 @@ export class LoginService {
 
         } else if (authenticateResult.accessToken) {
             //Successfully logged in
+          
             if (authenticateResult.rootId > 0) {
                 switch(authenticateResult.rootId){
                     case 1:

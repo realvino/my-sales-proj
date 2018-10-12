@@ -58,7 +58,7 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
     status:Datadto[];
     private sub: any;
     private id: number;
-    private total: number;
+    //private total: number;
     active_title:SelectOption[];
     active_company:SelectOption[];
     active_currency:SelectOption[];
@@ -80,7 +80,7 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
     quotation_input:CreateQuotationInput = new CreateQuotationInput();
     active = false;
     saving = false;
-
+    total: string;
     updateQuotTot:UpdateQuotationTotal = new UpdateQuotationTotal();
 
     constructor(
@@ -165,7 +165,7 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
                 this.active_payment=[{id:this.quotation.paymentId,text:this.quotation.paymentName}];
                 this.active_freight=[{id:this.quotation.freightId,text:this.quotation.freightName}];
                 this.active_reason=[{id:this.quotation.reasonId,text:this.quotation.reasonName}];
-                this.total = this.quotation.overAllTotal;
+                this.total = this.quotation.overAllTotal.toFixed(2);
                 if(this.quotation_input.salesmanId==0 || this.quotation_input.salesmanId==null) this.saving_btn=true;
                 else this.saving_btn=false;
                 if(this.quotation.won == true || this.quotation.lost == true){
@@ -173,8 +173,7 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
                 }
                 if(this.quotation_input.vat){
                     this.quotation_input.vatAmount = (this.quotation.overAllTotal * this.quotation_input.vatPercentage)/100;
-                    this.total = this.quotation.overAllTotal + this.quotation_input.vatAmount;
-                }
+                    this.total = (this.quotation.overAllTotal + this.quotation_input.vatAmount).toFixed(2);                }
                 else{
                     this.quotation_input.vatAmount = 0;
                 }

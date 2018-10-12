@@ -2,7 +2,7 @@
 .page-head .page-title{ padding:0px; margin-top:5px;}
 /* dragula-specific example page styles */
 .wrapper {
-    height: 75vh;
+    height: 78vh;
     overflow-x: auto;
     overflow-y: hidden;
     padding: 8px 0px;
@@ -17,8 +17,10 @@
     padding-bottom: 20px;
     vertical-align: top;
   	width:24.21%;
-  	min-width:290px;
+    min-width:290px;
+    height: 495px;
 }
+
 .desk-items {
     height: 100%;
     overflow-y: auto;

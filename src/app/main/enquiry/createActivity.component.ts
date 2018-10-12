@@ -77,10 +77,9 @@ export class CreateActivityComponent extends AppComponentBase {
         if (this.activity.id == null) {
             this.activity.id = 0;
         }
-        //console.log(moment(this.sc_date));
         this.activity.tenantId=abp.multiTenancy.getTenantIdCookie();
         this.activity.enquiryId= this.enquiry.id;
-        this.activity.scheduleTime=moment(this.sc_date);
+        this.activity.scheduleTime=moment(this.sc_date).add(6, 'hours');
         this._activityService.createOrUpdateActivity(this.activity)
             .finally(() => this.saving = false)
             .subscribe(() => {

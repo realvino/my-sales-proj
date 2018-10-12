@@ -1166,7 +1166,8 @@ Page content
         margin-left: 0 !important;
         margin-right: 54px !important; }
       .page-sidebar-closed .page-content-wrapper .page-content {
-        margin-left: 54px !important; }
+        margin-left: 43px !important; 
+        margin-right: -11px;}
       .page-sidebar-closed.page-sidebar-hide .page-content-wrapper .page-content {
         margin-left: 0 !important; }
       .page-sidebar-closed.page-sidebar-reversed.page-sidebar-hide .page-content-wrapper .page-content {

@@ -26,37 +26,49 @@ export class CreateReportComponent extends AppComponentBase {
     showGrid:boolean=false;
     filterText:string='';
     reportId:number=0;
-    quotationArray:Array<any>;
-    quotationArrayCount: number=0;
-    companyArray:Array<any>;
-    companyArrayCount: number=0;
-    contactArray:Array<any>;
-    contactArrayCount: number=0;
     mileStoness: Array<any> = [];
     mileStoneStatuss: Array<any> = [];
-    companyNames: Array<any> = [];
-    contactNames: Array<any> = [];
     salespersons: Array<any> = [];
     creators: Array<any> = [];
+    countrys: Array<any> = [];
+    currencys : Array<any> = [];
+    customerTypes : Array<any> = [];
+    statusNames : Array<any> = [];
     mileStones: string;
     mileStoneStatus: string;
-    companyName: string;
-    contactName: string;
     salesperson: string;
     creator: string;
-    enquiryClosureDate: any;
-    creationTime:any;
+    country: string;
+    currency: string;
+    customerType: string;
+    statusName: string;
+    submittedDate: any;
+    wonDate:any;
+    lostDate:any;
+    enqCreationTime:any;
+    enqCreationTimeId:number;
+    quotCreationTime:any;
+    quotCreationTimeId:number;
+    submittedDateId:number;
+    wonDateId:number;
+    lostDateId:number;
     newView= [{id:0, selected:false}];
     filter= {
         mileStones: [],
         mileStoneStatus: [],
-        companyName: [],
-        contactName: [],
         salesperson: [],
         creator: [],
-        enquiryClosureDate: [],
-        creationTime: []
+        creationTime: [],
+        country: [],
+        currency : [],
+        customerType : [],
+        statusName : [],
+        submittedDate : [],
+        wonDate : [],
+        lostDate : []
     };
+    showColumns: Array<any> = [];
+
     constructor(
         injector: Injector,
         private _reportService: ReportServiceProxy
@@ -71,53 +83,244 @@ export class CreateReportComponent extends AppComponentBase {
                         {id:'3', text:'Company Report'},
                         {id:'4', text:'Contact Report'}
                        ];
-
-        this.mileStoness = [];
-        this.mileStoneStatuss = [];
-        this.salespersons = [];
-        this.companyNames = [];
-        this.contactNames = [];
-        this.creators = [];
-        this. filter= {
-            mileStones: [],
-            mileStoneStatus: [],
-            companyName: [],
-            contactName: [],
-            salesperson: [],
-            creator: [],
-            enquiryClosureDate: [],
-            creationTime: []
-        };
         this.modal.show();
     }
     radioChange(value){
         this.reportId = value;
         this.showGrid = false;
+        this.mileStones = '';
+        this.mileStoneStatus = "";
+        this.creator = "";
+        this.salesperson = "";
+        this.enqCreationTime = "";
+        this.quotCreationTime= '';
+        this.country = "";
+        this.currency = "";
+        this.customerType = "";
+        this.statusName = "";
+        this.submittedDate = "";
+        this.wonDate = "";
+        this.lostDate= "";
+        this.mileStoness = [];
+        this.mileStoneStatuss = [];
+        this.salespersons = [];
+        this.creators = [];
+        this.countrys = [];
+        this.currencys = [];
+        this.customerTypes = [];
+        this.statusNames = [];
+        this.enqCreationTimeId = 0;
+        this.quotCreationTimeId =0;
+        this.submittedDateId= 0;
+        this.wonDateId=0;
+        this.lostDateId=0;
+        this. filter= {
+            mileStones: [],
+            mileStoneStatus: [],
+            salesperson: [],
+            creator: [],
+            creationTime: [],
+            country: [],
+            currency : [],
+            customerType : [],
+            statusName : [],
+            submittedDate : [],
+            wonDate : [],
+            lostDate : []
+        };
     }
     generateReport():void{
         this.showGrid = true;
-        if(this.reportId == 1){
-            setTimeout(() => {
-                this.getInqiuryReport();
-            }, 0);        }
-        else if(this.reportId == 2){
-            setTimeout(() => {
-                this.getQuotationReport();
-            }, 0); 
-        }
-        else if(this.reportId == 3){
-            setTimeout(() => {
-                this.getCompanyReport();
-            }, 0); 
-        }
-        else if(this.reportId == 4){
-            setTimeout(() => {
-                this.getContactReport();
-            }, 0); 
-        }
+        this.getColumns();
+        setTimeout(() => {
+            this.getFilterReport();
+        }, 0);
     }
     
-    getInqiuryReport(event?: LazyLoadEvent): void {
+    onShown(): void {
+    }
+
+    close(): void {
+        this.modal.hide();
+        this.active = false;
+        this.showGrid = false;
+        this.reportId=0;
+    }
+    selectedMileStone(filter) {
+        this.mileStones = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.mileStones =  element ;
+                i = 0;
+            }
+            else{
+                this.mileStones = this.mileStones + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedMileStoneStatus(filter) {
+        this.mileStoneStatus = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.mileStoneStatus =  element ;
+                i = 0;
+            }
+            else{
+                this.mileStoneStatus = this.mileStoneStatus + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedCreator(filter){
+        this.creator = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.creator =  element ;
+                i = 0;
+            }
+            else{
+                this.creator = this.creator + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedSalesperson(filter) {
+        this.salesperson = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.salesperson =  element ;
+                i = 0;
+            }
+            else{
+                this.salesperson = this.salesperson + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedCountry(filter) {
+        this.country = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.country =  element ;
+                i = 0;
+            }
+            else{
+                this.country = this.country + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedCurrency(filter) {
+        this.currency = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.currency =  element ;
+                i = 0;
+            }
+            else{
+                this.currency = this.currency + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedCustomerType(filter) {
+        this.customerType = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.customerType =  element ;
+                i = 0;
+            }
+            else{
+                this.customerType = this.customerType + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedStatus(filter) {
+        this.statusName = "";
+        var i = 1;
+        filter.value.forEach(element => {
+            if(i == 1)
+            {
+                this.statusName =  element ;
+                i = 0;
+            }
+            else{
+                this.statusName = this.statusName + "," + element;
+            }
+        });
+        this.getFilterReport();
+    }
+    selectedClosedDate(filter) {
+       if(filter.originalEvent == 1)
+        {
+            if(this.reportId == 1){
+                this.quotCreationTime = '';
+                this.quotCreationTimeId = 0;
+                this.enqCreationTime = "";
+                this.enqCreationTimeId = filter.value;
+                if(filter.value == 7){
+                   this.enqCreationTime = filter.datepicker;
+                   this.enqCreationTimeId = 0;
+                }
+            }
+            else if(this.reportId == 2){
+                this.quotCreationTime = '';
+                this.quotCreationTimeId = filter.value;
+                this.enqCreationTime = "";
+                this.enqCreationTimeId = 0;
+                if(filter.value == 7){
+                   this.quotCreationTime = filter.datepicker;
+                   this.quotCreationTimeId = 0;
+                }
+            }
+        }
+        else if(filter.originalEvent == 3)
+        {
+          this.submittedDate = "";
+          this.submittedDateId = filter.value
+          if(filter.value ==7){
+            this.submittedDate = filter.datepicker;
+            this.submittedDateId = 0;
+          }
+          
+        }
+        else if(filter.originalEvent == 4)
+        {
+           this.wonDate = "";
+           this.wonDateId = filter.value
+            if(filter.value ==7){
+              this.wonDate = filter.datepicker;
+              this.wonDateId = 0;
+            }
+        }
+        else if(filter.originalEvent == 5)
+        {
+            this.lostDate = "";
+            this.lostDateId = filter.value
+            if(filter.value ==7){
+               this.lostDate = filter.datepicker;
+               this.lostDateId = 0;
+            }
+        }
+        this.getFilterReport();
+    }
+    getFilterReport(event?: LazyLoadEvent): void {
         let data;
         this.primengDatatableHelper.showLoadingIndicator();
         if(this.primengDatatableHelper.getMaxResultCount(this.paginator, event)==0){
@@ -126,8 +329,11 @@ export class CreateReportComponent extends AppComponentBase {
         else{
             data=this.primengDatatableHelper.getMaxResultCount(this.paginator, event)
         }
-        this._reportService.getInquiryReport(
-            this.filterText,
+        this._reportService.getFilterReport(
+            this.reportId, 0, this.salesperson, this.creator, this.country, this.customerType, 
+            this.currency, this.mileStones, this.mileStoneStatus, this.statusName, 
+            this.enqCreationTime, this.enqCreationTimeId, this.quotCreationTime, this.quotCreationTimeId,
+            this.submittedDate, this.submittedDateId, this.wonDate, this.wonDateId, this.lostDate, this.lostDateId,
             this.primengDatatableHelper.getSorting(this.dataTable),
             data,
             this.primengDatatableHelper.getSkipCount(this.paginator, event))
@@ -168,28 +374,6 @@ export class CreateReportComponent extends AppComponentBase {
                         }
                     }
                 });
-                this.primengDatatableHelper.records.forEach((item:{companyName:string})=>{
-                    if(item.companyName != ""){
-                        var index = this.companyNames.findIndex(x => x.label == item.companyName)
-                        if(index == -1){
-                            this.companyNames.push({
-                                label: item.companyName,
-                                value: item.companyName
-                            });                   
-                        }
-                    }
-                });
-                this.primengDatatableHelper.records.forEach((item:{contactName:string})=>{
-                    if(item.contactName != ""){
-                        var index = this.contactNames.findIndex(x => x.label == item.contactName)
-                        if(index == -1){
-                            this.contactNames.push({
-                                label: item.contactName,
-                                value: item.contactName
-                            });                   
-                        }
-                    }
-                });
                 this.primengDatatableHelper.records.forEach((item:{creator:string})=>{
                     if(item.creator != ""){
                         var index = this.creators.findIndex(x => x.label == item.creator)
@@ -201,174 +385,114 @@ export class CreateReportComponent extends AppComponentBase {
                         }
                     }
                 });
+                this.primengDatatableHelper.records.forEach((item:{country:string})=>{
+                    if(item.country != ""){
+                        var index = this.countrys.findIndex(x => x.label == item.country)
+                        if(index == -1){
+                            this.countrys.push({
+                                label: item.country,
+                                value: item.country
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{currency:string})=>{
+                    if(item.currency != ""){
+                        var index = this.currencys.findIndex(x => x.label == item.currency)
+                        if(index == -1){
+                            this.currencys.push({
+                                label: item.currency,
+                                value: item.currency
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{customerType:string})=>{
+                    if(item.customerType != ""){
+                        var index = this.customerTypes.findIndex(x => x.label == item.customerType)
+                        if(index == -1){
+                            this.customerTypes.push({
+                                label: item.customerType,
+                                value: item.customerType
+                            });                   
+                        }
+                    }
+                });
+                this.primengDatatableHelper.records.forEach((item:{statusName:string})=>{
+                    if(item.statusName != ""){
+                        var index = this.statusNames.findIndex(x => x.label == item.statusName)
+                        if(index == -1){
+                            this.statusNames.push({
+                                label: item.statusName,
+                                value: item.statusName
+                            });                   
+                        }
+                    }
+                });
             });
     }
-    getQuotationReport(event?: LazyLoadEvent): void {
-        let data;
-        this.primengDatatableHelper.showLoadingIndicator();
-        if(this.primengDatatableHelper.getMaxResultCount(this.paginator, event)==0){
-            data=10;
+    getColumns(){
+        if(this.reportId == 1){
+            this._reportService.getEnquiryReportColumn().subscribe((result)=>{
+                if(result != null){
+                    this.showColumns=[];
+                    result.forEach((col:{columnId:number, columnName:string}) => {
+                        this.showColumns.push({
+                            id: col.columnId,
+                            text: col.columnName
+                        });
+                    });
+                }
+            });
+        }
+        else if(this.reportId == 2){
+            this._reportService.getQuotationReportColumn().subscribe((result)=>{
+                if(result != null){
+                    this.showColumns=[];
+                    result.forEach((col:{columnId:number, columnName:string}) => {
+                        this.showColumns.push({
+                            id: col.columnId,
+                            text: col.columnName
+                        });
+                    });
+                }
+            });
+        }
+        else if(this.reportId == 3){
+            this._reportService.getCompanyReportColumn().subscribe((result)=>{
+                if(result != null){
+                    this.showColumns=[];
+                    result.forEach((col:{columnId:number, columnName:string}) => {
+                        this.showColumns.push({
+                            id: col.columnId,
+                            text: col.columnName
+                        });
+                    });
+                }
+            });
+        }
+        else if(this.reportId == 4){
+            this._reportService.getContactReportColumn().subscribe((result)=>{
+                if(result != null){
+                    this.showColumns=[];
+                    result.forEach((col:{columnId:number, columnName:string}) => {
+                        this.showColumns.push({
+                            id: col.columnId,
+                            text: col.columnName
+                        });
+                    });
+                }
+            });
+        }
+        
+    }
+    Show(data){
+        var index = this.showColumns.findIndex(x=> x.text == data);
+        if(index == -1){
+            return false;
         }
         else{
-            data=this.primengDatatableHelper.getMaxResultCount(this.paginator, event)
-        }
-
-        this._reportService.getQuotationReport(
-            this.filterText,
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            data,
-            this.primengDatatableHelper.getSkipCount(this.paginator, event))
-            .subscribe((result) => {
-                this.quotationArrayCount = result.totalCount;
-                this.quotationArray = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
-            });
-    }
-    getCompanyReport(event?: LazyLoadEvent): void {
-        let data;
-        this.primengDatatableHelper.showLoadingIndicator();
-        if(this.primengDatatableHelper.getMaxResultCount(this.paginator, event)==0){
-            data=10;
-        }
-        else{
-            data=this.primengDatatableHelper.getMaxResultCount(this.paginator, event)
-        }
-
-        this._reportService.getCompanyReport(
-            this.filterText,
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            data,
-            this.primengDatatableHelper.getSkipCount(this.paginator, event))
-            .subscribe((result) => {
-                this.companyArrayCount = result.totalCount;
-                this.companyArray = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
-            });
-    }
-    getContactReport(event?: LazyLoadEvent): void {
-        let data;
-        this.primengDatatableHelper.showLoadingIndicator();
-        if(this.primengDatatableHelper.getMaxResultCount(this.paginator, event)==0){
-            data=10;
-        }
-        else{
-            data=this.primengDatatableHelper.getMaxResultCount(this.paginator, event)
-        }
-
-        this._reportService.getContactReport(
-            this.filterText,
-            this.primengDatatableHelper.getSorting(this.dataTable),
-            data,
-            this.primengDatatableHelper.getSkipCount(this.paginator, event))
-            .subscribe((result) => {
-                this.contactArrayCount = result.totalCount;
-                this.contactArray = result.items;
-                this.primengDatatableHelper.hideLoadingIndicator();
-            });
-    }
-    onShown(): void {
-    }
-
-    close(): void {
-        this.modal.hide();
-        this.active = false;
-        this.showGrid = false;
-        this.reportId=0;
-    }
-    selectedMileStone(filter) {
-        this.mileStones = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.mileStones =  element ;
-                i = 0;
-            }
-            else{
-                this.mileStones = this.mileStones + "," + element;
-            }
-        });
-    }
-    selectedMileStoneStatus(filter) {
-        this.mileStoneStatus = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.mileStoneStatus =  element ;
-                i = 0;
-            }
-            else{
-                this.mileStoneStatus = this.mileStoneStatus + "," + element;
-            }
-        });
-    }
-    selectedCreator(filter){
-        this.creator = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.creator =  element ;
-                i = 0;
-            }
-            else{
-                this.creator = this.creator + "," + element;
-            }
-        });
-    }
-    selectedSalesperson(filter) {
-        this.salesperson = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.salesperson =  element ;
-                i = 0;
-            }
-            else{
-                this.salesperson = this.salesperson + "," + element;
-            }
-        });
-    }
-    selectedCompany(filter) {
-        this.companyName = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.companyName =  element ;
-                i = 0;
-            }
-            else{
-                this.companyName = this.companyName + "," + element;
-            }
-        });
-    }
-    selectedContact(filter) {
-        this.contactName = "";
-        var i = 1;
-        filter.value.forEach(element => {
-            if(i == 1)
-            {
-                this.contactName =  element ;
-                i = 0;
-            }
-            else{
-                this.contactName = this.contactName + "," + element;
-            }
-        });
-    }
-    selectedClosedDate(filter) {
-       if(filter.originalEvent == 1)
-        {
-           this.creationTime = "";
-           this.creationTime = filter.datepicker;
-        }
-        else if(filter.originalEvent == 2)
-        {
-          this.enquiryClosureDate = "";
-          this.enquiryClosureDate = filter.datepicker;
+            return true;
         }
     }
 }

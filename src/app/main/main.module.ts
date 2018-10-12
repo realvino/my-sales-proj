@@ -116,6 +116,10 @@ import { ClosureDateFilterComponent } from '@app/main/reportFilters/closureDateF
 import { ContactFilterComponent } from '@app/main/reportFilters/contactFilterModal.component';
 import { CompanyFilterComponent } from '@app/main/reportFilters/companyFilterModal.component';
 import { CreatorFilterComponent } from '@app/main/reportFilters/creatorFilterModal.component';
+import { QuotationStatusFilterComponent } from '@app/main/reportFilters/quotationStatusFilterModal.component';
+import { CustomerTypeFilterComponent } from '@app/main/reportFilters/customerTypeFilterModal.component';
+import { CountryFilterComponent } from '@app/main/reportFilters/countryFilterModal.component';
+import { CurrencyFilterComponent } from '@app/main/reportFilters/currencyFilterModal.component';
 export function highchartsFactory() {
     const hc = require('highcharts');
     const dd = require('highcharts/modules/drilldown');
@@ -236,7 +240,11 @@ export function highchartsFactory() {
 		SalespersonFilterComponent,
 		CompanyFilterComponent,
 		ContactFilterComponent,
-		CreatorFilterComponent
+		CreatorFilterComponent,
+		CountryFilterComponent,
+		CurrencyFilterComponent,
+		CustomerTypeFilterComponent,
+		QuotationStatusFilterComponent
 	],
 	providers: [{
         provide: HighchartsStatic, 
