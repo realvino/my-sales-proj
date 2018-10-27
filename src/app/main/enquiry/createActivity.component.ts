@@ -34,7 +34,8 @@ export class CreateActivityComponent extends AppComponentBase {
     public enquiry:EnquiryInput=new EnquiryInput();
     active_type:SelectOption[];
     active_contact:SelectOption[];
-    public sc_date:Date;
+    //public sc_date:Date;
+    sc_date:string;
 
     constructor(
         injector: Injector,
@@ -61,7 +62,8 @@ export class CreateActivityComponent extends AppComponentBase {
         this._activityService.getActivityForEdit(actId).subscribe((result) => {
              if (result.activitys != null) {
                 this.activity=result.activitys;
-                 this.sc_date =moment(result.activitys.scheduleTime).toDate();
+                 //this.sc_date =moment(result.activitys.scheduleTime).toDate();
+                 this.sc_date =moment(result.activitys.scheduleTime).format('MM/DD/YYYY');
              }
          });
         this.getType();
@@ -79,7 +81,8 @@ export class CreateActivityComponent extends AppComponentBase {
         }
         this.activity.tenantId=abp.multiTenancy.getTenantIdCookie();
         this.activity.enquiryId= this.enquiry.id;
-        this.activity.scheduleTime=moment(this.sc_date).add(6, 'hours');
+        //this.activity.scheduleTime=moment(this.sc_date).add(6, 'hours');
+        this.activity.scheduleTime=moment(moment(moment(this.sc_date).toDate().toString())).add(6, 'hours');
         this._activityService.createOrUpdateActivity(this.activity)
             .finally(() => this.saving = false)
             .subscribe(() => {

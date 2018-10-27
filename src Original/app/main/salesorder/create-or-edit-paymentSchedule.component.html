@@ -1,0 +1,49 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form *ngIf="active" #createPaymentScheduleForm="ngForm" novalidate (ngSubmit)="save()">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="close()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">
+                            <span *ngIf="paymentScheduleInput.id">{{l("Edit Payment Schedule")}}: {{paymentSchedule.userName}}</span>
+                            <span *ngIf="!paymentScheduleInput.id">{{l("Create Payment Schedule")}}</span>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                       <label>User <required_field></required_field></label>
+                                        <ng-select [active]="active_user" [allowClear]="true" [disabled]="true" placeholder="No User selected">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                       <label>{{l("Schedule Date")}}  <required_field></required_field></label>
+                                        <p-calendar [style]="{'width':'433px'}" [(ngModel)]="scheduleDate" [ngModelOptions]="{standalone: true}"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-sm-12">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input type="number" class="form-control" name="total" [ngClass]="{'edited':paymentScheduleInput.total}" [(ngModel)]="paymentScheduleInput.total" required>
+                                        <label>Total <required_field></required_field></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                                <button type="submit" class="btn btn-primary blue" [disabled]="!createPaymentScheduleForm.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                            </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    

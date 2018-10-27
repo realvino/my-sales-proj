@@ -8,6 +8,7 @@ import { EnquiryServiceProxy,EnquiryKanbanUpdateInput, EnquiryQuotationKanbanUpd
 import { DragulaService } from 'ng2-dragula';
 import { Subject } from 'rxjs/Subject';
 import { AppConsts } from '@shared/AppConsts';
+import { QuotationCloseComponent } from './quotationClose.component';
 
 @Component({
 
@@ -20,6 +21,7 @@ import { AppConsts } from '@shared/AppConsts';
 export class KanbanComponent extends AppComponentBase implements AfterViewInit,OnDestroy {
 
   @ViewChild('createEnquiryModal') createEnquiryModal: CreateEnquiryComponent;
+  @ViewChild('quotationCloseModal') quotationCloseModal: QuotationCloseComponent;
   filter:string='';
   public items: Array<any> = [];
   public qitems: Array<any> = [];
@@ -29,6 +31,8 @@ export class KanbanComponent extends AppComponentBase implements AfterViewInit,O
   updatedflag: any;
   path : string = AppConsts.remoteServiceBaseUrl;
   private destroy$ = new Subject();	
+  currentIsEndQuotation:any;
+  updateIsEndQuotation: any;
 constructor(
   injector: Injector,
   private dragulaService: DragulaService,
@@ -112,6 +116,10 @@ getEnquiryTic(){
 
     this.currantflag = ec.getAttribute("data-isquotation");
     this.updatedflag = eu.getAttribute("data-isquotation");
+
+    this.currentIsEndQuotation = ec.getAttribute('data-endQuotation');
+    this.updateIsEndQuotation = eu.getAttribute('data-endQuotation');
+
     if(this.currantflag == this.updatedflag){
       if(this.currantflag == 'false'){
         this._enquiryService.enquiryKanbanUpdateAsync(this.enq_upadte_input).subscribe(result=>{
@@ -119,10 +127,21 @@ getEnquiryTic(){
           this.getEnquiryTic();
       });
       } else{
-        this._enquiryService.enquiryQuotationKanbanUpdateAsync(this.qot_upadte_input).subscribe(result=>{
-          this.notify.success("Quotation Moved Successfully");
-          this.getEnquiryTic();
-      });      } 
+          if(this.updateIsEndQuotation == 'true'){
+            this.quotationCloseModal.show(this.qot_upadte_input.quotationId, this.qot_upadte_input.currentMilestone, this.qot_upadte_input.updateMilestone);
+          } 
+          else if(this.currentIsEndQuotation == 'true'){
+            this.quotationCloseModal.show(this.qot_upadte_input.quotationId, this.qot_upadte_input.currentMilestone, this.qot_upadte_input.updateMilestone);
+            /* this.notify.error("Quotation cannot be moved");
+            this.getEnquiryTic(); */
+          }
+          else{
+            this._enquiryService.enquiryQuotationKanbanUpdateAsync(this.qot_upadte_input).subscribe(result=>{
+              this.notify.success("Quotation Moved Successfully");
+              this.getEnquiryTic();
+            }); 
+          }
+      } 
     }
     else{
       this.notify.error("Card can not moved");

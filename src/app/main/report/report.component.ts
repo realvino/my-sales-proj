@@ -29,6 +29,8 @@ export class ReportComponent extends AppComponentBase implements OnInit {
     slides : Array<Object> = [];
     lsgoption: Object;
     lgoption: Object;
+    monthTargetOption: Object;
+    yearTargetOption: Object;
     wonGraphInput:NullableIdDto= new NullableIdDto();
     cardIndex:number = 0;
 
@@ -371,7 +373,7 @@ export class ReportComponent extends AppComponentBase implements OnInit {
             this.getUserTarget(this.slides[this.cardIndex]);
         });
     }
-    getUserTarget(value:any):void{
+    /* getUserTarget(value:any):void{
         //console.log(value);
         this._dashboardService.getUserTarget(value.id).subscribe((result) => {
         this.yeartarget = result[0].yeartarget;
@@ -383,8 +385,100 @@ export class ReportComponent extends AppComponentBase implements OnInit {
         this.monthPercent.value =  result[0]._Month;
        });
 
-    }
+    } */
+    getUserTarget(value:any):void{
+        //console.log(value);
+        var monthTargetData = []; 
+        var yearTargetData = []; 
+        this._dashboardService.getUserTarget(value.id).subscribe((result) => {
+        this.yeartarget = result[0].yeartarget;
+        this.monthtarget = result[0].monthTarget;
+        this.yearachived = result[0].yearAchived;
+        this.monthachived = result[0].monthAchived;
+        monthTargetData.push(['Archieved', result[0].monthAchived]);
+        monthTargetData.push(['Pending', result[0].monthTarget - result[0].monthAchived]);
+        yearTargetData.push(['Archieved', result[0].yearAchived]);
+        yearTargetData.push(['Pending', result[0].yeartarget - result[0].yearAchived]);
+        this.yearPercent.value = result[0]._Year;
+        this.monthPercent.value =  result[0]._Month;
 
+        this.monthTargetOption =  {
+            title: {
+                text: 'Monthly Target',
+                align: 'center',
+                verticalAlign: 'middle',
+                y: 40
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        distance: -50,
+                        style: {
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }
+                    },
+                    startAngle: -90,
+                    endAngle: 90,
+                    center: ['50%', '75%'],
+                    size: '110%'
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Monthly Target',
+                innerSize: '60%',
+                data: monthTargetData
+                /* data: [ 
+                    ['Archieved', result[0].monthAchived], 
+                    ['Pending', result[0].monthTarget - result[0].monthAchived]
+                ] */
+            }]
+        };
+        this.yearTargetOption =  {
+            title: {
+                text: 'Yearly Target',
+                align: 'center',
+                verticalAlign: 'middle',
+                y: 40
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        distance: -50,
+                        style: {
+                            fontWeight: 'bold',
+                            color: 'white'
+                        }
+                    },
+                    startAngle: -90,
+                    endAngle: 90,
+                    center: ['50%', '75%'],
+                    size: '110%'
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Yearly Target',
+                innerSize: '60%',
+                data: yearTargetData
+                /* data: [
+                    ['Archieved', result[0].yearAchived],
+                    ['Pending', result[0].yeartarget - result[0].yearAchived]
+                ] */
+            }]
+        };
+       });
+
+    }
     public lineChartOptions:any = {
         responsive: true,
         maintainAspectRatio: false

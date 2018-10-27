@@ -1,0 +1,426 @@
+<!-- <div class="modalOverlay" style="background:rgba(0,0,0,.5); top:0px; left:0px; width:100%; height:100%; z-index:99;position: fixed;"></div> -->
+    <!-- <div class="modal-dialog" style="position: absolute;
+    width: 98%;
+    z-index: 99;
+    top: -25px;
+    left: 1%;"> -->
+<div [@routerTransition] id="pager">
+    <div>
+
+        <div class="row"> <br>
+            <div class="col-md-12">
+			<div class="info-block">
+                <h3 class="marginTop"><span><b></b>{{enquiry.enquiryNo}} <b></b>:</span>{{enquiry_detail.title}}</h3>
+				<p><small>Expected Closed: {{enquiry_detail.closeDate?(enquiry_detail.closeDate | amDateFormat:'LL'):'Nil' }}, Current Milestone: {{enquiry_detail.mileStoneName}}</small></p>
+				</div>
+            </div>
+            <!--<div class="col-md-6 text-right">
+                <div class="col-md-6">
+                    <span class="img-box">
+                        <img src="/assets/common/images/default-profile-picture.png" alt="pic" class="user-pic">
+                    </span>
+                    <span class="name">Murugan</span>
+                    <span class="type">Owner</span>
+                </div>
+                 <div class="col-md-6 text-left">
+                    <button class="btn btn-primary green">Won</button>
+                    <button class="btn btn-danger">Lost</button>
+                </div> 
+            </div>-->
+        </div>
+        <div class="row" >
+            <!-- <div class="col-md-3 organization-details">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4 class="display-inline noMargin">Organization</h4>
+                        <button class="custombtn" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="panel-body">{{enquiry_detail.companyName}}</div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="display-inline noMargin">Person</h4>
+                        <button class="custombtn">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4" >
+                                <span class="" style="float:right;">
+                                    <img src="/assets/common/images/default-profile-picture.png" alt="pic" class="user-pic">
+                                </span>
+                            </div>
+                            <div class="col-md-6 padding_left0" >
+                                <span class="name floatlefttline50" style="">{{enquiry_detail.contactName}}</span>
+                            </div>
+
+                        </div>
+                        <div class="row div_height" >
+                            <div class="col-md-4" >
+                                <span class="name floatrightheight30" style="">Email</span>
+                            </div>
+                            <div class="col-md-6 padding_left0" >
+                                <span class="floatleftheight30" >murugan@gmail.com</span>
+                            </div>
+
+                        </div>
+                        <div class="row div_height" >
+                            <div class="col-md-4" >
+                                <span class="name floatrightheight30" >Phone</span>
+                            </div>
+                            <div class="col-md-6 padding_left0" >
+                                <span class="floatleftheight30" >+91 9876543234</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-md-12">
+                <div class=" customcontain">
+                    <tabset class="tab-container tabbable-line">
+					<tab heading ="LeadInfo">
+                            <div class="col-xs-6"></div>
+                            <div class="col-xs-6 text-right">
+                                <button (click)="createQuotation()" class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Create Quotation")}}</button>
+                            </div>
+
+						<div style="width:100%; padding:20px 15px; background:white;">
+					
+						 <form  #createLeadForm="ngForm" novalidate (ngSubmit)="save()">
+							<span *ngIf="enquiry.id"></span>
+						<div class="modal-body">
+								<div class="row padding10px">
+									<div class="col-md-6">
+										<div class="form-group form-md-line-input form-md-floating-label no-hint">
+											<input #nameInput class="form-control" type="text" [(ngModel)]="enquiry.title" [ngClass]="{'edited':enquiry.title}" [ngModelOptions]="{standalone: true}" required>
+											<label>{{l("Title")}} <required_field></required_field></label>
+										</div>
+									</div>
+									 <div class="col-md-6">
+										<label>Company <required_field></required_field></label>
+										<ng-select   [active]="active_company" [allowClear]="true" (data)="refreshCompany($event)"  [items]="companytypo" (selected)="doSomething($event)" (removed)="removeType($event)" placeholder="No Company selected">
+										</ng-select>
+									</div> 
+								</div>
+								<div class="row padding10px">
+									<div class="col-md-6 form-group">
+										<label>Milestone <required_field></required_field></label>
+										<ng-select [active]="active_milestone"  [allowClear]="true" (data)="refreshMile($event)"  [items]="milestone" (selected)="selectMilestone($event)" (removed)="removeMilestone($event)" placeholder="No Milestone selected">
+										</ng-select>
+									</div>
+									<div class="col-md-6 form-group">
+										<label>Contact <required_field></required_field></label>
+										 <ng-select [active]="active_contact" [allowClear]="true" [items]="contact" (selected)="selectContact($event)" (removed)="removeContact($event)" placeholder="No Contact is selected">
+										</ng-select> 
+									</div>
+								</div>
+								<div class="row padding10px">
+									<div class="col-md-6" style="padding: 1px;">
+									<div class="col-md-12 form-group">
+										<label>Milestone Status</label>
+										<ng-select  [active]="active_milestonestatus" [allowClear]="true" [items]="status" (selected)="selectStatus($event)" (removed)="removeStatus($event)" placeholder="No Status is selected">
+										</ng-select>
+									</div>
+									 <div class="col-md-12 padding10px">
+										<label class="control-label">{{l("Closed Date")}}</label>
+										<div class="form-group">
+											<p-calendar [style]="{'width':'433px'}" [(ngModel)]="dpdate" [ngModelOptions]="{standalone: true}"></p-calendar>
+										</div>
+									</div> 
+									</div>
+									<div class="col-md-6">
+										<label class="control-label">{{l("Remarks")}}</label>
+										<textarea class="form-control" [(ngModel)]="enquiry.remarks" placeholder="Remarks" [ngModelOptions]="{standalone: true}" style="height:102px;"></textarea>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+									<button type="submit" class="btn btn-primary blue" [disabled]="!createLeadForm.valid || !enquiry.contactId ||!enquiry.mileStoneId || !enquiry.companyId" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+								</div>
+						</div>
+					</form>
+					</div>
+					</tab>
+                        <tab heading="Activity">
+
+                           <!-- <ul class="list-unstyled">
+                                <li class="media customli">
+                                    <div class="iconbtn">
+
+                                        <i class="fa fa-hand-o-right iconbttn" style="" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="media-body custommedia" >
+                                        <h5 class="mt-0 mb-1">Stage: Moved from New  Contact </h5>
+                                        <small class="floatright_weight">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            29 August 2017 2 PM
+                                        </small>
+
+                                    </div>
+                                </li>
+
+                                <li class="media my-4 customli">
+                                    <div class="iconbtn">
+
+                                        <i class="fa fa-hand-o-right iconbttn" style="" aria-hidden="true"></i>
+
+                                    </div>
+                                    <div class="media-body custommedia" >
+                                        <h5 class="mt-0 mb-1">Stage: Moved from New  Contact </h5>
+                                        <small class="floatright_weight">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            29 August 2017 2 PM
+                                        </small>
+
+                                    </div>
+                                </li>
+                                <li class="media customli">
+                                    <div class="iconbtn">
+
+                                        <i class="fa fa-hand-o-right iconbttn" style="" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="media-body custommedia" >
+                                        <h5 class="mt-0 mb-1">Stage: Moved from New -Contact </h5>
+                                        <small class="floatright_weight">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                            29 August 2017 2 PM
+                                        </small>
+
+                                    </div>
+                                </li>
+                            </ul> -->
+
+                            <!--<div class="container customcontain">
+                                <tabset class="tab-container tabbable-line">
+                                    <tab heading="{{l('All')}}">
+
+
+
+                                    </tab>
+                                    <tab heading="{{l('Inbound Call')}}"></tab>
+                                    <tab heading="{{l('Outbound Call')}}"></tab>
+                                    <tab heading="{{l('Site Visit')}}"></tab>
+                                    <tab heading="{{l('Show Room Visit')}}"></tab>
+                                    <tab heading="{{l('Email')}}"></tab>
+                                    <tab heading="{{l('Meeting')}}"></tab>
+                                </tabset>
+
+                            </div> -->
+
+
+                            <div id="activityTable">
+
+                                <div class="row" style="margin-bottom: 15px;">
+                                    <div class="col-xs-6"></div>
+                                    <div class="col-xs-6 text-right">
+                                        <button (click)="createActivity()" class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Create Activity")}}</button>
+                                    </div>
+                                </div>
+                                <div class="list-group">
+                                    <a *ngFor="let record of records" href="javascript:;" class="list-group-item">
+                                        <h4 class="list-group-item-heading">
+                                            {{record.title }}<small>({{record.actTypeName}})</small>
+                                            <span style="float: right;">
+                                                <button (click)="editAct(record)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person">
+                                                <i class="icon-pencil"></i>
+                                            </button>
+                                            <button (click)="deleteAct(record)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;">
+                                                <i class="icon-trash"></i>
+                                            </button>
+                                            </span>
+                                        </h4>
+                                        <p class="list-group-item-text">
+                                            <span><i class="fa fa-phone" aria-hidden="true"></i>
+                                                {{record.contactName}}
+                                            </span>
+                                            <span style="font-weight: bold;">
+                                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                               <small>{{record.scheduleTime|date:'medium'}}</small>
+                                            </span>
+                                        </p>
+                                    </a>
+                                </div>
+
+                              <!--  <div class="primeng-datatable-container" [busyIf]="primengDatatableHelper.isLoading">
+                                    <p-dataTable #dataTable
+                                                 (onLazyLoad)="getData()"
+                                                 [value]="primengDatatableHelper.records"
+                                                 rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                 [paginator]="false"
+                                                 [lazy]="true"
+                                                 emptyMessage="{{l('NoData')}}"
+                                                 [responsive]="primengDatatableHelper.isResponsive">
+                                        <p-footer>
+                                            {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                                        </p-footer>
+
+                                        <p-column field=""
+                                                  header="{{l('Actions')}}"
+                                                  [sortable]="false"
+                                                  styleClass="width-percent-15"
+                                                >
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                <div class="btn-group dropdown">
+                                                    <button class="dropdown-toggle btn btn-xs btn-primary blue"
+                                                            data-toggle="dropdown"
+                                                            tooltip="{{l('Actions')}}"
+                                                            aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                        <i class="fa fa-cog"></i><span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a (click)="editAct(record)">{{l('Edit')}}</a>
+                                                        </li>
+                                                        <li>
+                                                            <a (click)="deleteAct(record)">{{l('Delete')}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="title" header="{{l('Title')}}" [sortable]="false">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                            <span>
+                                                {{record.title}}
+
+                                            </span>
+                                            </ng-template>
+                                        </p-column>
+
+                                        <p-column field="actTypeName" header="{{l('Type')}}" [sortable]="false">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                <span >{{record.actTypeName}}</span>
+
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="description" header="{{l('Description')}}" [sortable]="false">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                <span >{{record.description}}</span>
+
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="contactName" header="{{l('Contact')}}" [sortable]="false">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                <span >{{record.contactName}}</span>
+
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column field="scheduleTime" header="{{l('Scheduled At')}}" [sortable]="false">
+                                            <ng-template let-record="rowData" pTemplate="body">
+                                                <span >{{record.scheduleTime}}</span>
+
+                                            </ng-template>
+                                        </p-column>
+
+                                    </p-dataTable>
+
+                                </div> -->
+
+
+
+                            </div>
+
+                        </tab>
+                        <tab heading="Quotations">
+                            <div class="col-xs-6"></div>
+                            <div class="col-xs-6 text-right">
+                                <button (click)="createQuotation()" class="btn btn-primary blue" style="margin: 10px;"><i class="fa fa-plus"></i> {{l("Create Quotation")}}</button>
+                            </div>
+                            <div class="portlet light margin-bottom-0">
+                                <div class="portlet-body">
+                                    <div class="primeng-datatable-container" 
+                                         [busyIf]="primengDatatableHelper.isLoading">
+                                        <p-dataTable #dataTable
+                                                     (onLazyLoad)="getEnqQuotation($event)"
+                                                     [value]="primengDatatableHelper.records"
+                                                     rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                     [paginator]="false"
+                                                     [lazy]="true"
+                                                     emptyMessage="{{l('NoData')}}"
+                                                     scrollable="true" 
+                                                     ScrollWidth="100%" 
+                                                     responsive="primengDatatableHelper.isResponsive"
+                                                     resizableColumns="primengDatatableHelper.resizableColumns">
+
+                                            <p-column field=""
+                                                     header="{{l('Actions')}}"
+                                                     [style]="{'width':'80px'}">
+                                               <ng-template let-record="rowData" pTemplate="body">
+                                                   <div class="btn-group dropdown" normalizePosition>
+                                                       <button class="dropdown-toggle btn btn-xs btn-primary blue"
+                                                               data-toggle="dropdown"
+                                                               aria-haspopup="true"
+                                                               aria-expanded="false">
+                                                               
+                                                           <i class="fa fa-cog"></i><span class="caret"></span>
+                                                       </button>
+                                                       <ul class="dropdown-menu">
+                                                           <li>
+                                                               <a (click)="editQuotation(record)">{{l('Edit')}}</a>
+                                                           </li>
+                                                           <li>
+                                                               <a (click)="deleteQuotation(record)">{{l('Delete')}}</a>
+                                                           </li>
+                                                       </ul>
+                                                   </div>
+                                               </ng-template>
+                                           </p-column>         
+                                                                                   
+                                            <p-column field="companyName" header="{{l('Company')}}" [sortable]="true" [style]="{'width':'150px'}">
+                                                <ng-template let-record="rowData" pTemplate="body">
+                                                    {{record.companyName}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column field="quotationTitleName" header="{{l('Subject')}}" [sortable]="true" [style]="{'width':'150px'}">
+                                                <ng-template let-record="rowData" pTemplate="body">
+                                                    {{record.subjectName}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column field="quotationTitleName" header="{{l('Title')}}" [sortable]="true" [style]="{'width':'150px'}">
+                                                <ng-template let-record="rowData" pTemplate="body">
+                                                    {{record.quotationTitleName}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column field="total" header="{{l('Total')}}" [sortable]="true" [style]="{'width':'150px'}">
+                                                <ng-template let-record="rowData" pTemplate="body">
+                                                    {{record.total}}
+                                                </ng-template>
+                                            </p-column>
+                                            
+                                            
+                                        </p-dataTable>
+                                        <div class="primeng-paging-container">
+                                            <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                                                         #paginator
+                                                         (onPageChange)="getEnqQuotation($event)"
+                                                         [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                                                         [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                                            </p-paginator>
+                                            <span class="total-records-count">
+                                                    {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+   </div>
+
+<createEActivityModal #createEActivityModal (modalSave)="getData()">
+</createEActivityModal>
+<createQModal #createQModal> </createQModal>
+
+<!--
+<div>
+
+</div> -->

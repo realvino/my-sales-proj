@@ -1,0 +1,60 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                    <h4 class="modal-title">
+                        <span>{{quotationUpdate_input.currentMilestone}} :: {{quotationUpdate_input.updateMilestone}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body" *ngIf="!ended">
+                    <h5 class="modal-title"> Please click any Status here</h5>
+                    <br>
+                    <div class="md-radio-list" style="display: inline-flex;">
+                        <div class="md-radio" *ngFor="let option of statusArray" style="margin-right: 30px;margin-left: 30px;">
+                            <input id="Edit_{{option.code}}"  type="radio" class="md-radio" name="status" [(ngModel)]="selected"
+                                [checked]="option.code == selected"
+                                value= {{option.code}} (click)=radioChange(option)
+                                [disabled]="!quotation_input.submitted">
+                                <label for="Edit_{{option.code}}">
+                                    <span class="inc"></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    {{option.name}}
+                                </label>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-sm-6" *ngIf="quotation_input.won">
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="text" class="form-control" name="salesNo" [ngClass]="{'edited':quotation_input.salesOrderNumber}" [(ngModel)]="quotation_input.salesOrderNumber" required>
+                                <label>SalesOrder Number <required_field></required_field></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" *ngIf="quotation_input.won">
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="text" class="form-control" name="proposalNo" [ngClass]="{'edited':quotation_input.customerPONumber}" [(ngModel)]="quotation_input.customerPONumber" required>
+                                <label>Customer PO Number <required_field></required_field></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" *ngIf="quotation_input.lost">
+                            <label>Reason <required_field></required_field></label>
+                                <ng-select [active]="active_reason" [allowClear]="true" [items]="reason" (selected)="selectedReason($event)" (removed)="removedReason()" placeholder="Select Reason">
+                                </ng-select>
+                        </div>
+                        <div class="col-sm-6" *ngIf="quotation_input.lost">
+                            <label>Competitor <required_field></required_field></label>
+                                <ng-select [active]="active_competitor" [allowClear]="true" [items]="competitor" (selected)="selectedCompetitor($event)" (removed)="removedCompetitor()" placeholder="Select Competitor">
+                                </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" *ngIf="!ended">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="isValidSave()" (click)="save()" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+        </div>
+    </div>
+</div>

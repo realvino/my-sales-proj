@@ -1,0 +1,341 @@
+ <div id="pager">
+        <div class="row">
+                <div class="col-sm-6">
+                        <h4 class="modal-title">
+                                <i class="fa fa-shield fa-3x" style="margin-top: 15px;color: red"></i>  <span style="margin: 5px;position: absolute;"> {{quotation_input.proposalNumber}}</span>
+                            </h4>
+                </div>
+                <div class="col-sm-6">
+                        <h3 class="head_qt" style="margin:0px;">
+                                <div class="actions" style="margin-left: 60%;">
+                                    <div class="btn-group mydropdown" style="margin-top: 14px;">
+                                        <a class="btn green-haze btn-outline btn-circle btn-sm" (click)="quot_preview(1)" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Preview
+                                           <i class="fa fa-angle-down"></i>
+                                        </a>
+                                    </div>
+                                    
+                                    <button style="margin-top: 10px;" type="button" (click)="goToEnquiry()" tooltip="{{l('Go To Enquiry')}}" class="btn btn-circle btn-icon-only" >
+                                        <i class="fa fa-external-link"></i>
+                                    </button>
+
+                                    <button style="background: #eff3f8;margin-top: 10px;" type="button" (click)="goToQuotation()" tooltip="{{l('Back To Quotation')}}" class="btn btn-circle btn-icon-only white delete-person" >
+                                       <i class="fa fa-close"></i>
+                                    </button>
+                                </div>
+                            </h3>
+                    </div>
+        </div>
+
+      
+      
+    <!-- <tabset class="tab-container tabbable-line">
+        <tab heading="Quotation Detail" style="background: #fff;" [busyIf]="loading"> -->
+            <div [busyIf]="loading" style="background: #fff;">
+                <form  #createCompanyForm="ngForm" novalidate (ngSubmit)="saveQuotation()">
+                   
+                    <div class="modal-body" [ngStyle]="{'pointer-events': pointenable == 'yes' ? 'auto' : 'none' }">
+                    <div id="abcd">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label style="display:block">Subject<required_field></required_field></label>
+                                <div  style="padding: 0px;">
+                                    <input type="text" class="form-control" name="subjectname"  [(ngModel)]="quotation_input.subjectName" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div #nameInput class="form-group" style="padding:0px;">
+                                    <label>Quotation Title</label>
+                                    <ng-select [active]="active_title" [allowClear]="true" [items]="quotationTitle" (selected)="selectedTitle($event)" (removed)="removedTitle($event)" placeholder="Quotation Title">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2" style="text-align: center">
+                                    <label class="" style="display:block">Total</label>
+                                    <label class="" style="font-size: xx-large;font-weight: 600;">{{total}}</label>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-sm-5">
+                                        <div class="form-group">
+                                            <label>Company<required_field></required_field></label>
+                                            <ng-select [active]="active_company" [allowClear]="true" [items]="companies" (selected)="selectedCompany($event)" (removed)="removedCompany($event)" placeholder="Enter a Company">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <label>Currency<required_field></required_field></label>
+                                                <ng-select [active]="active_currency" [allowClear]="true" [items]="currencies" (selected)="selectedCurrency($event)" (removed)="removedCurrency($event)" placeholder="Currency">
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    <div class="col-sm-2" style="text-align: center">
+                                            <label style="display:block">Exchange Rate</label>
+                                            <label class="" style="font-size: xx-large;font-weight: 600;" >{{quotation_input.exchangeRate}}</label>
+                                        </div>
+                        </div>
+                        <div class="row">
+                                    <div class="col-sm-5">
+                                        <div>
+                                                <label>Salesperson</label>
+                                            <input type="text" name="salesmanager" class="form-control" [disabled]="true" [(ngModel)]='salesman' required/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5" >
+                                            <div #nameInput class="form-group">
+                                                <label>Contact<required_field></required_field></label>
+                                                <ng-select [active]="active_contact" [allowClear]="true" [items]="companycontacts" (selected)="selectedCompanyContact($event)" (removed)="removedCompanyContact($event)" placeholder="Select Contact">
+                                                </ng-select>
+                                            </div>
+                                        </div>                                   
+                                    <div class="col-sm-2" style="text-align: center">
+                                                <label class="" style="display:block;margin: 0px;">Discount</label>
+                                                <label class="" style="font-size: xx-large;font-weight: 600;">{{quotation_input.overallDiscount}}</label>
+                                     </div>
+                        </div>
+                    </div>
+                        <div class="row" [ngStyle]="{'pointer-events': quotation_input.submitted == true ? 'none' : 'auto' }">
+                            <div class="portlet">
+                                <div class="portlet-title">
+                                    <div  class="actions" *ngIf="quotation_input.id" style="float:right;margin-top:10px;margin-right:35px;">
+                                        <button *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationServiceAdd')" (click)="addService(quotation_input.id)"  class="btn btn-circle btn-icon-only white delete-person" type="button" tooltip="Add Quotation Service" style="background: orange;">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <button *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationProductAdd')"  (click)="addProduct(quotation_input.id)"  class="btn btn-circle btn-icon-only white delete-person" type="button" tooltip="Add Quotation Product">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="portlet-body margin18_q">
+                                  <div class="row" style="margin: 20px;"><b>Product :</b></div>
+                                    <div class="list-group">
+                                        <div  class="row"  style="margin: 20px;">
+                                            <div class="row" style="margin-left:0px;width:100%;">
+                                                <div class="col-md-12" style="background: #444d58;color: white;">
+                                                    <div class="row">
+                                                        <div class="col-md-3 text-center">
+                                                            <label style="margin-top: 15px;">Product Name</label>
+                                                        </div>
+                                                        <div class="col-md-3 text-center">
+                                                            <label style="margin-top: 15px;">Quantity</label>
+                                                        </div>
+                                                        <div class="col-md-4 text-center">
+                                                            <div class="col-md-4">
+                                                                <label style="margin-top: 15px;">Unit Price</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label style="margin-top: 15px;">Discount</label>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <label style="margin-top: 15px;">Amount</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="list-group-item" *ngFor="let item of qProducts">
+                                                <div class="row">
+                                                    <div class="col-md-3 text-center">
+                                                        <label><b>{{item.productName}}</b></label>
+                                                    </div>
+                                                    <div class="col-md-3 text-center">
+                                                        <label>{{item.quantity}} pcs</label>
+                                                    </div>
+                                                    <div class="col-md-4 text-center">
+                                                        <div class="col-md-4">
+                                                            <label>{{item.price}}</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>{{item.discount}}</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                             <label>{{item.estimatedPrice}}</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <button type="button" *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationProductEdit')" tooltip="{{l('Edit')}}" (click)="editPro(item.id)" class="btn btn-circle btn-icon-only green edit-person">
+                                                            <i class="icon-pencil"></i>
+                                                        </button>
+                                                        <button type="button" *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationProductDelete')" tooltip="{{l('Delete')}}" (click)="trashPro(item.id)" class="btn btn-circle btn-icon-only red delete-person" >
+                                                            <i class="icon-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="portlet-body margin18_q">
+                                    <div class="row" style="margin: 20px;"><b>Service :</b></div>
+                                    <div class="list-group">
+                                            <div  class="row"  style="margin: 20px;">
+                                                <div class="row" style="margin-left:0px;width:100%;">
+                                                    <div class="col-md-12" style="background: #444d58;color: white;">
+                                                        <div class="row">
+                                                            <div class="col-md-2 text-center">
+                                                                <label style="margin-top: 15px;">Service Code</label>
+                                                            </div>
+                                                            <div class="col-md-4 text-center">
+                                                                    <label style="margin-top: 15px;">Service Name</label>
+                                                            </div>
+                                                            <div class="col-md-4 text-center">
+                                                                <div class="col-md-8">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label style="margin-top: 15px;">Amount</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="list-group-item" *ngFor="let ser of qServices">
+                                                    <div class="row">
+                                                        <div class="col-md-2 text-center">
+                                                            <label><b>{{ser.serviceName}}</b></label>
+                                                        </div>
+                                                        <div class="col-md-4 text-center">
+                                                                <label><b>{{ser.serviceName}}</b></label>
+                                                        </div>
+                                                        <div class="col-md-4 text-center">
+                                                            <div class="col-md-8">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                 <label>{{ser.covertPrice}}</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationServiceEdit')" type="button" tooltip="{{l('Edit')}}" (click)="editService(ser.id)" class="btn btn-circle btn-icon-only green edit-person">
+                                                                <i class="icon-pencil"></i>
+                                                            </button>
+                                                            <button *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit.QuotationServiceDelete')" type="button" tooltip="{{l('Delete')}}" (click)="deleteService(ser.id)" class="btn btn-circle btn-icon-only red delete-person" >
+                                                                <i class="icon-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                                <div class="row" style="background: #eee;" id="abcd2">
+                                        <div class="col-sm-6">
+                                                <label>Warranty<required_field></required_field></label>
+                                                <ng-select [active]="active_warranty" [allowClear]="true" [items]="warrantyData" (selected)="selectedWarranty($event)" (removed)="removedWarranty($event)" placeholder="Select Warranty">
+                                                </ng-select>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                    <label>Packing<required_field></required_field></label>
+                                                    <ng-select [active]="active_packing" [allowClear]="true" [items]="packingData" (selected)="selectedPacking($event)" (removed)="removedPacking($event)" placeholder="Select Packing">
+                                                    </ng-select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                        <label>Delivery<required_field></required_field></label>
+                                                        <ng-select  [active]="active_delivery" [allowClear]="true" [items]="deliveryData" (selected)="selectedDelivery($event)" (removed)="removedDelivery($event)" placeholder="Select Delivery">
+                                                        </ng-select>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                            <label>Freight<required_field></required_field></label>
+                                                            <ng-select [active]="active_freight" [allowClear]="true" [items]="freightData" (selected)="selectedFreight($event)" (removed)="removedFreight($event)" placeholder="Select Freight">
+                                                            </ng-select>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                                <label>Payment<required_field></required_field></label>
+                                                                <ng-select [active]="active_payment" [allowClear]="true" [items]="paymentData" (selected)="selectedPayment($event)" (removed)="removedPayment($event)" placeholder="Select Payment">
+                                                                </ng-select>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                                    <label>Validity<required_field></required_field></label>
+                                                                    <ng-select [active]="active_validity" [allowClear]="true" [items]="validityData" (selected)="selectedValidity($event)" (removed)="removedValidity($event)" placeholder="Select Validity">
+                                                                    </ng-select>
+                                               </div>
+
+                                               <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <br>
+                                                        <div style="width: 100px;margin: auto;" >
+                                                            <label>Vat</label>
+                                                            <div class="onoffswitch">
+                                                                <input type="checkbox" name="Vat" class="onoffswitch-checkbox" id="Vat" [(ngModel)]="quotation_input.vat"> 
+                                                                    <label class="onoffswitch-label" for="Vat">
+                                                                        <span class="onoffswitch-inner"></span>
+                                                                         <span class="onoffswitch-switch"></span>
+                                                                    </label>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                    </div> 
+                                                    <div *ngFor="let item of statusData; let indx = index" >
+                                                        <div class="col-md-2" *ngIf="item.text!='New'">
+                                                            <br>
+                                                            <div style="width: 100px;margin: auto;" >
+                                                                <label>{{item.text}}</label>
+                                                                <div class="onoffswitch">
+                                                                    <input type="checkbox" name="{{item.text}}" class="onoffswitch-checkbox" id="{{item.text}}" [(ngModel)]="item.stat_switch" (change)="getQuotationStatusId(item.text,item.stat_switch)"  [disabled]="(item.switch_disable || quotation.statusName != 'Submitted') && item.text !='Submitted'"   value="">
+                                                                    <label class="onoffswitch-label" for="{{item.text}}">
+                                                                        <span class="onoffswitch-inner"></span>
+                                                                        <span class="onoffswitch-switch"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div><br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <div class="col-sm-4" *ngIf="quotation.vat">
+                                                <label style="display:block"> Vat Percentage</label>
+                                                <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                                    <input type="number" class="form-control" name="vatPercentage" [disabled]="true" [(ngModel)]='quotation_input.vatPercentage'>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4" *ngIf="quotation.vat">
+                                                <label style="display:block"> Vat Amount</label>
+                                                <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                                    <input type="number" class="form-control" name="vatAmount" [disabled]="true" [(ngModel)]='vatAmount'>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label style="display:block"> Discount Amount</label>
+                                                <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
+                                                    <input type="number" class="form-control" name="quotation_name" [(ngModel)]='quotation_input.overallDiscount'>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4" *ngIf="quotation_input.won">
+                                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                    <input type="text" class="form-control" name="salesNo" [ngClass]="{'edited':quotation_input.salesOrderNumber}" [(ngModel)]="quotation_input.salesOrderNumber" required>
+                                                    <label>SalesOrder Number <required_field></required_field></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4" *ngIf="quotation_input.won">
+                                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                    <input type="text" class="form-control" name="proposalNo" [ngClass]="{'edited':quotation_input.customerPONumber}" [(ngModel)]="quotation_input.customerPONumber" required>
+                                                    <label>Customer PO Number <required_field></required_field></label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4" *ngIf="quotation_input.lost">
+                                                <label>Reason <required_field></required_field></label>
+                                                    <ng-select [active]="active_reason" [allowClear]="true" [items]="reason" (selected)="selectedReason($event)" (removed)="removedReason($event)" placeholder="Select Reason">
+                                                    </ng-select>
+                                            </div>
+                                            <div class="col-sm-4" *ngIf="quotation_input.lost">
+                                                <label>Competitor <required_field></required_field></label>
+                                                   <ng-select [active]="active_competitor" [allowClear]="true" [items]="competitor" (selected)="selectedCompetitor($event)" (removed)="removedCompetitor($event)" placeholder="Select Competitor">
+                                                   </ng-select>
+                                            </div>                
+                        </div>
+                        <div class="row" style="margin-top:12px;">
+                            <div class="col-xs-12 text-right">  
+                                <button [disabled]="saving" type="button" class="btn btn-default" (click)="goToQuotation()">{{l("Cancel")}}</button>
+                                <button type="submit" class="btn btn-primary blue" [disabled]="isValidSave(createCompanyForm)" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        <!-- </tab>
+    </tabset> -->
+</div><br>
+ <createQProductModal #createQProductModal (messageEvent)="receiveMessage($event)" (modalSave)="getQuotationProduct(quotation_input.id)">
+ </createQProductModal>
+ <quotationPreviewModal #quotationPreviewModal></quotationPreviewModal>
+ <createQServiceModal #createQServiceModal (messageEvent)="receiveMessage($event)" (modalSave)="getQuotationService(quotation_input.id)">
+</createQServiceModal>

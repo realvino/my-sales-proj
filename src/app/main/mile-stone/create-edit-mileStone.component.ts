@@ -37,8 +37,7 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
     //milestone: MileStoneListDto = new MileStoneListDto();
 	milestone: CreateMileInputDto = new CreateMileInputDto();
     milestoneDetail:CreateMileStoneDetailInput=new CreateMileStoneDetailInput();
-	
-	 
+
     //milestone:any=[];
     SelectedSourceId:number = 0; 
     SelectedSourceName:string = ""; 
@@ -46,7 +45,6 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
     eventOriginal = this.milestone;
     selectedVal:boolean=false;
     active = false;
-	//active= true;
     saving = false;
     private sourcesType:Array<any>= [];
     active_source:SelectOption[]=[];
@@ -60,30 +58,26 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
     ) {
         super(injector);
     }
-  public ngOnInit():any {
-    COLORS.forEach((color:{name:string, hex:string}) => {
-      this.items.push({
-        id: color.hex,
-        text: `<colorbox style='background-color:${color.hex};'></colorbox>${color.name} (${color.hex})`
-      });
-    });
-  }
-   show(MileStoneId?: number): void {
+    public ngOnInit():any {
+        COLORS.forEach((color:{name:string, hex:string}) => {
+            this.items.push({
+                id: color.hex,
+                text: `<colorbox style='background-color:${color.hex};'></colorbox>${color.name} (${color.hex})`
+            });
+        });
+    }
+    show(MileStoneId?: number): void {
 	    this.milestone =new CreateMileInputDto();
         this.getMilebyId(MileStoneId);
-		 this.getStatusbyMilestone();
-		 
-		 if(MileStoneId){
-			 
+		this.getStatusbyMilestone();
+        if(MileStoneId){
             this.getMilebyId(MileStoneId);
 			if(this.milestone.id){
-			this.staticTabs.tabs[0].active = true;
+     			this.staticTabs.tabs[0].active = true;
             }	
         }
-	   
         this.active = true;
         this.modal.show();
-      
     }
     doSomething(data): void {
 
@@ -91,24 +85,20 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
     removeSourceType(data):void{
 
     }
-   save(): void {
+    save(): void {
         this.saving = true;
            if (this.milestone.id == null) {
                this.milestone.id = 0;
            }
            this.milestone.tenantId = abp.multiTenancy.getTenantIdCookie();
-		  // console.log(this.milestone);
            this._mileStoneProxyService.createOrUpdateMilestone(this.milestone)
             .finally(() => this.saving = false)
             .subscribe(() => {
-				
                this.notify.info(this.l('SavedSuccessfully'));
 				this.milestone = this.eventOriginal;
 				this.close();
 				this.modalSave.emit(this.milestone); 
             });
-            
-            
     }
     onShown(): void {
         // $(this.nameInput.nativeElement).focus();
@@ -119,17 +109,16 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
         //this.milestone = this.eventOriginal;
     }
     private get disabledV():string {
-    return this._disabledV;
-  }
+      return this._disabledV;
+    }
   
-  private set disabledV(value:string) {
-    this._disabledV = value;
-    this.disabled = this._disabledV === '1';
-  }
-
-  public selected(value:any):void {
+    private set disabledV(value:string) {
+      this._disabledV = value;
+      this.disabled = this._disabledV === '1';
+    }
+    public selected(value:any):void {
     //console.log('Selected value is: ', value);
-  }
+    }
 
   public removed(value:any):void {
     //console.log('Removed value is: ', value);
@@ -197,7 +186,7 @@ export class CreateOrEditMileStoneModalComponent extends AppComponentBase implem
                 isConfirmed => {
                 if (isConfirmed) {
                     this._mileStoneProxyService.getDeleteMileStoneDetail(item.id).subscribe(result=>{
-                        if(result)
+                        if(this.message.error)
                         {
                             this.notify.error(this.l('This status could not delete'));
                         }else{

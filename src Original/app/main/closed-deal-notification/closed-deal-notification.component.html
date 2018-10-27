@@ -1,0 +1,59 @@
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+	<div class="modal-dialog" style="width:70% !important">
+        <div class="modal-content">
+        	<div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <!--<span *ngIf="company.id">{{l("EditCompany")}}: {{company.cityName}}</span>-->
+                        <span>{{l("Missed Leads")}}</span>
+                    </h4>
+                </div>
+        	<div class="modal-body">
+				
+				<div class="portlet-body">
+		            <div class="form">
+		                <form class="horizontal-form">
+		                    <div class="form-body">
+		                        <div class="row margin-bottom-10">
+		                            <div class="col-md-12">
+		                                <div class="inputs inputs-full-width">
+		                                    <div class="portlet-input">
+		                                        <div class="input-group">
+		                                            <input [(ngModel)]="filter" name="filter" (keyup.enter)="getMissedLead()" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+		                                            <span class="input-group-btn">
+		                                           <button  (click)="getMissedLead()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+		                                          </span>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </form>
+		            </div>
+
+		            <div class="list-group missedLeadCont">
+		                <a *ngFor="let missedLead of missedLeads" href="javascript:;" class="list-group-item">
+		                    <div style="float:left;">
+		                        <img src="/assets/common/images/default-profile-picture.png" alt="profile" class="image-profile">
+		                    </div>
+		                    <div style="margin-left: 60px;">
+		                        <h4 class="list-group-item-heading" style="font-weight: 700;">
+		                            {{missedLead.enquiryNo+' '+missedLead.title}}
+		                            <span class="badge">{{missedLead.mileStoneName}}</span>
+		                            <span class="text-right"><small class="text-muted missedLead-create">{{missedLead.creationTime | amTimeAgo}}</small>	</span>	                            
+		                        </h4>
+		                        <p class="list-group-item-text">
+		                            <i class="fa fa-industry"></i>&nbsp; {{missedLead.companyName}}&nbsp;&nbsp; <i class="fa fa-address-book"></i>&nbsp; {{missedLead.contactName}}&nbsp;&nbsp;&nbsp;&nbsp;Expected Closed Date : {{ missedLead.closeDate | amDateFormat:'LL' }}
+		                        </p>
+		                    </div>
+		                </a>
+		            </div>
+
+		        </div>
+        	</div>
+        </div>	
+    </div>    	
+</div>

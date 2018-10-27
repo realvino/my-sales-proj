@@ -1,0 +1,77 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog" style="width: 60%">
+        <div class="modal-content">
+            <form *ngIf="active" #createQuotForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span >{{l("Create Quotation")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                        <div class="row">
+                                <div class="col-sm-12">
+                                    <div  class="form-group" style="padding-top:20px">
+                                        <label>Enquiry</label>
+                                        <ng-select [disabled]="dis" [active]="active_company" [allowClear]="true" [items]="enquiry" (selected)="selectedEnquiry($event)" (removed)="removedEnquiry($event)" (typed)="searchEnquiry($event)" placeholder="Select a Enquiry">
+                                        </ng-select>  
+                                    </div>
+                                </div>
+                            </div>
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <label>Subject<required_field></required_field></label>
+                                <input type="text" name="subjectname" class="form-control" [(ngModel)]="quotation_input.subjectName" required/>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div  class="form-group" style="padding-top:20px">
+                                <label>Quotation Title</label>
+                                <ng-select [allowClear]="true" [items]="quotationTitle" (selected)="selectedTitle($event)" (removed)="removedTitle($event)" placeholder="Select a Title">
+                                </ng-select>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                   
+
+                    <div class="row" *ngIf="enquiryDetail.companyName">
+                            <div class="col-sm-12">
+                                    <div class="panel panel-default">
+                                      <div class="panel-heading">Enquiry Information</div>
+                                      <div class="panel-body">
+                                          <div class="col-sm-6">
+                                                <p>Company Name : <span id="summa">{{enquiryDetail.companyName}}</span></p>
+                                                <p>Salesperson Name: <span id="summa">{{enquiryDetail.salesName}}</span></p>
+                                          </div>
+                                          <div class="col-sm-6">
+                                                <p>Currency : <span id="summa">{{enquiryDetail.currencyName}}</span></p>
+                                                <p>Contactperson  Name: <span id="summa">{{enquiryDetail.contactName}}</span></p>
+                                          </div>
+                                                                                                                          
+                                        </div>
+                                    </div>
+                                  </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue"  [disabled]="disable_save" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<style>
+span#summa {
+    font-size: 17px;
+    font-weight: 600;
+}</style>

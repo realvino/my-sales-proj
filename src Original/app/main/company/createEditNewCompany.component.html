@@ -1,0 +1,188 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+    <div class="modal-dialog" style="width:70% !important">
+        <div class="modal-content">
+            <form *ngIf="active" #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <!--<span *ngIf="company.id">{{l("EditCompany")}}: {{company.cityName}}</span>-->
+                        <span>{{l("Create Company")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div *ngIf="!infotype.id">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                    <input #nameInput class="form-control" type="text" name="name" [ngClass]="{'edited':company_name}" [(ngModel)]="infotype.name" required (ngModelChange)="companyNameChange(infotype.name)">
+                                    <label>{{l("Company Name")}} <required_field></required_field> </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <label>Company Type <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [items]="companytypo" (selected)="doSomething($event)" (removed)="removeType($event)" placeholder="No Customer Type selected">
+                                </ng-select>
+
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Country <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [items]="country" (selected)="selectCountry($event)" (removed)="removeCountry($event)" placeholder="No Country is selected" required>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Currency <required_field></required_field></label>
+                                <ng-select  [allowClear]="true" [items]="currency" (selected)="selectCurrency($event)" (removed)="removeCurrency($event)" placeholder="No Currency is selected" required>
+                                </ng-select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [disabled]=" enable_save" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')">
+                                <i class="fa fa-save"></i>
+                                <span>{{l("Save")}}</span>
+                            </button>
+                        </div>
+                    </div>
+                    <tabset class="tab-container tabbable-line" *ngIf="infotype.id">
+                        <tab heading="Details">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="code"  required>
+                                        <label>{{l("Company Code")}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="name"  required>
+                                        <label>{{l("Company Name")}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <label>City</label>
+                                        <select #cityCombobox id="yourDropDownElementId" name="city" class="form-control" [attr.data-live-search]="true" (change)="doSomethingcity(Selectedcity)" jq-plugin="selectpicker" required>
+                                            <option [value]="SelectedCityId">{{SelectedCityName}}</option>
+                                           <!-- <option *ngFor="let city of citys" [value]="city.id">{{city.name}}</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <label>Customer Type</label>
+                                        <select #accountCombobox id="yourDropDownElementId" name="type" class="form-control" [(ngModel)]="SelectedType" [attr.data-live-search]="true" (change)="doSomethingType(SelectedType)" jq-plugin="selectpicker" required>
+                                            <option [value]="SelectedCustomerTypeId">{{SelectedCutomerTypeName}}</option>
+                                         <!--   <option *ngFor="let type of types" [value]="type.customerTypeId">{{type.customerTypeName}}</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="Email" required>
+                                        <label>{{l("Email")}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="PhNo" required>
+                                        <label>{{l("PhNo")}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="address"  required>
+                                        <label>{{l("Address")}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="fax"  required>
+                                        <label>{{l("Fax")}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <input #nameInput class="form-control" type="text" name="mblno"  required>
+                                        <label>{{l("Mobile Number")}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                        <label>Account Handler</label>
+                                        <select #accountCombobox id="yourDropDownElementId" name="accountHandler" class="form-control" [attr.data-live-search]="true" (change)="doSomethingAccount(SelectedAccount)" jq-plugin="selectpicker" required>
+                                            <option [value]="SelectedAccountId">{{SelectedAccountName}}</option>
+                                       <!--     <option *ngFor="let accountHandler of AccountHandlers" [value]="accountHandler.id">{{accountHandler.name}}</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                                <button type="submit" class="btn btn-primary blue"  [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                            </div>
+                        </tab>
+                        <tab >
+                            <div class="list-group">
+                                <div class="modal-header" style="margin-top: -30px;">
+                                    <h4 class="modal-title">
+                                        <button type="button" class="btn btn-primary blue pull-right" ><i class="fa fa-plus"></i>{{l("CreateNew")}}</button>
+                                    </h4>
+                                </div>
+                                <div class="list-group-item" >
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-1">
+                                                <img src="/assets/common/images/Contacts.png" style="height:70px;width:65px;align-content:center;" class="img-rounded" />
+                                            </div>
+                                            <div class="col-md-11">
+                                                <h3 class="list-group-item-heading" style="color:blue">
+                                                   Contact Person Name<br />
+                                                    <span style="float:right;">
+                                                       <button type="button"  title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person">
+                                                           <i class="icon-pencil"></i>
+                                                       </button>
+                                                       <button type="button"   title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;">
+                                                           <i class="icon-trash"></i>
+                                                       </button>
+                                                    </span>
+                                                </h3>
+
+                                                <h4 class="list-group-item-heading" style="color:green">
+                                                    Phone <br />
+                                                </h4>
+
+
+                                                <h5 class="list-group-item-heading" style="color:green">
+                                                    Mail <br />
+                                                </h5>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--<createCompanyContactModal #createCompanyContactModal (modalSave)="getContacts(company.id)">
+    </createCompanyContactModal>-->
+</div>

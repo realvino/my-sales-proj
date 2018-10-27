@@ -7,12 +7,17 @@
                 </div>
                 <div class="col-sm-6">
                         <h3 class="head_qt" style="margin:0px;">
-                                <div class="actions" style="margin-left: 75%;">
+                                <div class="actions" style="margin-left: 60%;">
                                     <div class="btn-group mydropdown" style="margin-top: 14px;">
                                         <a class="btn green-haze btn-outline btn-circle btn-sm" (click)="quot_preview(1)" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Preview
                                            <i class="fa fa-angle-down"></i>
                                         </a>
                                     </div>
+                                    
+                                    <button style="margin-top: 10px;" type="button" (click)="goToEnquiry()" tooltip="{{l('Go To Enquiry')}}" class="btn btn-circle btn-icon-only" >
+                                        <i class="fa fa-external-link"></i>
+                                    </button>
+
                                     <button style="background: #eff3f8;margin-top: 10px;" type="button" (click)="goToQuotation()" tooltip="{{l('Back To Quotation')}}" class="btn btn-circle btn-icon-only white delete-person" >
                                        <i class="fa fa-close"></i>
                                     </button>
@@ -261,13 +266,13 @@
                                                         <br>
                                                     </div> 
                                                     <div *ngFor="let item of statusData; let indx = index" >
-                                                        <div class="col-md-2" *ngIf="item.text!='New'">
+                                                        <div class="col-md-2">
                                                             <br>
                                                             <div style="width: 100px;margin: auto;" >
                                                                 <label>{{item.text}}</label>
                                                                 <div class="onoffswitch">
-                                                                    <input type="checkbox" name="{{item.text}}" class="onoffswitch-checkbox" id="{{item.text}}" [(ngModel)]="item.stat_switch" (change)="getQuotationStatusId(item.text,item.stat_switch)" [disabled]="(item.switch_disable || !quotation_input.submitted || quotation.statusName != 'Submitted') && item.text !='Submitted'" value="">
-                                                                    <label class="onoffswitch-label" for="{{item.text}}">
+                                                                    <input type="checkbox" name="{{item.code}}" class="onoffswitch-checkbox" id="{{item.code}}" [(ngModel)]="item.stat_switch" (change)="getQuotationStatusId(item.code,item.stat_switch)" [disabled]="(item.switch_disable || quotationStatusName != 'Submitted') && item.code !='Submitted'"   value="">
+                                                                    <label class="onoffswitch-label" for="{{item.code}}">
                                                                         <span class="onoffswitch-inner"></span>
                                                                         <span class="onoffswitch-switch"></span>
                                                                     </label>
@@ -275,6 +280,21 @@
                                                             </div><br>
                                                         </div>
                                                     </div>
+                                                    <!-- <div *ngFor="let item of statusData; let indx = index" >
+                                                        <div class="col-md-2" *ngIf="item.text!='New'">
+                                                            <br>
+                                                            <div style="width: 100px;margin: auto;" >
+                                                                <label>{{item.text}}</label>
+                                                                <div class="onoffswitch">
+                                                                    <input type="checkbox" name="{{item.text}}" class="onoffswitch-checkbox" id="{{item.text}}" [(ngModel)]="item.stat_switch" (change)="getQuotationStatusId(item.text,item.stat_switch)" [disabled]="(item.switch_disable || quotation.statusName != 'Submitted') && item.text !='Submitted'"   value="">
+                                                                    <label class="onoffswitch-label" for="{{item.text}}">
+                                                                        <span class="onoffswitch-inner"></span>
+                                                                        <span class="onoffswitch-switch"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div><br>
+                                                        </div>
+                                                    </div> -->
                                                 </div>
                                             <div class="col-sm-4" *ngIf="quotation.vat">
                                                 <label style="display:block"> Vat Percentage</label>
@@ -285,7 +305,7 @@
                                             <div class="col-sm-4" *ngIf="quotation.vat">
                                                 <label style="display:block"> Vat Amount</label>
                                                 <div class="form-group form-md-line-input form-md-floating-label no-hint" style="padding: 0px;">
-                                                    <input type="number" class="form-control" name="vatAmount" [disabled]="true" [(ngModel)]='quotation_input.vatAmount'>
+                                                    <input type="number" class="form-control" name="vatAmount" [disabled]="true" [(ngModel)]='vatAmount'>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">

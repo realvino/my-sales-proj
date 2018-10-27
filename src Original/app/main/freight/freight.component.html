@@ -1,0 +1,61 @@
+<div [@routerTransition] id="pager">
+    <div class="row margin-bottom-5"><br>
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>Freight</span> <small>Details ({{freight.length}})</small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <!-- <button (click)="exportToExcel()" class="btn btn-primary blue"><i class="fa fa-download"></i> {{l("Export")}}</button> -->
+            <button *ngIf="isGranted('Pages.Tenant.Quotation.QuotationMaster.Freight.Create')" class="btn btn-primary blue" (click)="createFreight()"><i class="fa fa-plus"></i> Create Freight </button>
+        </div>
+    </div>
+
+    <div class="portlet light margin-bottom-0">
+        <div class="portlet-body">
+            <div class="form">
+                <form class="horizontal-form">
+                    <div class="form-body">
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-12">
+                                <div class="inputs inputs-full-width">
+                                    <div class="portlet-input">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filter" name="filter" (keyup.enter)="getFreight()" autocomplete="off" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                            <span class="input-group-btn">
+                                           <button  (click)="getFreight()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                          </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+	
+            <div class="list-group">
+                <a *ngFor="let freights of freight" href="javascript:;" class="list-group-item">
+                    <h4 class="list-group-item-heading">
+                        {{freights.freightCode }}
+                        <button *ngIf="isGranted('Pages.Tenant.Quotation.QuotationMaster.Freight.Edit')" (click)="editFreight(freights)" title="{{l('Edit')}}" class="btn btn-circle btn-icon-only green edit-person">
+                                <i class="icon-pencil"></i>
+                            </button>
+                        <button *ngIf="isGranted('Pages.Tenant.Quotation.QuotationMaster.Freight.Delete')" (click)="deleteFreight(freights)" title="{{l('Delete')}}" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;">
+                                <i class="icon-trash"></i>
+                            </button>
+                    </h4>
+                    <p class="list-group-item-text">
+                        {{freights.freightName}}
+                    </p>
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <createFreightModal #createFreightModal (modalSave)="getFreight()"></createFreightModal>
+</div>

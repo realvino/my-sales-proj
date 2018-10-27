@@ -1,0 +1,137 @@
+<div [@routerTransition] id="pager">
+    <div class="row margin-bottom-5">
+        <br>
+        <div class="col-xs-6">
+            <div class="page-head">
+                <div class="page-title">
+                    <h1>
+                        <span>Quotations </span> <small>Details ({{primengDatatableHelper.totalRecordsCount}})</small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <button *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Create')" (click)="createQuotation()" class="btn btn-primary blue"><i class="fa fa-plus"></i> {{l("Create Quotation")}}</button>
+        </div>
+    </div>
+    <div class="portlet light margin-bottom-0">
+        <div class="portlet-body">
+            <div class="form">
+                <form class="horizontal-form">
+                    <div class="form-body">
+                        <div class="row margin-bottom-10">
+                            <div class="col-md-12">
+                                <div class="inputs inputs-full-width">
+                                    <div class="portlet-input">
+                                        <div class="input-group">
+                                            <input [(ngModel)]="filterText" name="filterText"  autocomplete="off" autoFocus class="form-control" [placeholder]="l('SearchWithThreeDot')" type="text">
+                                            <span class="input-group-btn">
+                                                <button (click)="getQuotation()" class="btn default" type="submit"><i class="icon-magnifier"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--<div id="productSubGroupTable"></div>-->
+			<div class="primeng-datatable-container" 
+                 [busyIf]="primengDatatableHelper.isLoading">
+                <p-dataTable #dataTable
+                             (onLazyLoad)="getQuotation($event)"
+                             [value]="primengDatatableHelper.records"
+                             rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                             [paginator]="false"
+                             [lazy]="true"
+                             emptyMessage="{{l('NoData')}}"
+                             scrollable="true" 
+                             responsive="primengDatatableHelper.isResponsive">
+                  
+                    <p-column field=""
+                              header="{{l('Actions')}}"
+                              [style]="{'width':'100px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            <div class="btn-group dropdown" normalizePosition>
+                                <button class="dropdown-toggle btn btn-xs btn-primary blue"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        tooltip="{{l('Actions')}}">
+                                    <i class="fa fa-cog"></i><span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Edit')" (click)="editQuotation(record)">{{l('Edit')}}</a>
+                                    </li>
+                                    <li>
+                                        <a *ngIf="isGranted('Pages.Tenant.Quotation.Quotations.Delete')" (click)="deleteQuotation(record)">{{l('Delete')}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="quotationTitleName" header="{{l('Title')}}" [sortable]="true" [style]="{'width':'100px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            {{record.quotationTitleName}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="subjectName" header="{{l('Subject')}}" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            {{record.subjectName}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="proposalNumber" header="{{l('REF NO')}}" [sortable]="true" [style]="{'width':'200px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.proposalNumber}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="companyName" header="{{l('Company')}}" [sortable]="true" [style]="{'width':'200px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.companyName}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="statusName" header="{{l('Status')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.statusName}}
+                        </ng-template>
+                    </p-column>
+                    <!-- <p-column field="Salesperson" header="{{l('Salesperson')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.Salesperson}}
+                        </ng-template>
+                    </p-column> -->
+                    <p-column field="contactName" header="{{l('Contact')}}" [sortable]="true" [style]="{'width':'150px'}">
+                    	<ng-template let-record="rowData" pTemplate="body">
+                            {{record.contactName}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="total" header="{{l('Total')}}" [sortable]="true" [style]="{'width':'150px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            {{record.total}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="dateString" header="{{l('Creation Time')}}" [sortable]="true" [style]="{'width':'200px'}">
+                        <ng-template let-record="rowData" pTemplate="body">
+                            {{record.dateString}}
+                        </ng-template>
+                    </p-column>
+					
+                </p-dataTable>
+                <div class="primeng-paging-container">
+                    <p-paginator rows="{{primengDatatableHelper.defaultRecordsCountPerPage}}"
+                    #paginator
+                    (onPageChange)="getQuotation($event)"
+                    [totalRecords]="primengDatatableHelper.totalRecordsCount"
+                    [rowsPerPageOptions]="primengDatatableHelper.predefinedRecordsCountPerPage">
+                    </p-paginator>
+                    <span class="total-records-count">
+                        {{l('TotalRecordsCount', primengDatatableHelper.totalRecordsCount)}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+ <createQModal #createQModal (modalSave)="getQuotation($event)" > </createQModal>
+</div>

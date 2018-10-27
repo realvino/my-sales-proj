@@ -1,0 +1,8 @@
+.list-group-item-heading > button.delete-person {
+    float: right;
+    margin-right: 10px;
+}
+.list-group-item-heading > button.edit-person {
+    float: right;
+}
+

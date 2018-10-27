@@ -13953,6 +13953,109 @@ export class QuotationServiceProxy {
         }
         return Observable.of<number>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    quotationRevoke(input: EntityDto): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Quotation/QuotationRevoke";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input ? input.toJSON() : null);
+        
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processQuotationRevoke(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processQuotationRevoke(response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processQuotationRevoke(response: Response): Observable<void> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getRevisionQuotation(quotationId: number, filter: string, sorting: string, maxResultCount: number, skipCount: number): Observable<PagedResultDtoOfQuotationList> {
+        let url_ = this.baseUrl + "/api/services/app/Quotation/GetRevisionQuotation?";
+        if (quotationId !== undefined)
+            url_ += "QuotationId=" + encodeURIComponent("" + quotationId) + "&"; 
+        if (filter !== undefined)
+            url_ += "Filter=" + encodeURIComponent("" + filter) + "&"; 
+        if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&"; 
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&"; 
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&"; 
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetRevisionQuotation(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetRevisionQuotation(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfQuotationList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfQuotationList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetRevisionQuotation(response: Response): Observable<PagedResultDtoOfQuotationList> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: PagedResultDtoOfQuotationList = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfQuotationList.fromJS(resultData200) : new PagedResultDtoOfQuotationList();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<PagedResultDtoOfQuotationList>(<any>null);
+    }
 }
 
 @Injectable()
@@ -17593,6 +17696,54 @@ export class Select2ServiceProxy {
             return throwException("An unexpected server error occurred.", status, responseText);
         }
         return Observable.of<Select2Result>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    getQuotationStatus(): Observable<Select3Result> {
+        let url_ = this.baseUrl + "/api/services/app/Select2/GetQuotationStatus";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = "";
+        
+        let options_ = {
+            body: content_,
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8", 
+                "Accept": "application/json; charset=UTF-8"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetQuotationStatus(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetQuotationStatus(response_);
+                } catch (e) {
+                    return <Observable<Select3Result>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Select3Result>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetQuotationStatus(response: Response): Observable<Select3Result> {
+        const status = response.status; 
+
+        if (status === 200) {
+            const responseText = response.text();
+            let result200: Select3Result = null;
+            let resultData200 = responseText === "" ? null : JSON.parse(responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Select3Result.fromJS(resultData200) : new Select3Result();
+            return Observable.of(result200);
+        } else if (status !== 200 && status !== 204) {
+            const responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, responseText);
+        }
+        return Observable.of<Select3Result>(<any>null);
     }
 }
 
@@ -27218,6 +27369,7 @@ export class QuotationList implements IQuotationList {
     vat: boolean;
     vatPercentage: number;
     vatAmount: number;
+    creationTime: moment.Moment;
 
     constructor(data?: IQuotationList) {
         if (data) {
@@ -27286,6 +27438,7 @@ export class QuotationList implements IQuotationList {
             this.vat = data["vat"];
             this.vatPercentage = data["vatPercentage"];
             this.vatAmount = data["vatAmount"];
+            this.creationTime = data["creationTime"] ? moment(data["creationTime"].toString()) : <any>undefined;
         }
     }
 
@@ -27353,6 +27506,7 @@ export class QuotationList implements IQuotationList {
         data["vat"] = this.vat;
         data["vatPercentage"] = this.vatPercentage;
         data["vatAmount"] = this.vatAmount;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
         return data; 
     }
 }
@@ -27414,6 +27568,7 @@ export interface IQuotationList {
     vat: boolean;
     vatPercentage: number;
     vatAmount: number;
+    creationTime: moment.Moment;
 }
 
 export class PagedResultDtoOfEnquiryQuotationKanbanList implements IPagedResultDtoOfEnquiryQuotationKanbanList {
@@ -29523,6 +29678,7 @@ export class MileStoneListDto implements IMileStoneListDto {
     id: number;
     tenantId: number;
     isQuotation: boolean;
+    endOfQuotation: boolean;
     isDeleted: boolean;
     deleterUserId: number;
     deletionTime: moment.Moment;
@@ -29547,6 +29703,7 @@ export class MileStoneListDto implements IMileStoneListDto {
             this.id = data["id"];
             this.tenantId = data["tenantId"];
             this.isQuotation = data["isQuotation"];
+            this.endOfQuotation = data["endOfQuotation"];
             this.isDeleted = data["isDeleted"];
             this.deleterUserId = data["deleterUserId"];
             this.deletionTime = data["deletionTime"] ? moment(data["deletionTime"].toString()) : <any>undefined;
@@ -29570,6 +29727,7 @@ export class MileStoneListDto implements IMileStoneListDto {
         data["id"] = this.id;
         data["tenantId"] = this.tenantId;
         data["isQuotation"] = this.isQuotation;
+        data["endOfQuotation"] = this.endOfQuotation;
         data["isDeleted"] = this.isDeleted;
         data["deleterUserId"] = this.deleterUserId;
         data["deletionTime"] = this.deletionTime ? this.deletionTime.toISOString() : <any>undefined;
@@ -29587,6 +29745,7 @@ export interface IMileStoneListDto {
     id: number;
     tenantId: number;
     isQuotation: boolean;
+    endOfQuotation: boolean;
     isDeleted: boolean;
     deleterUserId: number;
     deletionTime: moment.Moment;
@@ -29649,6 +29808,7 @@ export class CreateMileInputDto implements ICreateMileInputDto {
     tenantId: number;
     id: number;
     isQuotation: boolean;
+    endOfQuotation: boolean;
 
     constructor(data?: ICreateMileInputDto) {
         if (data) {
@@ -29666,6 +29826,7 @@ export class CreateMileInputDto implements ICreateMileInputDto {
             this.tenantId = data["tenantId"];
             this.id = data["id"];
             this.isQuotation = data["isQuotation"];
+            this.endOfQuotation = data["endOfQuotation"];
         }
     }
 
@@ -29682,6 +29843,7 @@ export class CreateMileInputDto implements ICreateMileInputDto {
         data["tenantId"] = this.tenantId;
         data["id"] = this.id;
         data["isQuotation"] = this.isQuotation;
+        data["endOfQuotation"] = this.endOfQuotation;
         return data; 
     }
 }
@@ -29692,6 +29854,7 @@ export interface ICreateMileInputDto {
     tenantId: number;
     id: number;
     isQuotation: boolean;
+    endOfQuotation: boolean;
 }
 
 export class MileStoneDetailListDto implements IMileStoneDetailListDto {
@@ -29699,6 +29862,7 @@ export class MileStoneDetailListDto implements IMileStoneDetailListDto {
     milestoneStatusId: number;
     statusName: string;
     id: number;
+    endOfQuotation: boolean;
 
     constructor(data?: IMileStoneDetailListDto) {
         if (data) {
@@ -29715,6 +29879,7 @@ export class MileStoneDetailListDto implements IMileStoneDetailListDto {
             this.milestoneStatusId = data["milestoneStatusId"];
             this.statusName = data["statusName"];
             this.id = data["id"];
+            this.endOfQuotation = data["endOfQuotation"];
         }
     }
 
@@ -29730,6 +29895,7 @@ export class MileStoneDetailListDto implements IMileStoneDetailListDto {
         data["milestoneStatusId"] = this.milestoneStatusId;
         data["statusName"] = this.statusName;
         data["id"] = this.id;
+        data["endOfQuotation"] = this.endOfQuotation;
         return data; 
     }
 }
@@ -29739,6 +29905,7 @@ export interface IMileStoneDetailListDto {
     milestoneStatusId: number;
     statusName: string;
     id: number;
+    endOfQuotation: boolean;
 }
 
 export class GetMilestoneDetail implements IGetMilestoneDetail {
@@ -34185,6 +34352,41 @@ export interface ICreatePaymentCollectionInput {
     paymentId: number;
 }
 
+export class EntityDto implements IEntityDto {
+    id: number;
+
+    constructor(data?: IEntityDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+        }
+    }
+
+    static fromJS(data: any): EntityDto {
+        let result = new EntityDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        return data; 
+    }
+}
+
+export interface IEntityDto {
+    id: number;
+}
+
 export class ListResultDtoOfQuotationStatusList implements IListResultDtoOfQuotationStatusList {
     items: QuotationStatusList[];
 
@@ -37458,41 +37660,6 @@ export class UpdateTenantFeaturesInput implements IUpdateTenantFeaturesInput {
 export interface IUpdateTenantFeaturesInput {
     id: number;
     featureValues: NameValueDto[];
-}
-
-export class EntityDto implements IEntityDto {
-    id: number;
-
-    constructor(data?: IEntityDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(data?: any) {
-        if (data) {
-            this.id = data["id"];
-        }
-    }
-
-    static fromJS(data: any): EntityDto {
-        let result = new EntityDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data; 
-    }
-}
-
-export interface IEntityDto {
-    id: number;
 }
 
 export class PagedResultDtoOfSpResultActivepotential implements IPagedResultDtoOfSpResultActivepotential {

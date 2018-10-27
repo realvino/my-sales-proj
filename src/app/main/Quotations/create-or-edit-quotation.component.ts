@@ -1,7 +1,7 @@
 import { Component, ViewChild, Injector, ElementRef, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router,ActivatedRoute,NavigationEnd } from "@angular/router";
 import { AppComponentBase } from '@shared/common/app-component-base';
-import { QuotationServiceProxy,QuotationList,CreateQuotationInput,Select2ServiceProxy,Datadto,Datadto3, UpdateQuotationTotal } from "shared/service-proxies/service-proxies";
+import { QuotationServiceProxy,QuotationList,CreateQuotationInput,Select2ServiceProxy,Datadto,Datadto3, UpdateQuotationTotal, EntityDto } from "shared/service-proxies/service-proxies";
 import {CreateEditQProductComponent} from './create-or-edit-product.component';
 import { QuotationPreviewModalComponent } from "./quotation-preview.component";
 import {Location} from '@angular/common';
@@ -55,7 +55,8 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
     competitorData:Datadto[];
     qProducts:Array<any>=[];
     qServices:Array<any>=[];
-    status:Datadto[];
+    //status:Datadto[];
+    status:Datadto3[];
     private sub: any;
     private id: number;
     //private total: number;
@@ -82,6 +83,8 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
     saving = false;
     total: string;
     updateQuotTot:UpdateQuotationTotal = new UpdateQuotationTotal();
+    vatAmount: string;
+    quotationStatusName: string;
 
     constructor(
         injector: Injector,
@@ -164,7 +167,10 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
                 this.active_delivery=[{id:this.quotation.deliveryId,text:this.quotation.deliveryName}];
                 this.active_payment=[{id:this.quotation.paymentId,text:this.quotation.paymentName}];
                 this.active_freight=[{id:this.quotation.freightId,text:this.quotation.freightName}];
-                this.active_reason=[{id:this.quotation.reasonId,text:this.quotation.reasonName}];
+                if(this.quotation.lost == true){
+                    this.active_reason=[{id:this.quotation.reasonId,text:this.quotation.reasonName}];
+                    this.active_competitor = [{id:this.quotation.competitorId, text: this.quotation.competitorName}];
+                }
                 this.total = this.quotation.overAllTotal.toFixed(2);
                 if(this.quotation_input.salesmanId==0 || this.quotation_input.salesmanId==null) this.saving_btn=true;
                 else this.saving_btn=false;
@@ -172,11 +178,14 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
                     this.pointenable = "no";
                 }
                 if(this.quotation_input.vat){
-                    this.quotation_input.vatAmount = (this.quotation.overAllTotal * this.quotation_input.vatPercentage)/100;
-                    this.total = (this.quotation.overAllTotal + this.quotation_input.vatAmount).toFixed(2);                }
+                    this.quotation_input.vatAmount = ((this.quotation.overAllTotal/this.quotation.exchangeRate) * this.quotation_input.vatPercentage)/100;
+                    this.vatAmount = (this.quotation_input.vatAmount * this.quotation.exchangeRate).toFixed(2);
+                    this.total = (this.quotation.overAllTotal + (this.quotation_input.vatAmount * this.quotation.exchangeRate)).toFixed(2);                
+                }
                 else{
                     this.quotation_input.vatAmount = 0;
                 }
+                
 
                 this.getCompany();
                 this.loading = false;
@@ -356,7 +365,7 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
         });
     }
 
-    getStatus(){
+    /* getStatus(){
         this._selectProxyService.getStatus().subscribe(result=>{
             if(result.select2data!=null){
                 this.status = result.select2data;
@@ -369,6 +378,41 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
                         switch_disable:false
                     });
                 });
+          if(this.quotation.statusName =="Revised")
+            {
+              let revised_ind = this.statusData.findIndex(x=> x.text == "Revised");
+
+              this.statusData[revised_ind].stat_switch = true;
+
+            }
+            }
+        });
+    } */
+    getStatus(){
+        this._selectProxyService.getQuotationStatus().subscribe(result=>{
+            if(result.select3data!=null){
+                this.status = result.select3data;
+                this.statusData = [];
+                this.status.forEach((quo:{id:number,name:string,code:string})=>{
+                    this.statusData.push({
+                        id:quo.id,
+                        text:quo.name,
+                        code:quo.code,
+                        stat_switch:quo.code=='Won'?this.quotation.won:false || quo.code=='Lost'?this.quotation.lost:false || quo.code=='Submitted'?this.quotation.submitted:false,
+                        switch_disable:false
+                    });
+                });
+                if(this.quotation.statusId > 0)
+                {
+                    let revised_ind = this.statusData.findIndex(x=> x.code == "Revised");
+                    if(this.statusData[revised_ind].text == this.quotation.statusName){
+                       this.statusData[revised_ind].stat_switch = true;
+                    }
+                    let statas_ind = this.statusData.findIndex(x=> x.text == this.quotation.statusName);
+                    if(statas_ind != -1){
+                        this.quotationStatusName =  this.statusData[statas_ind].code;
+                    }
+                }
             }
         });
     }
@@ -521,9 +565,14 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
         }
         this.quotation_input.tenantId= abp.multiTenancy.getTenantIdCookie();
         this._quotationServiceProxy.createOrUpdateQuotation(this.quotation_input).finally(() => this.saving = false)
-            .subscribe(() => {
-                this.notify.success(this.l('Saved Successfully'));
-                this.ngOnInit();
+            .subscribe((result) => {
+                if(result > 0){
+                    console.log(result);
+                    this.notify.success(this.l('Saved Successfully'));
+                    this.route.navigate(['app/main/quotation/editquotation',result])
+                    this.id = result;
+                    this.ngOnInit();
+                }
         });
 
     }
@@ -588,49 +637,268 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
         //this._location.back();
         this.route.navigate(['app/main/quotation']);
     }
+    goToEnquiry(){
+        this.route.navigate(['/app/main/leads/',this.quotation.enquiryId]);
+    }
 
     quot_preview(i:number){
        // console.log(i,this.id);
         this.quotationPreviewModal.show(this.id,i);
     }
-    getQuotationStatusId(text,statusIndex){
+    // getQuotationStatusId(text,statusIndex){
+
+    //     var index = this.statusData.findIndex(x=> x.text == text);
+    //     var won_index = this.statusData.findIndex(x=> x.text == 'Won');
+    //     var lost_index = this.statusData.findIndex(x=> x.text == 'Lost');
+    //     var revised_index = this.statusData.findIndex(x=> x.text == 'Revised');
+    //     var submitted_index = this.statusData.findIndex(x=> x.text == 'Submitted');
+    //     if(this.statusData[won_index].stat_switch && this.statusData[lost_index].stat_switch && text=='Won'){
+    //       this.statusData[lost_index].stat_switch = false;
+    //       document.getElementById('Lost').click();
+    //     }
+    //     if(this.statusData[lost_index].stat_switch && this.statusData[won_index].stat_switch && text=='Lost'){
+    //        document.getElementById('Won').click();
+    //     }
+    //   if(this.statusData[submitted_index].stat_switch && text=='Submitted'){
+    //         this.statusData[revised_index].stat_switch = false;
+    //         this.quotation_input.revised = false;
+    //         this.statusData[won_index].switch_disable = false;
+    //        this.statusData[lost_index].switch_disable = false;
+           
+    //   }
+    //   else if(this.statusData[revised_index].stat_switch == true && text=='Revised'){
+    //     this.quotation_input.revised = true;
+    //     this.statusData[submitted_index].stat_switch = false;
+    //   }
+    //   else if(this.statusData[revised_index].stat_switch == false && text=='Revised'){
+    //     this.quotation_input.revised = false;
+    //     this.statusData[submitted_index].stat_switch = true;
+    //   }
+    //   else {
+
+    //       if(this.quotation.statusName =="Revised")
+    //        {
+    //          this.statusData[revised_index].stat_switch = true;
+    //        }  
+          
+    //    }
+
+    //    this.quotation_input.won = this.statusData[won_index].stat_switch;
+    //    this.quotation_input.lost = this.statusData[lost_index].stat_switch;
+    //    this.quotation_input.submitted = this.statusData[submitted_index].stat_switch;
+    //    //this.quotation_input.revised = this.statusData[revised_index].stat_switch;
+
+    //     if(!this.quotation_input.submitted && this.quotation_input.won){
+    //          document.getElementById('Won').click(); 
+    //     }else if(!this.quotation_input.submitted && this.quotation_input.lost){
+    //         document.getElementById("Lost").click();
+    //     }
+    //    if(statusIndex){
+    //     this.quotation_input.statusId = this.statusData[index].id;
+    //   }else if(this.quotation_input.submitted){
+    //     this.quotation_input.statusId = this.statusData[submitted_index].id;
+    //     this.quotation_input.submitted = true;
+    //   }
+    //   else if(this.quotation_input.won){
+    //     this.statusData[lost_index].stat_switch = false;
+    //   }
+    //   else if(this.quotation_input.lost){
+    //     this.statusData[lost_index].stat_switch = false;
+    //   }
+    //   else if(this.quotation_input.revised == true){
+    //     this.statusData[submitted_index].stat_switch = false;
+    //   }
+    //   else if(this.quotation_input.revised == false){
+
+    //     if(this.quotation.statusName =="Submitted"){
+    //         this.statusData[submitted_index].stat_switch = true;
+    //        }   
+    //           }
+    //   else if(!this.quotation_input.submitted){
+    //     var new_index = this.status.findIndex(x=>x.name == 'New');
+
+    //     this.quotation_input.statusId = this.status[new_index].id;
+    //   }else{
+    //     this.quotation_input.statusId = this.quotation.statusId;
+    //   }
+    // }
+
+    /* getQuotationStatusId(text,statusIndex){
         var index = this.statusData.findIndex(x=> x.text == text);
         var won_index = this.statusData.findIndex(x=> x.text == 'Won');
         var lost_index = this.statusData.findIndex(x=> x.text == 'Lost');
+        var revised_index = this.statusData.findIndex(x=> x.text == 'Revised');
         var submitted_index = this.statusData.findIndex(x=> x.text == 'Submitted');
-        if(this.statusData[won_index].stat_switch && this.statusData[lost_index].stat_switch && text=='Won'){
-          this.statusData[lost_index].stat_switch = false;
-          document.getElementById('Lost').click();
+        if(text == 'Submitted'){
+           if(statusIndex){
+              this.quotation_input.statusId = this.statusData[index].id;
+              this.quotation_input.submitted = true;
+              this.statusData[revised_index].stat_switch = false;
+              this.quotation_input.revised = false;
+              this.statusData[won_index].switch_disable = false;
+              this.statusData[lost_index].switch_disable = false;
+              if(this.quotation.statusName =="Revised"){
+                this.statusData[won_index].switch_disable = true;
+                this.statusData[lost_index].switch_disable = true;
+              }
+           }else{
+               this.quotation_input.submitted = false;
+               this.statusData[won_index].switch_disable = true;
+               this.statusData[lost_index].switch_disable = true;
+               this.statusData[won_index].stat_switch = false;
+               this.statusData[lost_index].stat_switch = false;
+               this.quotation_input.won = false;
+               this.quotation_input.lost = false;
+                if(this.quotation.statusName =="Revised"){
+                   this.statusData[revised_index].stat_switch = true;
+                   this.quotation_input.statusId = this.statusData[revised_index].id;
+                }
+                else{
+                   var new_index = this.status.findIndex(x=>x.name == 'New');
+                   this.quotation_input.statusId = this.status[new_index].id;
+                }    
+               
+           }
+        }else if(text == 'Revised'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.revised = true;
+                this.statusData[submitted_index].stat_switch = false;
+                this.statusData[won_index].stat_switch = false;
+                this.statusData[lost_index].stat_switch = false;
+                this.statusData[won_index].switch_disable = true;
+                this.statusData[lost_index].switch_disable = true;
+                this.quotation_input.won = false;
+                this.quotation_input.lost = false;
+            }else{
+                this.quotation_input.revised = false;
+                if(this.quotation.statusName =="Submitted"){
+                    this.statusData[submitted_index].stat_switch = true;
+                    this.quotation_input.submitted = true;
+                    this.statusData[won_index].switch_disable = false;
+                    this.statusData[lost_index].switch_disable = false;
+                    this.quotation_input.revised = false;
+                    this.quotation_input.statusId = this.statusData[submitted_index].id;
+                } 
+            }
+        }else if(text == 'Won'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.won = true;
+                this.quotation_input.lost = false;
+                this.quotation_input.reasonId=null;
+                this.quotation_input.competitorId=null;
+                this.statusData[lost_index].stat_switch = false;
+            }else{
+                this.quotation_input.won = false;
+                this.quotation_input.customerPONumber = null;
+                this.quotation_input.salesOrderNumber = null;
+                this.quotation_input.statusId = this.statusData[submitted_index].id;
+            }
+        }else if(text == 'Lost'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.lost = true;
+                this.quotation_input.won = false;
+                this.quotation_input.customerPONumber = null;
+                this.quotation_input.salesOrderNumber = null;
+                this.statusData[won_index].stat_switch = false;
+            }else{
+                this.quotation_input.lost = false;
+                this.quotation_input.reasonId=null;
+                this.quotation_input.competitorId=null;
+                this.quotation_input.statusId = this.statusData[submitted_index].id;
+            }
         }
-        if(this.statusData[lost_index].stat_switch && this.statusData[won_index].stat_switch && text=='Lost'){
-           document.getElementById('Won').click();
+     } */
+    getQuotationStatusId(code,statusIndex){
+        var index = this.statusData.findIndex(x=> x.code == code);
+        var won_index = this.statusData.findIndex(x=> x.code == 'Won');
+        var lost_index = this.statusData.findIndex(x=> x.code == 'Lost');
+        var revised_index = this.statusData.findIndex(x=> x.code == 'Revised');
+        var submitted_index = this.statusData.findIndex(x=> x.code == 'Submitted');
+        if(code == 'Submitted'){
+           if(statusIndex){
+              this.quotation_input.statusId = this.statusData[index].id;
+              this.quotation_input.submitted = true;
+              this.statusData[revised_index].stat_switch = false;
+              this.quotation_input.revised = false;
+              this.statusData[won_index].switch_disable = false;
+              this.statusData[lost_index].switch_disable = false;
+              if(this.quotation.statusName == this.statusData[revised_index].text){
+                this.statusData[won_index].switch_disable = true;
+                this.statusData[lost_index].switch_disable = true;
+              }
+           }else{
+               this.quotation_input.submitted = false;
+               this.statusData[won_index].switch_disable = true;
+               this.statusData[lost_index].switch_disable = true;
+               this.statusData[won_index].stat_switch = false;
+               this.statusData[lost_index].stat_switch = false;
+               this.quotation_input.won = false;
+               this.quotation_input.lost = false;
+                if(this.quotation.statusName == this.statusData[revised_index].text){
+                   this.statusData[revised_index].stat_switch = true;
+                   this.quotation_input.statusId = this.statusData[revised_index].id;
+                }
+                else{
+                   //var new_index = this.status.findIndex(x=>x.code == 'New');
+                   //this.quotation_input.statusId = this.status[new_index].id;
+                   this.quotation_input.statusId = null;
+                }    
+               
+           }
+        }else if(code == 'Revised'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.revised = true;
+                this.statusData[submitted_index].stat_switch = false;
+                this.statusData[won_index].stat_switch = false;
+                this.statusData[lost_index].stat_switch = false;
+                this.statusData[won_index].switch_disable = true;
+                this.statusData[lost_index].switch_disable = true;
+                this.quotation_input.won = false;
+                this.quotation_input.lost = false;
+            }else{
+                this.quotation_input.revised = false;
+                if(this.quotation.statusName == this.statusData[submitted_index].text){
+                    this.statusData[submitted_index].stat_switch = true;
+                    this.quotation_input.submitted = true;
+                    this.statusData[won_index].switch_disable = false;
+                    this.statusData[lost_index].switch_disable = false;
+                    this.quotation_input.revised = false;
+                    this.quotation_input.statusId = this.statusData[submitted_index].id;
+                } 
+            }
+        }else if(code == 'Won'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.won = true;
+                this.quotation_input.lost = false;
+                this.quotation_input.reasonId=null;
+                this.quotation_input.competitorId=null;
+                this.statusData[lost_index].stat_switch = false;
+            }else{
+                this.quotation_input.won = false;
+                this.quotation_input.customerPONumber = null;
+                this.quotation_input.salesOrderNumber = null;
+                this.quotation_input.statusId = this.statusData[submitted_index].id;
+            }
+        }else if(code == 'Lost'){
+            if(statusIndex){
+                this.quotation_input.statusId = this.statusData[index].id;
+                this.quotation_input.lost = true;
+                this.quotation_input.won = false;
+                this.quotation_input.customerPONumber = null;
+                this.quotation_input.salesOrderNumber = null;
+                this.statusData[won_index].stat_switch = false;
+            }else{
+                this.quotation_input.lost = false;
+                this.quotation_input.reasonId=null;
+                this.quotation_input.competitorId=null;
+                this.quotation_input.statusId = this.statusData[submitted_index].id;
+            }
         }
-        if(this.statusData[submitted_index].stat_switch){
-           this.statusData[won_index].switch_disable = false;
-           this.statusData[lost_index].switch_disable = false;
-       }else{
-          this.statusData[won_index].switch_disable = true;
-          this.statusData[lost_index].switch_disable = true;
-       }
-       this.quotation_input.won = this.statusData[won_index].stat_switch;
-       this.quotation_input.lost = this.statusData[lost_index].stat_switch;
-       this.quotation_input.submitted = this.statusData[submitted_index].stat_switch;
-        if(!this.quotation_input.submitted && this.quotation_input.won){
-             document.getElementById('Won').click(); 
-        }else if(!this.quotation_input.submitted && this.quotation_input.lost){
-            document.getElementById("Lost").click();
-        }
-       if(statusIndex){
-        this.quotation_input.statusId = this.statusData[index].id;
-      }else if(this.quotation_input.submitted){
-        this.quotation_input.statusId = this.statusData[submitted_index].id;
-      }else if(!this.quotation_input.submitted){
-        var new_index = this.status.findIndex(x=>x.name == 'New');
-
-        this.quotation_input.statusId = this.status[new_index].id;
-      }else{
-        this.quotation_input.statusId = this.quotation.statusId;
-      }
     }
 
     receiveMessage($event) {
@@ -655,6 +923,5 @@ export class CreateEditQuotationComponent extends AppComponentBase implements On
            
        }
     }
-
-
+    
 }

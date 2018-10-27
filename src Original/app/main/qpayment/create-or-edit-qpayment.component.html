@@ -1,0 +1,33 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form *ngIf="active" #createqpaymentForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span *ngIf="qpayment.id">{{l("Edit QPayment")}}: {{qpayment.paymentName}}</span>
+                        <span *ngIf="!qpayment.id">{{l("Create QPayment")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input #nameInput class="form-control" type="text" name="code" [ngClass]="{'edited':qpayment.paymentCode}" [(ngModel)]="qpayment.paymentCode" required>
+                        <label>{{l("QPayment Code")}}  <required_field></required_field></label>
+
+                    </div>
+
+                    <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                        <input class="form-control" type="text" name="name" [ngClass]="{'edited':qpayment.paymentName}" [(ngModel)]="qpayment.paymentName" required>
+                        <label>{{l("QPayment Name")}}  <required_field></required_field></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!createqpaymentForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

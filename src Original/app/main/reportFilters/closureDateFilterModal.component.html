@@ -1,0 +1,79 @@
+<p-overlayPanel #menu showCloseIcon="true" class="popups">
+    <div class="row">
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 1">
+            <p> Created Date</p><hr>
+                <div class="md-radio-list">
+                  <div class="md-radio" *ngFor="let dateFilter of dateFilters">
+                      <input id="EditUser_{{dateFilter.name}}" type="radio" class="md-radio" name="ranges" 
+                      [checked]="dateFilter.selected == true" value= {{dateFilter.id}} (click)=selectedCreatedDateFilter(dateFilter.id)>
+                           <label for="EditUser_{{dateFilter.name}}">
+                              <span class="inc"></span>
+                              <span class="check"></span>
+                              <span class="box"></span>
+                                {{dateFilter.name}}
+                           </label>
+                  </div>
+                </div>
+              <p-calendar showButtonBar="true" id="datetime1" [(ngModel)]="filterDate1" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod1($event)"
+               [disabled]="createdDateFilterId != 7" [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 3">
+            <p> Submitted Date</p><hr>
+            <div class="md-radio-list">
+                    <div class="md-radio" *ngFor="let dateFilter of dateFilters">
+                        <input id="EditUser_{{dateFilter.name}}" type="radio" class="md-radio" name="ranges" 
+                        [checked]="dateFilter.selected == true" value= {{dateFilter.id}} (click)=selectedSubmittedDateFilter(dateFilter.id)>
+                             <label for="EditUser_{{dateFilter.name}}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                  {{dateFilter.name}}
+                             </label>
+                    </div>
+                </div>
+                <p-calendar showButtonBar="true" id="datetime3" [(ngModel)]="filterDate3" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod3($event)"
+                [disabled]="submittedDateFilterId != 7" [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 4">
+            <p> Won Date</p><hr>
+            <div class="md-radio-list">
+                    <div class="md-radio" *ngFor="let dateFilter of dateFilters">
+                        <input id="EditUser_{{dateFilter.name}}" type="radio" class="md-radio" name="ranges" 
+                        [checked]="dateFilter.selected == true"  value= {{dateFilter.id}} (click)=selectedWonDateFilter(dateFilter.id)>
+                             <label for="EditUser_{{dateFilter.name}}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                  {{dateFilter.name}}
+                             </label>
+                    </div>
+                </div>
+                <p-calendar showButtonBar="true" id="datetime4" [(ngModel)]="filterDate4" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod4($event)"
+                [disabled]="wonDateFilterId != 7" [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+
+        <div class="col-md-12"  style="width: 240px;" *ngIf="from == 5">
+            <p> Lost Date</p><hr>
+            <div class="md-radio-list">
+                    <div class="md-radio" *ngFor="let dateFilter of dateFilters">
+                        <input id="EditUser_{{dateFilter.name}}" type="radio" class="md-radio" name="ranges" 
+                        [checked]="dateFilter.selected == true"  value= {{dateFilter.id}} (click)=selectedLostDateFilter(dateFilter.id)>
+                             <label for="EditUser_{{dateFilter.name}}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                                  {{dateFilter.name}}
+                             </label>
+                    </div>
+                </div>
+                <p-calendar showButtonBar="true" id="datetime5" [(ngModel)]="filterDate5" [ngClass]="form-control" [showIcon]="true" [inline]="false" (onSelect)="onSelectMethod5($event)"
+                [disabled]="lostDateFilterId != 7" [dataType]="date" [ngModelOptions]="{standalone: true}"></p-calendar>  
+        </div>
+
+        <div style="width:200px">
+            <button  style="float:right;margin-top:10px;margin-right :-27px"  type="button" class="btn btn-default" (click)="close()">Clear</button>
+        </div>
+    </div>
+</p-overlayPanel>

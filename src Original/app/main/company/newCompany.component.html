@@ -1,0 +1,175 @@
+<div class="container" id="pager" style="width:100%;margin-bottom: 25px;">
+    <tabset class="tab-container tabbable-line">
+        <tab heading="Company Details">
+
+            <div class="col-xs-12" style="background: rgba(113, 145, 176, 0.16);padding: 20px;">
+
+                <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm)">
+                    <!--<div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button class="btn btn-success pull-right" (click)="goToCompany()">X</button>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="actions" style="text-align:right;">
+                        <button type="button" (click)="goToCompany()" title="{{l('Close')}}" class="btn btn-circle btn-icon-only btn-default">
+                            <i class="fa fa-times" style="color:red;"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-5" style="margin-left: 13px;">
+                            <div class="form-group">
+                                <label>Company Name <required_field></required_field></label>
+                                <input type="text" class="form-control" formControlName="companyName" [(ngModel)]="company.name" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-3" style="width: 28%">
+
+                            <label>Company Type <required_field></required_field></label>
+                            <ng-select [active]="active_company" [items]="companytypo" [allowClear]="true" (selected)="selectType($event)" (removed)="removeType($event)"  placeholder="No Company Type selected">
+                            </ng-select>
+                            <input type="hidden" formControlName="typeid">
+                        </div>
+                        <div class="col-xs-3" style="width: 28%">
+                            <label>Managed By</label>
+                                <ng-select [active]="active_sale" [allowClear]="true" [items]="sale" (selected)="selectManagedBy($event)" (removed)="removeManagedBy($event)" placeholder="Nothing is selected">
+                                </ng-select>
+                                <input type="hidden" formControlName="managed">
+                        </div>
+                    </div>
+					 <div class="row">
+                            <div class="col-xs-5" style="margin-left:13px;">
+                                <label>Currency <required_field></required_field></label>
+                                <ng-select [active]="active_currency" [allowClear]="true" [items]="currency" (selected)="selectCurrency($event)" (removed)="removeCurrency($event)" placeholder="No Currency is selected">
+                                </ng-select>
+                            </div>
+                            <div class="col-xs-5" style="width: 28%">
+                                <label>Country <required_field></required_field></label>
+                                <ng-select [active]="active_country" [allowClear]="true" [items]="country" (selected)="selectCountry($event)" (removed)="removeCountry($event)" placeholder="No Country is selected">
+                                </ng-select>
+                            </div>
+                    </div>
+
+
+
+                    <div formArrayName="contacts" class="col-xs-5" style="margin-top:21px;">
+
+                        <div class="panel panel-default" style="padding-bottom: 15px">
+                            <div class="panel-heading">
+
+                                <div style="width:40%;">
+                                    <span>Contact Details</span>
+                                </div>
+                                <div style="width:1%;float:right">
+                                    <a style="cursor: pointer;float:right;text-align:right;margin-top: -18px;position: absolute">
+                                        <i style="color:green;" *ngIf="myForm.controls.contacts.valid" (click)="addContacts(1)" class="fa fa-plus-circle" aria-hidden="true" title="Create"> </i>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="row" style="padding-left:15px; padding-top:15px;">
+                                <div class="col-xs-5"><label>Type</label></div>
+                                <div class="col-xs-7" style="margin-top:5px;"></div>
+                            </div>
+                            <div *ngFor="let contact of myForm.controls.contacts['controls'];let j=index">
+                                <input type="hidden">
+                                <div class="panel-body" [formGroupName]="j" style="padding-bottom:0px;">
+                                    <contact [group]="myForm.controls.contacts.controls[j]"></contact>
+                                    <span style="margin-top: -33px;" class="fa fa-trash-o pull-right" *ngIf="myForm.controls.contacts['controls'].length > 1" (click)="removeContacts(j,contact)">
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div formArrayName="addresses" class="col-xs-7" style="margin-top:21px;">
+                        <div class="panel-heading">
+                            <div style="width:40%;">
+                                <span>Address Details</span>
+                            </div>
+                            <div style="width:1%;float:right">
+                                <a style="cursor: pointer;float:right;text-align:right;margin-top: -18px;position: absolute">
+                                    <i style="color:green;" *ngIf="myForm.controls.addresses.valid" (click)="addAddress(1)" class="fa fa-plus-circle" aria-hidden="true" title="Create"> </i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" style="padding-bottom: 15px;">
+                        <div class="row" style="padding-left:15px; padding-top:15px;">
+                                <div class="col-xs-4 noPaddingR"><label>Type</label></div>
+                                <div class="col-xs-4 noPaddingR"><label>Address 1</label></div>
+                                <div class="col-xs-4 noPaddingL noPaddingR"><label>Address 2</label></div>
+                               
+                            </div>
+                            <div *ngFor="let address of myForm.controls.addresses['controls'];let i=index">
+                                <input type="hidden">
+                                <div class="panel-body" [formGroupName]="i" style="padding-bottom:0px;">
+
+                                    <address_comp [group]="myForm.controls.addresses.controls[i]"></address_comp>
+
+                                    <span style="margin-top: -50px;" class="fa fa-trash-o pull-right" *ngIf="myForm.controls.addresses['controls'].length > 1" (click)="removeAddress(i,address)">
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="margin-20">
+                            <button style="margin-bottom: 20px !important;" type="submit" class="btn btn-primary pull-right" [disabled]="!myForm.valid || !company.customerTypeId || !company.currencyId || !company.countryId">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </tab>
+        <tab heading="Contact Details">
+            <div class="portlet light margin-bottom-0" style="background: rgba(113, 145, 176, 0.16);">
+                <div class="portlet-body">
+                    <h3>All Contacts </h3>
+                    
+
+                        <div class="actions" style="text-align:right;margin-top: -30px;margin-bottom: 11px;">
+
+                            <button type="button" (click)="createContact()" title="{{l('Create')}}" class="btn btn-circle btn-icon-only btn-default" href="javascript:;">
+                                <i style="color:#FFDE16" class="fa fa-plus"></i>
+                                </button>
+                        </div>
+                         <div style="width:100%;background: white;">
+                        <div class="scroll-window"  style="width:100%;max-height:291px;font-size:13px;padding:10px;">
+                        <div class="list-group" style="margin-bottom: 0px;" *ngFor="let contactCom of companyContact">
+                        <div class="list-group-item" >
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-1">
+                                        <img src="/assets/common/images/Contacts.png" style="height:50px;width:50px;align-content:center;" class="img-rounded" />
+                                    </div>
+                                    <div class="col-md-11">
+                                        <h4 class="list-group-item-heading" style="color:blue">
+                                           {{contactCom.contactName+' '+contactCom.lastName}}<br />
+                                            <span style="float:right;">
+                                                       <button type="button" title="{{l('Edit')}}" (click)="editContact(contactCom)" class="btn btn-circle btn-icon-only green edit-person">
+                                                       <i class="icon-pencil"></i>
+                                                       </button>
+                                                       <button type="button" title="{{l('Delete')}}" (click)="deleteContact(contactCom)" class="btn btn-circle btn-icon-only red delete-person" href="javascript:;">
+                                                       <i class="icon-trash"></i>
+                                                       </button>
+                                                    </span>
+                                        </h4>
+
+                                        <h5 class="list-group-item-heading" style="color:green">
+                                            Contact type : {{contactCom.contactTypeName}} <br />
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div></div>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+
+</div>
+<createNewContactModal #createNewContactModal (modalSave)="getCompanyCon()"></createNewContactModal>

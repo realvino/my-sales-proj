@@ -120,6 +120,7 @@ import { QuotationStatusFilterComponent } from '@app/main/reportFilters/quotatio
 import { CustomerTypeFilterComponent } from '@app/main/reportFilters/customerTypeFilterModal.component';
 import { CountryFilterComponent } from '@app/main/reportFilters/countryFilterModal.component';
 import { CurrencyFilterComponent } from '@app/main/reportFilters/currencyFilterModal.component';
+import { QuotationCloseComponent } from './kanban/quotationClose.component';
 export function highchartsFactory() {
     const hc = require('highcharts');
     const dd = require('highcharts/modules/drilldown');
@@ -244,7 +245,8 @@ export function highchartsFactory() {
 		CountryFilterComponent,
 		CurrencyFilterComponent,
 		CustomerTypeFilterComponent,
-		QuotationStatusFilterComponent
+		QuotationStatusFilterComponent,
+		QuotationCloseComponent
 	],
 	providers: [{
         provide: HighchartsStatic, 

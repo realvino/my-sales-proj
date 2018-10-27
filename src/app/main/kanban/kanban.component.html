@@ -13,11 +13,11 @@
     <div class='wrapper'>
             <div class='dndcontainer' slimScroll height="250px" size="7px"*ngFor='let item of items' >
               <div class="itemHead"><h4>{{item.milestoneName}} ({{item.enquiryQuotationKanban.length}})</h4> </div>
-              <div class="desk-items"  [dragula]='"main-bag"' [attr.data-milestoneId]="item.milestoneName" [attr.data-isquotation]="item.flag" *ngIf="isGranted('Pages.Tenant.Leads.Leads.Edit')">
-                  <div *ngFor="let kanban of item.enquiryQuotationKanban" [attr.data-itemId]="kanban.id" [attr.data-quotationId]="kanban.quotationId" (click)="editLeads(kanban)">
+              <div class="desk-items"  [dragula]='"main-bag"' [attr.data-milestoneId]="item.milestoneName" [attr.data-isquotation]="item.flag" [attr.data-endQuotation]= "item.endQuotation" *ngIf="isGranted('Pages.Tenant.Leads.Leads.Edit')">
+                  <div *ngFor="let kanban of item.enquiryQuotationKanban" [attr.data-itemId]="kanban.id" [attr.data-quotationId]="kanban.quotationId" (click)="editQuotation(kanban)">
                      
                     <div  class="deskItem ddns">
-                        <b>{{kanban.enquiryNo}} - &nbsp;{{kanban.title}}</b> <span class="name"> : {{kanban.mileStoneStatusName}}</span>
+                     <b>{{kanban.enquiryNo}} - &nbsp;{{kanban.title}}</b> <span class="name"> : {{kanban.mileStoneStatusName}}</span>
                       <p class="name ddns">{{kanban.companyName}} <small>(India) &nbsp; : {{kanban.salesperson}}</small></p>
                       <p class="name ddns">{{kanban.contactName}} <span *ngIf="kanban.quotationId" 
                         (click) ="editQuotation(kanban)"> - {{kanban.qRefno}} </span></p>  
@@ -27,7 +27,7 @@
                       </ul></div>              
                       <div class="row" style="margin-top: -15px;">
                           <hr>
-                          <div class="col-sm-12">
+                          <div class="col-sm-12" style="margin-top: -12px;">
                              <img *ngIf="kanban.creatorImg"  class="img-circle" height="30"  width="30" data-placement="top" tooltip="{{kanban.creator}}" src="{{path+kanban.creatorImg}}">
                              <img *ngIf="kanban.salespersonImg"  class="img-circle" height="30"  width="30" data-placement="top" tooltip="{{kanban.salesperson}}" src="{{path+kanban.salespersonImg}}"> 
                              <!-- <span tooltip="{{kanban.creator}}"><i class="fa fa-user-circle-o fa-2x"></i></span>
@@ -46,3 +46,4 @@
 </div>
 </div>
 <createEnquiryModal #createEnquiryModal (modalSave)="getEnquiryTic()"></createEnquiryModal>
+<quotationCloseModal #quotationCloseModal (modalSave)="getEnquiryTic()"></quotationCloseModal>

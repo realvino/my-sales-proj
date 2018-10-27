@@ -1,0 +1,312 @@
+<div bsModal #modal="bs-modal" (onShown)="onShown()" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" [config]="{backdrop: 'static'}" >
+    <div class="modal-dialog" style="width:70% !important">
+        <div class="modal-content">
+          <div class="modal-header">
+                <button type="button" class="close" (click)="close()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <span *ngIf="product_input.id">{{l("Edit Product")}}: {{product_input.productName}}</span>
+                    <span *ngIf="!product_input.id">{{l("Create Product")}}</span>
+                </h4>
+          </div> 
+			<form *ngIf="active && !product_input.id" #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-body">
+                    <!-- <div class="modal_processing" *ngIf="processed_image">
+                        Processing...
+                        <div class="loader">
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-2" *ngIf="product_input.id">
+                            <div class="col-md-12 imgCont" *ngIf="product_input.path">
+                                            <span >
+                                                <img width="142" height="147" src="{{path+'/'+product_input.path}}" class="img-product" />
+                                            </span>
+                            </div>
+                            <div class="col-md-12" *ngIf="!product_input.path" style="margin-top: 136px;">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-top: 17px;">
+                                    <input type="file" ng2FileSelect [uploader]="uploader" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div  [ngClass]="product_input.id ? 'col-md-10' : 'col-md-12'">
+                            <!-- <div class="col-md-2" *ngIf="product_input.id" >
+                                &nbsp;
+                            </div> -->
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div #nameInput class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                   <input class="form-control" type="text" name="product_names" [ngClass]="{'edited':product_input.productName}" [(ngModel)]="product_input.productName" required>
+                                                   <label>Product Name</label>
+                                               </div>
+                                           </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                   <input class="form-control" type="text" name="product_code" [ngClass]="{'edited':product_input.productCode}" [(ngModel)]="product_input.productCode" required>
+                                                   <label>{{l("Product Code")}} </label>
+                                               </div>
+
+                                           </div>
+                                       </div>
+
+                                       <div class="row" style="margin-top:20px;">
+                                           
+                                           <div class="col-md-6">
+                                               <label>Product Sub Group</label>
+                                               <ng-select [active]="active_product_sub" [allowClear]="true" [items]="product_subgroup" (selected)="selectedProductsubgroup($event)" (removed)="removeProductsubgroup($event)" placeholder="Product sub group">
+                                               </ng-select>
+                                           </div>
+                                           <div class="col-md-6">
+                                                <label>Discontinue:</label>
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [(ngModel)]="product_input.discontinued" checked>
+                                                    <label class="onoffswitch-label" for="myonoffswitch" >
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch" ></span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                           <!-- <div class="col-md-6">
+
+                                                   <label>Product Group</label>
+                                                   <ng-select [active]="active_product" [allowClear]="true" [items]="product_group" (selected)="selectedProductgroup($event)" (removed)="removeProductgroup($event)" placeholder="Product group">
+                                                   </ng-select>
+
+                                           </div> -->
+                                       </div>
+
+                                        <!-- <div class="row" style="margin-top:25px;">
+                                            <div class="col-md-6">
+                                                <label>Discontinue:</label>
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [(ngModel)]="product_input.discontinued" checked>
+                                                    <label class="onoffswitch-label" for="myonoffswitch" >
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch" ></span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div> -->
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                        <div class="row" style="margin-top: 35px;">
+                            <div class="col-md-12 form-group">
+                            <label>Description</label>
+                               <!--<p-editor [(ngModel)]="product_input.description" name="HtmlEditorInput" [style]="{'height':'100px'}"></p-editor>-->
+							   <quill-editor [(ngModel)]="product_input.description" name="HtmlEditorInput"
+											[options]="editorOptions"
+											(blur)="onEditorBlured($event)"
+											(focus)="onEditorFocused($event)"
+											(ready)="onEditorCreated($event)"
+											(change)="onContentChanged($event)">
+								</quill-editor>
+								
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [disabled]="!createCompanyForm.form.valid"[buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        </div>
+                </div>
+            </form>		  
+           <tabset class="tab-container tabbable-line" #staticTabs *ngIf="product_input.id">
+           <tab heading="Product Detail" active="active"> 
+            <form *ngIf="active" #createCompanyForm="ngForm" novalidate (ngSubmit)="save()">
+                <div class="modal-body">
+                    <!-- <div class="modal_processing" *ngIf="processed_image">
+                        Processing...
+                        <div class="loader">
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-2" *ngIf="product_input.id">
+                            <div class="col-md-12 imgCont" *ngIf="product_input.path">
+                                            <span >
+                                                <img width="142" height="147" src="{{path+'/'+product_input.path}}" class="img-product" />
+                                            </span>
+                            </div>
+                            <div class="col-md-12" *ngIf="!product_input.path" style="margin-top: 136px;">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="margin-top: 17px;">
+                                    <input type="file" ng2FileSelect [uploader]="uploader" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div  [ngClass]="product_input.id ? 'col-md-10' : 'col-md-12'">
+                            <!-- <div class="col-md-2" *ngIf="product_input.id" >
+                                &nbsp;
+                            </div> -->
+                            <div class="col-md-12">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                               <div #nameInput class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                   <input class="form-control" type="text" name="product_names" [ngClass]="{'edited':product_input.productName}" [(ngModel)]="product_input.productName" required>
+                                                   <label>Product Name</label>
+                                               </div>
+                                           </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                                   <input class="form-control" type="text" name="product_code" [ngClass]="{'edited':product_input.productCode}" [(ngModel)]="product_input.productCode" required>
+                                                   <label>{{l("Product Code")}} </label>
+                                               </div>
+
+                                           </div>
+                                       </div>
+
+                                       <div class="row" style="margin-top:20px;">
+                                           
+                                           <div class="col-md-6">
+                                               <label>Product Sub Group</label>
+                                               <ng-select [active]="active_product_sub" [allowClear]="true" [items]="product_subgroup" (selected)="selectedProductsubgroup($event)" (removed)="removeProductsubgroup($event)" placeholder="Product sub group">
+                                               </ng-select>
+                                           </div>
+                                           <div class="col-md-6">
+                                                <label>Discontinue:</label>
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [(ngModel)]="product_input.discontinued" checked>
+                                                    <label class="onoffswitch-label" for="myonoffswitch" >
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch" ></span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                           <!-- <div class="col-md-6">
+
+                                                   <label>Product Group</label>
+                                                   <ng-select [active]="active_product" [allowClear]="true" [items]="product_group" (selected)="selectedProductgroup($event)" (removed)="removeProductgroup($event)" placeholder="Product group">
+                                                   </ng-select>
+
+                                           </div> -->
+                                       </div>
+
+                                        <!-- <div class="row" style="margin-top:25px;">
+                                            <div class="col-md-6">
+                                                <label>Discontinue:</label>
+                                                <div class="onoffswitch">
+                                                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch" [(ngModel)]="product_input.discontinued" checked>
+                                                    <label class="onoffswitch-label" for="myonoffswitch" >
+                                                        <span class="onoffswitch-inner"></span>
+                                                        <span class="onoffswitch-switch" ></span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div> -->
+
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                        <div class="row" style="margin-top: 35px;">
+                            <div class="col-md-12 form-group">
+                            <label>Description</label>
+                               <!--<p-editor [(ngModel)]="product_input.description" name="HtmlEditorInput" [style]="{'height':'100px'}"></p-editor>-->
+							   <quill-editor [(ngModel)]="product_input.description" name="HtmlEditorInput"
+											[options]="editorOptions"
+											(blur)="onEditorBlured($event)"
+											(focus)="onEditorFocused($event)"
+											(ready)="onEditorCreated($event)"
+											(change)="onContentChanged($event)">
+								</quill-editor>
+								
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()">{{l("Cancel")}}</button>
+                            <button type="submit" class="btn btn-primary blue" [disabled]="!createCompanyForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"><i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                        </div>
+                </div>
+            </form>
+            </tab>
+               <tab heading="Price Level" *ngIf="product_input.id">
+
+                   <form  *ngIf="active_price" #createpricelevelForm="ngForm" novalidate (ngSubmit)="pricelevelsave()">
+
+                       <div class="modal-body">
+
+                           <div class="row" >
+                                <div class="col-md-3">
+                                   <label></label>
+                               </div> 
+                               <div class="col-md-4" style="bottom:17px;padding-left:29px;">
+                                   <label>Price Level</label>
+                               </div>
+							   <div class="col-md-4" style="bottom:17px;padding-left:1px;">
+                                   <label>Price </label>
+                               </div>
+
+                           </div>
+
+                           <div class="row" *ngFor="let price of productprice" style="padding:10px;margin:3px;">
+                               <div class="col-md-3">
+                                   <button type="button" class="btn btn-circle btn-icon-only  red delete-person" (click)="deletePricelevel(price)"><i class="icon-trash"></i></button>
+                               </div>
+                               <div class="col-md-4">
+                                   {{price.priceLevelName}}
+                               </div>
+							   <div class="col-md-4">
+									{{price.price}}
+							   </div>
+
+                           </div>
+
+                           <div class="row"  style="padding:10px;margin:3px;">
+                               <div class="col-md-3">
+                                   <button type="submit" class="btn btn-circle btn-icon-only blue"><i class="fa fa-floppy-o"></i></button>
+                               </div>
+                               <div class="col-md-3">
+                                   <ng-select [active]="activepricelevel" [allowClear]="true" [items]="price_level" (selected)="selectedPricelevel($event)" (removed)="removePricelevel($event)" placeholder="Price Level">
+                                   </ng-select>
+                               </div>
+                               <div class ="col-md-3">
+                                   <input class="form-control" type="number" name="price" [(ngModel)]="priceLevel.price" min="0"  >
+                               </div>
+                           </div>
+
+                       </div>
+
+                   </form>
+
+               </tab>
+
+            </tabset>
+        </div>
+    </div>
+</div>
